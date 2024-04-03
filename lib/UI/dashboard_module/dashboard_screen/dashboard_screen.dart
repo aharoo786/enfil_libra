@@ -1,3 +1,4 @@
+import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,6 +51,8 @@ class _DashboardScreen extends State<DashboardScreen> {
           child: GestureDetector(
               onTap: () {
                 Get.to(() => UserProfile());
+                Get.find<AuthController>().getUserData();
+
               },
               child: SvgPicture.asset(MyImgs.profilIcons)),
         ),
@@ -59,7 +62,8 @@ class _DashboardScreen extends State<DashboardScreen> {
             .appBarText("Hello 👋, Virginie ", color: MyColors.buttonColor),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+              },
               icon: Icon(
                 Icons.notifications_none_outlined,
                 color: MyColors.iconColor2,

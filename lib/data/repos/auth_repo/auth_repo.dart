@@ -68,6 +68,16 @@ class AuthRepo extends GetxService {
           HttpHeaders.contentTypeHeader: "application/json",
         });
   }
+  Future<Response> getUserProfile(
+      { required String accessToken}) async {
+    return await apiProvider.getData(Constants.getUserProfile,headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      "Accept":"application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+
+
+    });
+  }
 
   Future<Response> updatePasswordRepo(
       {required Map<String, dynamic> formData,required String accessToken}) async {

@@ -1,5 +1,6 @@
 import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import 'package:enfil_libre/UI/widgets/otp_bottom_sheet_widget.dart';
+import 'package:enfil_libre/data/models/get_user_profile.dart';
 import 'package:enfil_libre/data/models/user_model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,7 +64,7 @@ class AuthController extends GetxController implements GetxService {
 
         await authRepo.signUpUserRepo(formData: {
           "first_name": firstName.text,
-          "last_name":  lastName.text,
+          "last_name": lastName.text,
           "email": email.text,
           "password": password.text,
           "password_confirmation": password.text
@@ -114,10 +115,10 @@ class AuthController extends GetxController implements GetxService {
                             "Please verify your email");
                     Get.bottomSheet(otpBottomSheet(context, email));
                   }
-                }
-                else {
+                } else {
                   CustomToast.failToast(
-                      msg: response.body["errors"]["message"] ?? "Some error occurred");
+                      msg: response.body["errors"]["message"] ??
+                          "Some error occurred");
                 }
               }
             } else if (response.body["status"] == Constants.success) {
@@ -287,7 +288,7 @@ class AuthController extends GetxController implements GetxService {
                     Constants.userUid, model.data.user.id);
                 sharedPreferences.setString(
                     Constants.email, model.data.user.email);
-         
+
                 sharedPreferences.setString(
                     Constants.accessToken, model.data.accessToken);
                 sharedPreferences.setBool(Constants.login, true);
@@ -297,6 +298,53 @@ class AuthController extends GetxController implements GetxService {
               CustomToast.failToast(
                   msg: "Some Error has occurred, Try Again Later");
             }
+          }
+        });
+      }
+    });
+  }
+
+  ///gettting user Data
+
+  var isUserDataLoad = false.obs;
+  TextEditingController updateFirstNameController = TextEditingController();
+  TextEditingController updateLastNameController = TextEditingController();
+  TextEditingController updateEmailController = TextEditingController();
+  GetUserProfile? getUserProfile;
+
+
+  getUserData() async {
+    isUserDataLoad.value = false;
+
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        await authRepo
+            .getUserProfile(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "")
+            .then((response) async {
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              GetUserProfile model = GetUserProfile.fromJson(response.body);
+              if (model.status == Constants.success) {
+                getUserProfile=model;
+                isUserDataLoad.value = true;
+                updateFirstNameController.text=model.data.firstName;
+                updateLastNameController.text=model.data.lastName;
+                updateEmailController.text=model.data.email;
+
+              }
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            CustomToast.failToast(
+                msg: response.body["message"] + "\n" + response.body["error"]);
           }
         });
       }

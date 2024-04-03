@@ -4,7 +4,7 @@ class Constants {
   static String countryCode = "92";
   static String countryName = "PK";
   static String fullName = "fullName";
-  static String baseUrl = "https://b171-2400-adc5-15d-da00-8f62-c82f-f755-6dbc.ngrok-free.app/api";
+  static String baseUrl = "https://libra.vordx.com/api";
 
   static String email = "email";
   static String password = "password";
@@ -28,4 +28,5 @@ class Constants {
   static String resetPasswordOtp = "/reset-password";
   static String resendOtp = "/resend-otp";
   static String updatePassword = "/update-password";
+  static String getUserProfile = "/user";
 }
