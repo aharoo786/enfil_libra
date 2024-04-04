@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import 'package:enfil_libre/UI/widgets/otp_bottom_sheet_widget.dart';
 import 'package:enfil_libre/data/models/get_user_profile.dart';
 import 'package:enfil_libre/data/models/user_model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../UI/auth_module/email_verification/otp_screen.dart';
@@ -25,6 +28,16 @@ class AuthController extends GetxController implements GetxService {
   var bottomSheetStatus = 1.obs;
 
   var selectedFrequency = 999.obs;
+
+  ///Image counter
+  int i = 0;
+
+  XFile? profileImage;
+
+  ///gender List
+  List<String> genderList = ["Male", "Female", "Others"];
+  String? selectedGender;
+
   UserModel? userModel;
 
   ///Text Editing Controllers
@@ -291,7 +304,9 @@ class AuthController extends GetxController implements GetxService {
 
                 sharedPreferences.setString(
                     Constants.accessToken, model.data.accessToken);
+
                 sharedPreferences.setBool(Constants.login, true);
+                userModel = model;
                 Get.to(() => DashboardScreen());
               }
             } else {
@@ -312,7 +327,6 @@ class AuthController extends GetxController implements GetxService {
   TextEditingController updateEmailController = TextEditingController();
   GetUserProfile? getUserProfile;
 
-
   getUserData() async {
     isUserDataLoad.value = false;
 
@@ -331,20 +345,63 @@ class AuthController extends GetxController implements GetxService {
             } else if (response.body["status"] == Constants.success) {
               GetUserProfile model = GetUserProfile.fromJson(response.body);
               if (model.status == Constants.success) {
-                getUserProfile=model;
+                getUserProfile = model;
                 isUserDataLoad.value = true;
-                updateFirstNameController.text=model.data.firstName;
-                updateLastNameController.text=model.data.lastName;
-                updateEmailController.text=model.data.email;
-
+                selectedGender = genderList[0];
+                updateFirstNameController.text = model.data.firstName;
+                updateLastNameController.text = model.data.lastName;
+                updateEmailController.text = model.data.email;
               }
             } else {
               CustomToast.failToast(
                   msg: "Some Error has occurred, Try Again Later");
             }
           } else {
-            CustomToast.failToast(
-                msg: response.body["message"] + "\n" + response.body["error"]);
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
+
+  updateUser() {
+    connectionService.checkConnection().then((value) async {
+      if (!value) {
+        CustomToast.noInternetToast();
+        // Get.back();
+      } else {
+        Get.dialog(const Center(child: CircularProgressIndicator()),
+            barrierDismissible: false);
+
+        await authRepo.updateUser(
+            accessToken:
+                sharedPreferences.getString(Constants.accessToken) ?? "",
+            map: {
+              "image": profileImage == null ? null : profileImage!.path,
+              "first_name": updateFirstNameController.text,
+              "date_of_birth": "2000-01-25",
+              "gender": selectedGender!.toLowerCase(),
+              "last_name": updateLastNameController.text,
+            }).then((response) async {
+          Get.back();
+          var body = jsonDecode(response.body);
+          if (response.statusCode == 200) {
+            print("respn  ${response.body}");
+
+            if (body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (body["status"] == Constants.success) {
+              profileImage = null;
+              Get.back();
+
+              CustomToast.successToast(msg: "User updated successfully");
+              getUserData();
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            CustomToast.failToast(msg: body["message"]);
           }
         });
       }

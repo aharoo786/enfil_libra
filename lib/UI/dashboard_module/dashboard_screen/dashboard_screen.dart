@@ -49,21 +49,48 @@ class _DashboardScreen extends State<DashboardScreen> {
         leading: Padding(
           padding: const EdgeInsets.only(top: 7),
           child: GestureDetector(
-              onTap: () {
-                Get.to(() => UserProfile());
-                Get.find<AuthController>().getUserData();
+            onTap: () {
+              Get.to(() => UserProfile());
+              Get.find<AuthController>().getUserData();
+            },
+            child: Container(
 
-              },
-              child: SvgPicture.asset(MyImgs.profilIcons)),
+              margin: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 12,
+                        offset: const Offset(2, 2),
+                        color: Colors.black.withOpacity(0.04))
+                  ],
+                  color: Colors.white,
+                  border:
+                      Border.all(color: MyColors.purpleColor.withOpacity(0.2)),
+                  image:
+                      Get.find<AuthController>().userModel!.data.user.image ==
+                              null
+                          ? const DecorationImage(
+                              image: AssetImage(MyImgs.dummyDp),
+                              fit: BoxFit.cover)
+                          : DecorationImage(
+                              image: NetworkImage(Get.find<AuthController>()
+                                  .userModel!
+                                  .data
+                                  .user
+                                  .image),
+                              fit: BoxFit.cover)),
+            ),
+          ),
         ),
         titleSpacing: 0,
         backgroundColor: MyColors.splashColor,
-        title: HelpingWidgets()
-            .appBarText("Hello 👋, Virginie ", color: MyColors.buttonColor),
+        title: HelpingWidgets().appBarText(
+            "Hello 👋, ${Get.find<AuthController>().userModel!.data.user.firstName}",
+            color: MyColors.buttonColor),
         actions: [
           IconButton(
-              onPressed: () {
-              },
+              onPressed: () {},
               icon: Icon(
                 Icons.notifications_none_outlined,
                 color: MyColors.iconColor2,

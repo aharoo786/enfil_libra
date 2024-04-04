@@ -44,6 +44,11 @@ dependencies:
   connectivity_plus: ^4.0.2
   pod_player: ^0.2.1
   signature: ^5.4.1
+  image_picker: ^1.0.7
+  flutter_image_compress: ^1.1.0
+  device_info_plus: ^9.1.0
+  permission_handler: ^10.2.0
+
 
 dev_dependencies:
   flutter_test:

@@ -13,11 +13,13 @@ class AuthRepo extends GetxService {
   Future<Response> signUpUserRepo(
       {required Map<String, dynamic> formData}) async {
     // int contentLength = utf8.encode(formData).length;
-    return await apiProvider
-        .setFormData(url: Constants.signUpPath, formData: formData, headers: {
-      HttpHeaders.contentTypeHeader: "application/json",
-      "Accept":"application/json"
-    });
+    return await apiProvider.setFormData(
+        url: Constants.signUpPath,
+        formData: formData,
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          "Accept": "application/json"
+        });
   }
 
   Future<Response> loginRepo({required Map<String, dynamic> formData}) async {
@@ -61,26 +63,35 @@ class AuthRepo extends GetxService {
   Future<Response> resendOtpRepo(
       {required Map<String, dynamic> formData}) async {
     // int contentLength = utf8.encode(formData).length;
-    return await apiProvider.setFormData(
-        url: Constants.resendOtp,
-        formData: formData,
-        headers: {
-          HttpHeaders.contentTypeHeader: "application/json",
-        });
-  }
-  Future<Response> getUserProfile(
-      { required String accessToken}) async {
-    return await apiProvider.getData(Constants.getUserProfile,headers: {
+    return await apiProvider
+        .setFormData(url: Constants.resendOtp, formData: formData, headers: {
       HttpHeaders.contentTypeHeader: "application/json",
-      "Accept":"application/json",
-      HttpHeaders.authorizationHeader: "Bearer $accessToken"
-
-
     });
   }
 
+  Future<Response> getUserProfile({required String accessToken}) async {
+    return await apiProvider.getData(Constants.getUserProfile, headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      "Accept": "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+    });
+  }
+
+  Future<Response> updateUser(
+      {required String accessToken, required Map<String, dynamic> map}) async {
+    return await apiProvider.setFormDataImage(
+        url: Constants.getUserProfile,
+        formData: map,
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json",
+          "Accept": "application/json",
+          HttpHeaders.authorizationHeader: "Bearer $accessToken"
+        });
+  }
+
   Future<Response> updatePasswordRepo(
-      {required Map<String, dynamic> formData,required String accessToken}) async {
+      {required Map<String, dynamic> formData,
+      required String accessToken}) async {
     // int contentLength = utf8.encode(formData).length;
     return await apiProvider.setFormData(
         url: Constants.updatePassword,

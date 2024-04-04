@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 
 import '../../UI/values/constants.dart';
-
+import 'package:http/http.dart' as http;
 
 class ApiProvider extends GetConnect implements GetxService {
   ApiProvider() {
@@ -221,19 +221,53 @@ class ApiProvider extends GetConnect implements GetxService {
     }
   }
 
-   setFormData(
+  setFormData(
       {required String url,
-      required  Map<String, dynamic> formData,
+      required Map<String, dynamic> formData,
       Map<String, String>? headers}) async {
-   /// final Map<String, dynamic> requestData = formData;
+    /// final Map<String, dynamic> requestData = formData;
 
     // Convert the request data to a JSON string
 
     debugPrint(
         '====> API Call: [${Constants.baseUrl + url}]\n$query  \n $headers');
-    var response = await post(url, jsonEncode(formData),
-        headers: headers ?? {},);
+    var response = await post(
+      url,
+      jsonEncode(formData),
+      headers: headers ?? {},
+    );
     debugPrint('====> API Respnse: [${response.body}]\n$query  \n $headers');
     return response;
+  }
+
+  Future<Response> setFormDataImage(
+      {required String url,
+      required Map<String, dynamic> formData,
+      Map<String, String>? headers}) async {
+    http.MultipartRequest request = http.MultipartRequest(
+      'POST',
+      Uri.parse("${Constants.baseUrl}$url"),
+    );
+
+    // Add the file to the request
+    formData.forEach((key, value) {
+      if (key == "image" && value == null) {
+        request.fields[key] = "";
+      } else {
+        request.fields[key] = value.toString();
+      }
+    });
+    if (formData["image"] != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+        'image',
+        formData["image"],
+      ));
+    }
+    if (headers != null) {
+      request.headers.addAll(headers);
+    }
+
+    var response = await http.Response.fromStream(await request.send());
+    return Response(statusCode: response.statusCode, body: response.body);
   }
 }
