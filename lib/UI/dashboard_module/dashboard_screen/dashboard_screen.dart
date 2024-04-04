@@ -54,7 +54,6 @@ class _DashboardScreen extends State<DashboardScreen> {
               Get.find<AuthController>().getUserData();
             },
             child: Container(
-
               margin: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                   shape: BoxShape.circle,

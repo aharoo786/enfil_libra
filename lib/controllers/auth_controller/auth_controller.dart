@@ -158,34 +158,36 @@ class AuthController extends GetxController implements GetxService {
     });
   }
 
-  forgotPassword(String email) {
-    Get.dialog(Center(child: CircularProgressIndicator()),
-        barrierDismissible: false);
+  TextEditingController forgotPasswordController = TextEditingController();
+  forgotPassword() {
+    // Get.dialog(const Center(child: CircularProgressIndicator()),
+    //     barrierDismissible: false);
     connectionService.checkConnection().then((value) async {
       if (!value) {
         Get.back();
-
-        CustomToast.failToast(msg: "noInternetConnection".tr);
+        bottomSheetStatus.value = 1;
+        CustomToast.noInternetToast();
         // Get.back();
       } else {
-        await authRepo
-            .forgotPassword(formData: {"email": email}).then((response) async {
-          Get.back();
+        bottomSheetStatus.value = 0;
+        await authRepo.forgotPassword(formData: {
+          "email": forgotPasswordController.text
+        }).then((response) async {
+          //Get.back();
           Get.log("login api response :${response.body}");
 
           if (response.statusCode == 200) {
-            //   Get.back();
             if (response.body["status"] == Constants.failure) {
+              bottomSheetStatus.value = 1;
+
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
-              // Get.to(() => OtpScreen(
-              //       email: email,
-              //       isFromReset: true,
-              //     ));
+              bottomSheetStatus.value = 2;
               CustomToast.successToast(
                   msg: "Otp send successfully\nPlease check your email");
             }
           } else {
+            bottomSheetStatus.value = 1;
             CustomToast.failToast(msg: response.body["message"]);
           }
         });
@@ -408,45 +410,47 @@ class AuthController extends GetxController implements GetxService {
     });
   }
 
-  // resetPasswordEmailVerify({
-  //   required String otp,
-  //   required String email,
-  // }) async {
-  //   Get.dialog(const Center(child: CircularProgressIndicator()),
-  //       barrierDismissible: false);
-  //   connectionService.checkConnection().then((value) async {
-  //     if (!value) {
-  //       Get.back();
-  //       CustomToast.failToast(msg: "noInternetConnection".tr);
-  //     } else {
-  //       await authRepo.verifyEmailResetPassword(
-  //           formData: {"otp": otp, "email": email}).then((response) async {
-  //         Get.back();
-  //         if (response.statusCode == 200) {
-  //           if (response.body["status"] == Constants.failure) {
-  //             CustomToast.failToast(msg: response.body["message"]);
-  //           } else if (response.body["status"] == Constants.success) {
-  //             SignUpModel model = SignUpModel.fromJson(response.body);
-  //             if (model.status == Constants.success) {
-  //               CustomToast.successToast(msg: response.body["message"]);
-  //               sharedPreferences.setString(
-  //                   Constants.userUid, model.data.user.id);
-  //               sharedPreferences.setString(
-  //                   Constants.email, model.data.user.email);
-  //               sharedPreferences.setString(
-  //                   Constants.fullName, model.data.user.name);
-  //               sharedPreferences.setString(
-  //                   Constants.accessToken, model.data.accessToken);
-  //               sharedPreferences.setBool(Constants.login, true);
-  //               Get.to(() => ResetPassword());
-  //             }
-  //           } else {
-  //             CustomToast.failToast(
-  //                 msg: "Some Error has occured, Try Again Later");
-  //           }
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
+  TextEditingController resetPasswordController = TextEditingController();
+  TextEditingController resetPasswordConfirmController =
+      TextEditingController();
+  resetPasswordEmailVerify() async {
+    Get.dialog(const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false);
+    connectionService.checkConnection().then((value) async {
+      if (!value) {
+        Get.back();
+        CustomToast.failToast(msg: "noInternetConnection".tr);
+      } else {
+        await authRepo.verifyEmailResetPassword(formData: {
+          "otp": signUpOtp,
+          "email": forgotPasswordController.text
+        }).then((response) async {
+          Get.back();
+          if (response.statusCode == 200) {
+            //   Get.back();
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              UserModel model = UserModel.fromJson(response.body);
+
+              userModel = model;
+
+              CustomToast.successToast(msg: response.body["message"]);
+              sharedPreferences.setString(
+                  Constants.userUid, model.data.user.id);
+              sharedPreferences.setString(
+                  Constants.email, model.data.user.email);
+
+              sharedPreferences.setString(
+                  Constants.accessToken, model.data.accessToken);
+              sharedPreferences.setBool(Constants.login, true);
+              Get.to(() => DashboardScreen());
+            }
+          } else {
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
 }
