@@ -48,6 +48,8 @@ dependencies:
   flutter_image_compress: ^1.1.0
   device_info_plus: ^9.1.0
   permission_handler: ^10.2.0
+  firebase_auth: ^4.12.1
+  firebase_core: ^2.21.0
 
 
 dev_dependencies:

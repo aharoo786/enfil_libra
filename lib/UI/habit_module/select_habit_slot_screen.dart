@@ -1,3 +1,4 @@
+import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import 'package:enfil_libre/UI/values/my_imgs.dart';
 import 'package:enfil_libre/UI/widgets/custom_button.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
@@ -472,7 +473,14 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                       ),
                                       CustomButton(
                                           text: "Save",
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Get.find<AuthController>()
+                                                .fromHabit = true;
+                                            Get.offAll(() => DashboardScreen(
+                                                  index: 2,
+                                                  fromHabit: true,
+                                                ));
+                                          },
                                           width: 160.w,
                                           roundCorner: 8),
                                     ],
@@ -498,16 +506,18 @@ class SelectHabitSlotScreen extends StatelessWidget {
   frequencyWidget(TextTheme textTheme, String text, int index) {
     var selectedIndex = Get.find<AuthController>().selectedFrequency;
     return GestureDetector(
-      onTap: (){
-        selectedIndex.value=index;
+      onTap: () {
+        selectedIndex.value = index;
       },
       child: Obx(
-        ()=> Container(
+        () => Container(
           height: 36.h,
           width: 100.w,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: selectedIndex.value == index ? MyColors.primary2 : MyColors.primaryColor,
+              color: selectedIndex.value == index
+                  ? MyColors.primary2
+                  : MyColors.primaryColor,
               border: Border.all(
                   color: selectedIndex.value == index
                       ? MyColors.primary2
@@ -519,7 +529,9 @@ class SelectHabitSlotScreen extends StatelessWidget {
               style: textTheme.headlineLarge!.copyWith(
                 fontWeight: FontWeight.w400,
                 fontSize: 16.sp,
-                color: selectedIndex.value == index ? Colors.white : MyColors.black,
+                color: selectedIndex.value == index
+                    ? Colors.white
+                    : MyColors.black,
               ),
             ),
           ),

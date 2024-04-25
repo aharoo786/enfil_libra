@@ -1,3 +1,4 @@
+import 'package:enfil_libre/UI/reward_module/reward_home_screen.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +19,8 @@ import '../widgets/custom_bottomNavigationBar.dart';
 
 class DashboardScreen extends StatefulWidget {
   int? index;
-  DashboardScreen({Key? key, this.index = 0}) : super(key: key);
+  bool fromHabit;
+  DashboardScreen({Key? key, this.index = 0,this.fromHabit=false}) : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreen();
@@ -30,7 +32,7 @@ class _DashboardScreen extends State<DashboardScreen> {
     HomeScreen(),
     MyChallengesScreen(),
     CreateHabitScreen(),
-    Container()
+    RewardHomeScreen()
   ];
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -42,61 +44,67 @@ class _DashboardScreen extends State<DashboardScreen> {
     return Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        systemOverlayStyle:
-            const SystemUiOverlayStyle(statusBarColor: MyColors.splashColor),
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(top: 7),
-          child: GestureDetector(
-            onTap: () {
-              Get.to(() => UserProfile());
-              Get.find<AuthController>().getUserData();
-            },
-            child: Container(
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 12,
-                        offset: const Offset(2, 2),
-                        color: Colors.black.withOpacity(0.04))
-                  ],
-                  color: Colors.white,
-                  border:
-                      Border.all(color: MyColors.purpleColor.withOpacity(0.2)),
-                  image:
-                      Get.find<AuthController>().userModel!.data.user.image ==
-                              null
-                          ? const DecorationImage(
-                              image: AssetImage(MyImgs.dummyDp),
-                              fit: BoxFit.cover)
-                          : DecorationImage(
-                              image: NetworkImage(Get.find<AuthController>()
-                                  .userModel!
-                                  .data
-                                  .user
-                                  .image),
-                              fit: BoxFit.cover)),
+      appBar: widget.index == 3
+          ? HelpingWidgets()
+              .appBarWidget(null, text: "Badges", statusBarColor: Colors.white)
+          : AppBar(
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                  statusBarColor: MyColors.splashColor),
+              elevation: 0,
+              leading: Padding(
+                padding: const EdgeInsets.only(top: 7),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(() => UserProfile());
+                    Get.find<AuthController>().getUserData();
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 12,
+                              offset: const Offset(2, 2),
+                              color: Colors.black.withOpacity(0.04))
+                        ],
+                        color: Colors.white,
+                        border: Border.all(
+                            color: MyColors.purpleColor.withOpacity(0.2)),
+                        image: Get.find<AuthController>()
+                                    .userModel!
+                                    .data
+                                    .user
+                                    .image ==
+                                null
+                            ? const DecorationImage(
+                                image: AssetImage(MyImgs.dummyDp),
+                                fit: BoxFit.cover)
+                            : DecorationImage(
+                                image: NetworkImage(Get.find<AuthController>()
+                                    .userModel!
+                                    .data
+                                    .user
+                                    .image),
+                                fit: BoxFit.cover)),
+                  ),
+                ),
+              ),
+              titleSpacing: 0,
+              backgroundColor: MyColors.splashColor,
+              title: HelpingWidgets().appBarText(
+                  "Hello 👋, ${Get.find<AuthController>().userModel!.data.user.firstName}",
+                  color: MyColors.buttonColor),
+              actions: [
+                IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.notifications_none_outlined,
+                      color: MyColors.iconColor2,
+                      size: 36.w,
+                    ))
+              ],
             ),
-          ),
-        ),
-        titleSpacing: 0,
-        backgroundColor: MyColors.splashColor,
-        title: HelpingWidgets().appBarText(
-            "Hello 👋, ${Get.find<AuthController>().userModel!.data.user.firstName}",
-            color: MyColors.buttonColor),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications_none_outlined,
-                color: MyColors.iconColor2,
-                size: 36.w,
-              ))
-        ],
-      ),
       body: _widgetOption.elementAt(widget.index!),
       bottomNavigationBar: CustomBottomNavigationBar(
         index: widget.index!,

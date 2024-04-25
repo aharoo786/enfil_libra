@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "928695052505",
+    "project_id": "enfillibre",
+    "storage_bucket": "enfillibre.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928695052505:android:7fceaf70e197e7b99076c8",
+        "android_client_info": {
+          "package_name": "com.abtechnologies.enfil_libre"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwqgeDIJdDdlX8Vd3De7YjDThvPKlCCms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -52,98 +52,20 @@ class UserProfile extends StatelessWidget {
             SizedBox(
               height: 30.h,
             ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
-              child: Obx(
-                () => Column(
-                  children: [
-                    if (authController.isUserDataLoad.value)
-                      Row(
-                        children: [
-                          Container(
-                            height: 64.h,
-                            width: 64.h,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                      blurRadius: 12,
-                                      offset: const Offset(2, 2),
-                                      color: Colors.black.withOpacity(0.04))
-                                ],
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: MyColors.purpleColor
-                                        .withOpacity(0.2)),
-                                image:
-                                    authController.getUserProfile!.data.image ==
-                                            null
-                                        ? const DecorationImage(
-                                            image: AssetImage(MyImgs.dummyDp),
-                                            fit: BoxFit.cover)
-                                        : DecorationImage(
-                                            image: NetworkImage(authController
-                                                .getUserProfile!.data.image),
-                                            fit: BoxFit.cover)),
-                          ),
-                          // Image.asset(MyImgs.dummyDp,scale: 3,),
-                          SizedBox(
-                            width: 12.w,
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${authController.getUserProfile!.data.firstName} ${authController.getUserProfile!.data.lastName}",
-                                  style: textTheme.headlineLarge!.copyWith(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                SizedBox(
-                                  height: 8.h,
-                                ),
-                                Text(
-                                  authController.getUserProfile!.data.email,
-                                  style: textTheme.headlineLarge!.copyWith(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                          ),
-                          GestureDetector(
-                              onTap: () {
-                                UserProfileBottomSheets()
-                                    .showUpdateUserBottomSheet(
-                                        context,
-                                        authController,
-                                        authController.genderList);
-                              },
-                              child: SvgPicture.asset(MyImgs.editIcon)),
-                        ],
-                      )
-                    else
-                      const CircularProgressIndicator(
-                        color: MyColors.buttonColor,
-                      )
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Expanded(
-                child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => Container(
-                          height: 52.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
+            GetBuilder<AuthController>(
+              builder: (cont) {
+                return Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+                  decoration: BoxDecoration(
+                      color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 64.h,
+                        width: 64.h,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
                                   blurRadius: 12,
@@ -153,24 +75,109 @@ class UserProfile extends StatelessWidget {
                             color: Colors.white,
                             border: Border.all(
                                 color: MyColors.purpleColor.withOpacity(0.2)),
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 20.w,
-                              ),
-                              SvgPicture.asset(profileList[index]["icon"]),
-                              SizedBox(
-                                width: 12.w,
-                              ),
-                              Expanded(
-                                  child: Text(
-                                profileList[index]["text"],
-                                style: textTheme.headlineLarge!.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.sp),
-                              ))
-                            ],
+                            image: authController.userModel!.data.user.image ==
+                                    null
+                                ? const DecorationImage(
+                                    image: AssetImage(MyImgs.dummyDp),
+                                    fit: BoxFit.cover)
+                                : DecorationImage(
+                                    image: NetworkImage(authController
+                                        .userModel!.data.user.image),
+                                    fit: BoxFit.cover)),
+                      ),
+                      // Image.asset(MyImgs.dummyDp,scale: 3,),
+                      SizedBox(
+                        width: 12.w,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${authController.userModel!.data.user.firstName} ${authController.userModel!.data.user.lastName}",
+                              style: textTheme.headlineLarge!.copyWith(
+                                  fontSize: 20.sp, fontWeight: FontWeight.w700),
+                            ),
+                            SizedBox(
+                              height: 8.h,
+                            ),
+                            Text(
+                              authController.userModel!.data.user.email,
+                              style: textTheme.headlineLarge!.copyWith(
+                                  fontSize: 14.sp, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            UserProfileBottomSheets().showUpdateUserBottomSheet(
+                                context,
+                                authController,
+                                authController.genderList);
+                          },
+                          child: SvgPicture.asset(MyImgs.editIcon)),
+                    ],
+                  ),
+                  //),
+                );
+              }
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            Expanded(
+                child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => GestureDetector(
+                          onTap: () {
+                            if (index == 0) {
+                              UserProfileBottomSheets()
+                                  .showUpdatePasswordBottomSheet(
+                                      context, authController);
+                            } else if (index == 1) {
+                              UserProfileBottomSheets().showAboutUsBottomSheet(
+                                  context, authController);
+                            } else if (index == 2) {
+                              UserProfileBottomSheets()
+                                  .showRateUsDialog(context, authController);
+                            } else {
+                              UserProfileBottomSheets()
+                                  .showLogoutDialog(context, authController);
+                            }
+                          },
+                          child: Container(
+                            height: 52.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 12,
+                                    offset: const Offset(2, 2),
+                                    color: Colors.black.withOpacity(0.04))
+                              ],
+                              color: Colors.white,
+                              border: Border.all(
+                                  color: MyColors.purpleColor.withOpacity(0.2)),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 20.w,
+                                ),
+                                SvgPicture.asset(profileList[index]["icon"]),
+                                SizedBox(
+                                  width: 12.w,
+                                ),
+                                Expanded(
+                                    child: Text(
+                                  profileList[index]["text"],
+                                  style: textTheme.headlineLarge!.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.sp),
+                                ))
+                              ],
+                            ),
                           ),
                         ),
                     separatorBuilder: (context, index) => SizedBox(

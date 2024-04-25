@@ -19,50 +19,50 @@ class MyRoutinesScreen extends StatelessWidget {
           ),
           Expanded(
               child: Container(
-            decoration: const BoxDecoration(
-                // boxShadow: [
-                //   BoxShadow(
-                //       spreadRadius: 4,
-                //       blurRadius: 4,
-                //       offset: const Offset(0, 0),
-                //       color: Colors.black.withOpacity(0.08))
-                // ],
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32), topRight: Radius.circular(32))),
-            child:  Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 40.h,
-                ),
-                Padding(
-                  padding:  EdgeInsets.only(left: 20.w),
-                  child: Text(
-                    'All Tasks',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.sp,
-                        color: MyColors.buttonColor),
-                  ),
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Expanded(
-                  child: ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      // shrinkWrap: true,
-                      itemBuilder: (context, index) =>
-                      const CustomProgressWidget(),
-                      separatorBuilder: (context, index) => SizedBox(
-                        height: 16.h,
+                  decoration: const BoxDecoration(
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //       spreadRadius: 4,
+                      //       blurRadius: 4,
+                      //       offset: const Offset(0, 0),
+                      //       color: Colors.black.withOpacity(0.08))
+                      // ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(32),
+                          topRight: Radius.circular(32))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 40.h,
                       ),
-                      itemCount: 8),
-                )
-              ],
-            )
-          ))
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.w),
+                        child: Text(
+                          'My Routines',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20.sp,
+                              color: MyColors.buttonColor),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Expanded(
+                        child: ListView.separated(
+                            physics: const BouncingScrollPhysics(),
+                            // shrinkWrap: true,
+                            itemBuilder: (context, index) =>
+                                const CustomProgressWidget(),
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 16.h,
+                                ),
+                            itemCount: 8),
+                      )
+                    ],
+                  )))
         ],
       ),
     );

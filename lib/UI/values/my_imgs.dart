@@ -1,6 +1,7 @@
 class MyImgs {
   static const String appLogo = "assets/images/appLogo.svg";
   static const String logo = "assets/images/logo.png";
+  static const String logoutGatePng = "assets/images/logoutGate.png";
   static const String onBoarding1 = "assets/images/onbaording1.svg";
   static const String onBoarding2 = "assets/images/onBoarding2.svg";
   static const String onBoarding3 = "assets/images/onBoarding3.svg";
@@ -8,10 +9,16 @@ class MyImgs {
   static const String chart = "assets/images/chart.svg";
   static const String myAccount = "assets/images/myAccount.svg";
   static const String dummyDp = "assets/images/dummyDp.png";
+  static const String googleStoreButton = "assets/images/googleStoreButton.png";
+  static const String appleStoreButton = "assets/images/appleStoreButton.png";
+  static const String socialIcons = "assets/images/socialIcons.png";
   static const String createHabitVector = "assets/images/createHabitVector.svg";
 
   ///Icons
   static const String googleIcon = "assets/icons/google.svg";
+  static const String logoutGate = "assets/icons/logoutGate.svg";
+  static const String starFill = "assets/icons/starFill.svg";
+  static const String medal = "assets/icons/medal.svg";
   static const String lock = "assets/icons/lock.svg";
   static const String rateUs = "assets/icons/rateUs.svg";
   static const String aboutUs = "assets/icons/aboutUs.svg";

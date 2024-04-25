@@ -1,4 +1,4 @@
-package com.example.enfil_libre
+package com.abtechnologies.enfil_libre
 
 import io.flutter.embedding.android.FlutterActivity
 

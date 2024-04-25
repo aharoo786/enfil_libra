@@ -33,7 +33,6 @@ class CustomTextFieldBorder extends StatelessWidget {
   final double? fontSize;
   final FontWeight? fontWeight;
 
-
   final bool isListOfInputFormatters;
   final Function(String)? onFieldSubmitted;
   final List<BoxShadow>? boxShadow;
@@ -71,7 +70,7 @@ class CustomTextFieldBorder extends StatelessWidget {
       this.textColor,
       this.cursorColor,
       this.onFieldSubmitted,
-      this.verticalPadding=0.0,
+      this.verticalPadding = 0.0,
       this.boxShadow = const [],
       this.isListOfInputFormatters = false,
       this.fontSize,
@@ -133,7 +132,7 @@ class CustomTextFieldBorder extends StatelessWidget {
         onFieldSubmitted: onFieldSubmitted,
         decoration: InputDecoration(
           contentPadding:
-              EdgeInsets.symmetric(horizontal: 10.w,vertical: verticalPadding),
+              EdgeInsets.symmetric(horizontal: 10.w, vertical: verticalPadding),
           border: border ?? InputBorder.none,
 
           errorText: errorText,
@@ -152,7 +151,6 @@ class CustomTextFieldBorder extends StatelessWidget {
           suffixIcon: suffixIcon,
 
           hintStyle: TextStyle(
-
               color: hintColor ?? MyColors.hintText,
               fontWeight: FontWeight.w300,
               fontSize: fontSize ?? 16.sp),

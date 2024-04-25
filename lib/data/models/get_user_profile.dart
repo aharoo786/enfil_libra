@@ -58,7 +58,7 @@ class Data {
     email: json["email"],
     image: json["image"],
     gender: json["gender"],
-    otpVerify: json["otp_verify"],
+    otpVerify: json["otp_verify"] is String ? json["otp_verify"]=="1"?true:false:json["otp_verify"]  ,
   );
 
   Map<String, dynamic> toJson() => {

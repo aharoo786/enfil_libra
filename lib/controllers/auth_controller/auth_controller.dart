@@ -28,6 +28,7 @@ class AuthController extends GetxController implements GetxService {
   var bottomSheetStatus = 1.obs;
 
   var selectedFrequency = 999.obs;
+  bool fromHabit = false;
 
   ///Image counter
   int i = 0;
@@ -393,7 +394,16 @@ class AuthController extends GetxController implements GetxService {
             if (body["status"] == Constants.failure) {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (body["status"] == Constants.success) {
+              var getUserProfile =
+                  GetUserProfile.fromJson(jsonDecode(response.body));
+              userModel!.data.user.firstName = getUserProfile.data.firstName;
+              userModel!.data.user.lastName = getUserProfile.data.lastName;
+              userModel!.data.user.image = getUserProfile.data.image;
+              userModel!.data.user.gender = getUserProfile.data.gender;
+
               profileImage = null;
+              update();
+
               Get.back();
 
               CustomToast.successToast(msg: "User updated successfully");

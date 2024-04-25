@@ -19,6 +19,7 @@ class MyColors {
   static const Color pendingColor = Color(0xFFFFECE8);
   static const Color inProgressColor = Color(0xFFE9F1FF);
   static const Color purpleColor = Color(0xFF7E6EE0);
+  static Color borderColor = purpleColor.withOpacity(0.2);
   //static const Color finishedColorContainer = Color(0xFFF2FFED);
   static const Color finishedColor = Color(0xFFF2FFED);
 
@@ -101,7 +102,6 @@ class MyColors {
   static const Color lightTeal = Color(0xFF4AD6C8);
   static const Color lightBlue2 = Color(0xFF7685FC);
   static const Color facebook = Color(0xFF3B589C);
-  static const Color borderColor = Color(0xFF3B589C);
 
   static const Color bodyBackground = Color(0xFFFFFFFF);
   static const Color lightTextColor = Color(0xFF6B7280);
