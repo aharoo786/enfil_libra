@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import 'package:enfil_libre/UI/widgets/otp_bottom_sheet_widget.dart';
@@ -162,7 +163,7 @@ class AuthController extends GetxController implements GetxService {
   }
 
   socialLogin(String email, String name, String loginType) {
-    Get.dialog(Center(child: CircularProgressIndicator()),
+    Get.dialog(const Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
     connectionService.checkConnection().then((value) async {
       if (!value) {
@@ -254,6 +255,39 @@ class AuthController extends GetxController implements GetxService {
         } catch (error) {
           //Get.back();
           print("Error during Google Sign-In: $error");
+        }
+      }
+    });
+  }
+
+  void handleappleLogin() async {
+    await connectionService.checkConnection().then((value) async {
+      if (!value) {
+        CustomToast.noInternetToast();
+      } else {
+        final appleAuthProvider = firebase_auth.AppleAuthProvider();
+        appleAuthProvider.addScope("email");
+
+        var authCredentials = await _auth.signInWithProvider(appleAuthProvider);
+        final firebase_auth.User? user = authCredentials.user;
+        print("User :   $user");
+        if (user != null) {
+          if (Platform.isIOS) {
+            if (user.email == null) {
+              if (user.providerData.isNotEmpty) {
+                socialLogin(user.providerData[0].email ?? "",
+                    user.displayName ?? "", "apple");
+              } else {
+                socialLogin(user.email ?? "", user.displayName ?? "", "apple");
+              }
+            } else {
+              socialLogin(user.email ?? "", user.displayName ?? "", "apple");
+            }
+          } else {
+            socialLogin(user.email ?? "", user.displayName ?? "", "apple");
+          }
+        } else {
+          CustomToast.failToast(msg: "Something went wrong");
         }
       }
     });

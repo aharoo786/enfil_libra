@@ -48,9 +48,9 @@ dependencies:
   flutter_image_compress: ^1.1.0
   device_info_plus: ^9.1.0
   permission_handler: ^10.2.0
-  firebase_auth: ^4.12.1
-  firebase_core: ^2.21.0
-  google_sign_in: ^6.1.6
+  firebase_auth: ^4.19.4
+  firebase_core: ^2.30.1
+  google_sign_in: ^6.2.1
   shimmer: ^3.0.0
 
 

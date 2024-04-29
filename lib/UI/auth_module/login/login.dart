@@ -296,7 +296,9 @@ class _LoginState extends State<Login> {
                                   ),
                                   SocialCard(
                                     icon: MyImgs.appleIcon,
-                                    onTap: () {},
+                                    onTap: () {
+                                      authController.handleappleLogin();
+                                    },
                                   ),
                                   SocialCard(
                                     icon: MyImgs.facebookIcon,

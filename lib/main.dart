@@ -13,7 +13,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyAwqgeDIJdDdlX8Vd3De7YjDThvPKlCCms",
+          appId: "1:928695052505:android:7fceaf70e197e7b99076c8",
+          messagingSenderId: "messaging scenter",
+          projectId: "enfillibre"));
 
   await di.init();
   runApp(const MyApp());

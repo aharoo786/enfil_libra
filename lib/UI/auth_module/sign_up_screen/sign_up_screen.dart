@@ -319,7 +319,10 @@ class SignUpScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SocialCard(icon: MyImgs.googleIcon,onTap: (){authController.showEmailsDialog();},),
-                                  SocialCard(icon: MyImgs.appleIcon,onTap: (){},),
+                                  SocialCard(icon: MyImgs.appleIcon,onTap: (){
+                                    authController.handleappleLogin();
+
+                                  },),
                                   SocialCard(icon: MyImgs.facebookIcon,onTap: (){},)
                                 ],
                               ),
