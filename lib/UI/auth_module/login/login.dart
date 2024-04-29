@@ -284,13 +284,24 @@ class _LoginState extends State<Login> {
                               SizedBox(
                                 height: 24.h,
                               ),
-                              const Row(
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SocialCard(icon: MyImgs.googleIcon),
-                                  SocialCard(icon: MyImgs.appleIcon),
-                                  SocialCard(icon: MyImgs.facebookIcon)
+                                  SocialCard(
+                                    icon: MyImgs.googleIcon,
+                                    onTap: () {
+                                      authController.showEmailsDialog();
+                                    },
+                                  ),
+                                  SocialCard(
+                                    icon: MyImgs.appleIcon,
+                                    onTap: () {},
+                                  ),
+                                  SocialCard(
+                                    icon: MyImgs.facebookIcon,
+                                    onTap: () {},
+                                  )
                                 ],
                               ),
                               SizedBox(

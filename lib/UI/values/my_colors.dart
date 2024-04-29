@@ -125,4 +125,6 @@ class MyColors {
 
   //Color(0xFFEBFD6C);
   static const Color subCategory = Color(0xFFF6F6F8);
+  static const Color shimmerBaseColor = Color(0xFFE0E0E0);
+  static const Color shimmerHighlightColor = Color(0xfff5f5f5);
 }

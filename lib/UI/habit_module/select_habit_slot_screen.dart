@@ -2,6 +2,7 @@ import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_scree
 import 'package:enfil_libre/UI/values/my_imgs.dart';
 import 'package:enfil_libre/UI/widgets/custom_button.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
+import 'package:enfil_libre/controllers/habit_controller/habit_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +27,9 @@ class SelectHabitSlotScreen extends StatelessWidget {
   ];
 
   final List<String> frequencyText = ["Daily", "Weekly", "Monthly"];
+  final List<String> slotText = ["Morning", "Evening", "Night", "Every Time"];
+  final List<String> dayText = ["M", "T", "W", "T", "F", "S", "S"];
+  final HabitController habitController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +80,28 @@ class SelectHabitSlotScreen extends StatelessWidget {
                         itemCount: tempColors.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (ctx, index) {
-                          return Container(
-                            height: 36.h,
-                            width: 36.w,
-                            margin: EdgeInsets.symmetric(horizontal: 6.w),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: tempColors[index]),
+                          return Obx(
+                            () => GestureDetector(
+                              onTap: () {
+                                habitController.selectedHabitColor.value =
+                                    index;
+                              },
+                              child: Container(
+                                height: 36.h,
+                                width: 36.w,
+                                margin: EdgeInsets.symmetric(horizontal: 6.w),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 2,
+                                        color: habitController
+                                                    .selectedHabitColor.value ==
+                                                index
+                                            ? MyColors.primary2
+                                            : Colors.transparent),
+                                    color: tempColors[index]),
+                              ),
+                            ),
                           );
                         }),
                   )
@@ -93,7 +112,7 @@ class SelectHabitSlotScreen extends StatelessWidget {
               height: 20.h,
             ),
             Container(
-              height: 156.h,
+              // height: 156.h,
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
               decoration: BoxDecoration(
@@ -125,7 +144,10 @@ class SelectHabitSlotScreen extends StatelessWidget {
                     child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) => frequencyWidget(
-                            textTheme, frequencyText[index], index),
+                            textTheme,
+                            frequencyText[index],
+                            index,
+                            habitController.selectedFrequency),
                         separatorBuilder: (context, index) => SizedBox(
                               width: 16.w,
                             ),
@@ -194,19 +216,44 @@ class SelectHabitSlotScreen extends StatelessWidget {
                   SizedBox(
                     height: 16.h,
                   ),
-                  Container(
-                    height: 36.h,
-                    width: 145.w,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: MyColors.black, width: 1)),
-                    child: Center(
-                      child: Text(
-                        "+More option",
-                        style: textTheme.headlineLarge!.copyWith(
-                            fontWeight: FontWeight.w400, fontSize: 16.sp),
-                      ),
-                    ),
+                  Obx(
+                    () => habitController.selectedFrequency.value == 3
+                        ? SizedBox(
+                            height: 60.h,
+                            child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) => dayWidget(
+                                    textTheme,
+                                    dayText[index],
+                                    index,
+                                    habitController.selectedFrequencyDay),
+                                separatorBuilder: (context, index) => SizedBox(
+                                      width: 11.w,
+                                    ),
+                                itemCount: dayText.length),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              habitController.selectedFrequency.value = 3;
+                            },
+                            child: Container(
+                              height: 36.h,
+                              width: 145.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: MyColors.buttonColor, width: 1)),
+                              child: Center(
+                                child: Text(
+                                  "+More option",
+                                  style: textTheme.headlineLarge!.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16.sp,
+                                      color: MyColors.buttonColor),
+                                ),
+                              ),
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -243,17 +290,30 @@ class SelectHabitSlotScreen extends StatelessWidget {
                     height: 20.h,
                   ),
 
-                  SizedBox(
-                    height: 36.h,
-                    child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) => frequencyWidget(
-                            textTheme, frequencyText[index], index),
-                        separatorBuilder: (context, index) => SizedBox(
-                              width: 16.w,
-                            ),
-                        itemCount: frequencyText.length),
+                  Wrap(
+                    spacing: 16.w,
+                    runSpacing: 16.h,
+                    children: List.generate(
+                      slotText.length,
+                      (index) => frequencyWidget(textTheme, slotText[index],
+                          index, habitController.selectedSlot),
+                    ),
                   ),
+
+                  // SizedBox(
+                  //   height: 36.h,
+                  //   child: ListView.separated(
+                  //       scrollDirection: Axis.horizontal,
+                  //       itemBuilder: (context, index) => frequencyWidget(
+                  //           textTheme,
+                  //           slotText[index],
+                  //           index,
+                  //           habitController.selectedSlot),
+                  //       separatorBuilder: (context, index) => SizedBox(
+                  //             width: 16.w,
+                  //           ),
+                  //       itemCount: slotText.length),
+                  // ),
 
                   // Row(
                   //   //  mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -314,23 +374,23 @@ class SelectHabitSlotScreen extends StatelessWidget {
                   //     ),
                   //   ],
                   // ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  Container(
-                    height: 36.h,
-                    width: 117.w,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: MyColors.black, width: 1)),
-                    child: Center(
-                      child: Text(
-                        "Every time",
-                        style: textTheme.headlineLarge!.copyWith(
-                            fontWeight: FontWeight.w400, fontSize: 16.sp),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 16.h,
+                  // ),
+                  // Container(
+                  //   height: 36.h,
+                  //   width: 117.w,
+                  //   decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       border: Border.all(color: MyColors.black, width: 1)),
+                  //   child: Center(
+                  //     child: Text(
+                  //       "Every time",
+                  //       style: textTheme.headlineLarge!.copyWith(
+                  //           fontWeight: FontWeight.w400, fontSize: 16.sp),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -341,6 +401,10 @@ class SelectHabitSlotScreen extends StatelessWidget {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(12.r),
+                            topLeft: Radius.circular(12.r))),
                     builder: (BuildContext context) {
                       return Container(
                         height: 820.h,
@@ -385,6 +449,8 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                         color: MyColors.splashColor,
                                         borderColor: MyColors.splashColor,
                                         roundCorner: 8,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 18.sp,
                                         width: 120.w,
                                         textColor: Colors.black,
                                       ),
@@ -396,7 +462,7 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                             activeColor: MyColors.buttonColor,
                                           ),
                                           SizedBox(
-                                            width: 20.w,
+                                            width: 5.w,
                                           ),
                                           SvgPicture.asset(MyImgs.info)
                                         ],
@@ -409,10 +475,18 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                   SizedBox(
                                     width: 284.w,
                                     height: 184.h,
-                                    child: CupertinoTimerPicker(
-                                        mode: CupertinoTimerPickerMode.hms,
-                                        onTimerDurationChanged:
-                                            (Duration duration) {}),
+                                    child: CupertinoPicker(
+                                      itemExtent: 50,
+
+                                      onSelectedItemChanged: (int value) {
+                                        print("Value  $value");
+                                      },
+                                      children: [
+                                        Text("Text"),
+                                        Text("Text"),
+                                        Text("Text")
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 20.h,
@@ -424,6 +498,8 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                       CustomButton(
                                         text: "Minute",
                                         onPressed: () {},
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 18.sp,
                                         color: MyColors.splashColor,
                                         borderColor: MyColors.splashColor,
                                         roundCorner: 8,
@@ -438,7 +514,7 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                             activeColor: MyColors.buttonColor,
                                           ),
                                           SizedBox(
-                                            width: 20.w,
+                                            width: 5.w,
                                           ),
                                           SvgPicture.asset(MyImgs.info)
                                         ],
@@ -503,8 +579,8 @@ class SelectHabitSlotScreen extends StatelessWidget {
     );
   }
 
-  frequencyWidget(TextTheme textTheme, String text, int index) {
-    var selectedIndex = Get.find<AuthController>().selectedFrequency;
+  frequencyWidget(
+      TextTheme textTheme, String text, int index, RxInt selectedIndex) {
     return GestureDetector(
       onTap: () {
         selectedIndex.value = index;
@@ -513,6 +589,42 @@ class SelectHabitSlotScreen extends StatelessWidget {
         () => Container(
           height: 36.h,
           width: 100.w,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: selectedIndex.value == index
+                  ? MyColors.primary2
+                  : MyColors.primaryColor,
+              border: Border.all(
+                  color: selectedIndex.value == index
+                      ? MyColors.primary2
+                      : MyColors.black,
+                  width: 1)),
+          child: Center(
+            child: Text(
+              text,
+              style: textTheme.headlineLarge!.copyWith(
+                fontWeight: FontWeight.w400,
+                fontSize: 16.sp,
+                color: selectedIndex.value == index
+                    ? Colors.white
+                    : MyColors.black,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  dayWidget(TextTheme textTheme, String text, int index, RxInt selectedIndex) {
+    return GestureDetector(
+      onTap: () {
+        selectedIndex.value = index;
+      },
+      child: Obx(
+        () => Container(
+          height: 60.h,
+          width: 40.w,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: selectedIndex.value == index

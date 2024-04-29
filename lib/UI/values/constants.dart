@@ -20,10 +20,11 @@ class Constants {
   ///end points
   static String signUpPath = "/sign-up";
   static String loginPath = "/sign-in";
+  static String socialLogin = "/social-login";
   static String forgotPassword = "/forget-password";
   static String getUser = "/user";
   static String getProvinces = "/provinces";
-  static String getCities = "/cities";
+  static String getCategories = "/categories";
   static String otp = "/verify-otp";
   static String resetPasswordOtp = "/reset-password";
   static String resendOtp = "/resend-otp";

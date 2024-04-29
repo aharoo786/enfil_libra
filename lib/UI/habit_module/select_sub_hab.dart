@@ -1,5 +1,6 @@
 import 'package:enfil_libre/UI/habit_module/select_habit_slot_screen.dart';
 import 'package:enfil_libre/UI/habit_module/widgets/habit_widget.dart';
+import 'package:enfil_libre/data/models/habit_module/get_catergories_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,15 +10,17 @@ import '../values/my_colors.dart';
 import '../widgets/app_bar_widget.dart';
 
 class SelectSubHat extends StatelessWidget {
-  SelectSubHat({super.key});
+  SelectSubHat(
+      {super.key, required this.subCategories, required this.category});
 
   final List<String> catHab = [
     "100 Pushups",
     "2 km running",
     "Weight lifting",
     "Legs exercise",
-
   ];
+  final List<SubCategory> subCategories;
+  final Datum category;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class SelectSubHat extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 20.w),
             child: Text(
-              "Exercise > Choose sub category",
+              "${category.name} > Choose sub category",
               style: textTheme.headlineLarge!.copyWith(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.w700,
@@ -49,16 +52,16 @@ class SelectSubHat extends StatelessWidget {
             child: ListView.separated(
                 padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
                 itemBuilder: (context, index) => HabitWidget(
-                      text: catHab[index],
+                      text: subCategories[index].name,
                       onTap: () {
-                        Get.to(()=>SelectHabitSlotScreen());
+                        Get.to(() => SelectHabitSlotScreen());
                       },
                       showContainer: false,
                     ),
                 separatorBuilder: (context, index) => SizedBox(
                       height: 12.h,
                     ),
-                itemCount: catHab.length),
+                itemCount: subCategories.length),
           )
         ],
       ),

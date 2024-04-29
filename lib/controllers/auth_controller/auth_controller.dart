@@ -4,17 +4,16 @@ import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_scree
 import 'package:enfil_libre/UI/widgets/otp_bottom_sheet_widget.dart';
 import 'package:enfil_libre/data/models/get_user_profile.dart';
 import 'package:enfil_libre/data/models/user_model/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../UI/auth_module/email_verification/otp_screen.dart';
 import '../../UI/auth_module/login/login.dart';
 import '../../UI/values/constants.dart';
 import '../../UI/widgets/toasts.dart';
 import '../../data/GetServices/CheckConnectionService.dart';
-import '../../data/models/sign_up_model/sign_up_model.dart';
 import '../../data/repos/auth_repo/auth_repo.dart';
 
 class AuthController extends GetxController implements GetxService {
@@ -27,7 +26,6 @@ class AuthController extends GetxController implements GetxService {
   var isLoginPassObscure = true.obs;
   var bottomSheetStatus = 1.obs;
 
-  var selectedFrequency = 999.obs;
   bool fromHabit = false;
 
   ///Image counter
@@ -48,6 +46,10 @@ class AuthController extends GetxController implements GetxService {
   TextEditingController password = TextEditingController();
   TextEditingController loginEmail = TextEditingController();
   TextEditingController loginPassword = TextEditingController();
+
+  ///Intiliazting variables
+  final firebase_auth.FirebaseAuth _auth = firebase_auth.FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
 
   // checkSignUpValidation(){
   //   if(firstName.text.isEmpty){
@@ -155,6 +157,104 @@ class AuthController extends GetxController implements GetxService {
             CustomToast.failToast(msg: response.body["message"]);
           }
         });
+      }
+    });
+  }
+
+  socialLogin(String email, String name, String loginType) {
+    Get.dialog(Center(child: CircularProgressIndicator()),
+        barrierDismissible: false);
+    connectionService.checkConnection().then((value) async {
+      if (!value) {
+        Get.back();
+
+        CustomToast.failToast(msg: "No internet Connection".tr);
+        // Get.back();
+      } else {
+        await authRepo.socialLoginRepo(formData: {
+          "email": email,
+          "type": loginType,
+          "name": name
+        }).then((response) async {
+          Get.back();
+          Get.log("login api response :${response.body}");
+
+          if (response.statusCode == 200) {
+            //   Get.back();
+            if (response.body["status"] == Constants.failure) {
+              if (response.body["errors"] != null) {
+                if (response.body["errors"]["otp_verify"] != null) {
+                  if (response.body["errors"]["otp_verify"] == false) {
+                    CustomToast.failToast(
+                        msg: response.body["errors"]["message"] ??
+                            "Please verify your email");
+                  }
+                } else {
+                  CustomToast.failToast(
+                      msg: response.body["errors"]["message"] ??
+                          "Some error occurred");
+                }
+              }
+            } else if (response.body["status"] == Constants.success) {
+              UserModel model = UserModel.fromJson(response.body);
+              if (model.status == Constants.success) {
+                CustomToast.successToast(msg: response.body["message"]);
+                sharedPreferences.setString(
+                    Constants.userUid, model.data.user.id);
+                sharedPreferences.setString(
+                    Constants.email, model.data.user.email);
+
+                sharedPreferences.setString(
+                    Constants.accessToken, model.data.accessToken);
+
+                sharedPreferences.setBool(Constants.login, true);
+                userModel = model;
+                Get.to(() => DashboardScreen());
+              }
+            }
+          } else {
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
+
+  Future<void> showEmailsDialog({bool isFromResortScreen = false}) async {
+    // Get.dialog(Center(child: CircularProgressIndicator()),
+    //     barrierDismissible: false);
+    await connectionService.checkConnection().then((value) async {
+      if (!value) {
+        // Get.back();
+
+        CustomToast.noInternetToast();
+      } else {
+        try {
+          final GoogleSignInAccount? googleSignInAccount =
+              await googleSignIn.signIn();
+          if (googleSignInAccount != null) {
+            // Get.back();
+            final GoogleSignInAuthentication googleSignInAuthentication =
+                await googleSignInAccount.authentication;
+            //  signInUsingGoogle(googleSignInAuthentication.accessToken!);
+            final firebase_auth.AuthCredential credential =
+                firebase_auth.GoogleAuthProvider.credential(
+              accessToken: googleSignInAuthentication.accessToken,
+              idToken: googleSignInAuthentication.idToken,
+            );
+
+            final firebase_auth.UserCredential authResult =
+                await _auth.signInWithCredential(credential);
+            final firebase_auth.User? user = authResult.user;
+            print("user $user");
+            if (user != null) {
+              socialLogin(user.email ?? "", user.displayName ?? "", "google");
+            }
+          }
+        } catch (error) {
+          //Get.back();
+          print("Error during Google Sign-In: $error");
+        }
       }
     });
   }

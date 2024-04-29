@@ -12,7 +12,20 @@
           "package_name": "com.abtechnologies.enfil_libre"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "928695052505-mdi7t0drf62c54kq6aslje11gth9aeah.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abtechnologies.enfil_libre",
+            "certificate_hash": "4e8e388c77b99cfa465f239e0865a340cba0583b"
+          }
+        },
+        {
+          "client_id": "928695052505-sb5rc6dmunj72a5h5la122a1hav0j87a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAwqgeDIJdDdlX8Vd3De7YjDThvPKlCCms"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928695052505-sb5rc6dmunj72a5h5la122a1hav0j87a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

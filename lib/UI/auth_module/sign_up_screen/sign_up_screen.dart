@@ -276,7 +276,7 @@ class SignUpScreen extends StatelessWidget {
                               CustomButton(
                                   text: "Sign up",
                                   onPressed: () async {
-                                   // Get.bottomSheet(otpBottomSheet(context, "abc"));
+                                    // Get.bottomSheet(otpBottomSheet(context, "abc"));
 
                                     if (authController.email.text.isEmpty ||
                                         authController.firstName.text.isEmpty ||
@@ -298,7 +298,6 @@ class SignUpScreen extends StatelessWidget {
                                     } else {
                                       authController.signUp(context);
                                     }
-
                                   }),
                               SizedBox(
                                 height: 25.h,
@@ -315,13 +314,13 @@ class SignUpScreen extends StatelessWidget {
                               SizedBox(
                                 height: 20.h,
                               ),
-                              const Row(
+                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SocialCard(icon: MyImgs.googleIcon),
-                                  SocialCard(icon: MyImgs.appleIcon),
-                                  SocialCard(icon: MyImgs.facebookIcon)
+                                  SocialCard(icon: MyImgs.googleIcon,onTap: (){authController.showEmailsDialog();},),
+                                  SocialCard(icon: MyImgs.appleIcon,onTap: (){},),
+                                  SocialCard(icon: MyImgs.facebookIcon,onTap: (){},)
                                 ],
                               ),
                               SizedBox(

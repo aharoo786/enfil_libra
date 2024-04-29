@@ -50,6 +50,8 @@ dependencies:
   permission_handler: ^10.2.0
   firebase_auth: ^4.12.1
   firebase_core: ^2.21.0
+  google_sign_in: ^6.1.6
+  shimmer: ^3.0.0
 
 
 dev_dependencies:

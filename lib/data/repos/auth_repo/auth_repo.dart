@@ -30,6 +30,15 @@ class AuthRepo extends GetxService {
     });
   }
 
+  Future<Response> socialLoginRepo(
+      {required Map<String, dynamic> formData}) async {
+    // int contentLength = utf8.encode(formData).length;
+    return await apiProvider
+        .setFormData(url: Constants.socialLogin, formData: formData, headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+    });
+  }
+
   Future<Response> forgotPassword(
       {required Map<String, dynamic> formData}) async {
     // int contentLength = utf8.encode(formData).length;

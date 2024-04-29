@@ -2,6 +2,7 @@ import 'package:enfil_libre/UI/dashboard_module/home_screen/my_routines_screen.d
 import 'package:enfil_libre/UI/habit_module/create_new_habit.dart';
 import 'package:enfil_libre/UI/widgets/custom_button.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
+import 'package:enfil_libre/controllers/habit_controller/habit_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -80,6 +81,8 @@ class CreateHabitScreen extends StatelessWidget {
                               text: "+ Create a habit",
                               width: 190.w,
                               onPressed: () {
+                                Get.find<HabitController>()
+                                    .getCategoriesScreen();
                                 Get.to(() => CreateNewHabit());
                               },
                               color: Colors.white,
