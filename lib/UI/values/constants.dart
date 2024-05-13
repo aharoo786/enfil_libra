@@ -4,6 +4,7 @@ class Constants {
   static String countryCode = "92";
   static String countryName = "PK";
   static String fullName = "fullName";
+  static String deviceToken = "deviceToken";
   static String baseUrl = "https://5b9a-2400-adc5-15d-da00-8ca6-1189-f18-f959.ngrok-free.app/api";
   // static String baseUrl = "https://libra.vordx.com/api";
 

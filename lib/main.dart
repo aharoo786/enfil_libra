@@ -17,7 +17,7 @@ Future<void> main() async {
       options: const FirebaseOptions(
           apiKey: "AIzaSyAwqgeDIJdDdlX8Vd3De7YjDThvPKlCCms",
           appId: "1:928695052505:android:7fceaf70e197e7b99076c8",
-          messagingSenderId: "messaging scenter",
+          messagingSenderId: "928695052505",
           projectId: "enfillibre"));
 
   await di.init();

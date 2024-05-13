@@ -17,12 +17,13 @@ import '../../UI/values/constants.dart';
 import '../../UI/widgets/toasts.dart';
 import '../../data/GetServices/CheckConnectionService.dart';
 import '../../data/repos/auth_repo/auth_repo.dart';
+import '../../helper/notification_services.dart';
 
 class AuthController extends GetxController implements GetxService {
   SharedPreferences sharedPreferences;
   AuthRepo authRepo;
-
-  AuthController({required this.sharedPreferences, required this.authRepo});
+  NotificationServices notificationServices;
+  AuthController({required this.sharedPreferences, required this.authRepo,required this.notificationServices});
   CheckConnectionService connectionService = CheckConnectionService();
 
   var isLoginPassObscure = true.obs;
@@ -618,5 +619,23 @@ class AuthController extends GetxController implements GetxService {
         });
       }
     });
+  }
+
+
+  initializeFireBase() {
+    notificationServices.requestNotificationPermission();
+    notificationServices.forgroundMessage();
+    notificationServices.firebaseInit();
+    notificationServices.setupInteractMessage();
+    notificationServices.isTokenRefresh();
+
+    notificationServices.getDeviceToken();
+    //print('device token ${localStorageMethods.getDvToken()}');
+  }
+
+  @override
+  void onInit() {
+    initializeFireBase();
+    super.onInit();
   }
 }
