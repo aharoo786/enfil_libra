@@ -54,7 +54,8 @@ class SelectSubHat extends StatelessWidget {
                 itemBuilder: (context, index) => HabitWidget(
                       text: subCategories[index].name,
                       onTap: () {
-                        Get.to(() => SelectHabitSlotScreen());
+
+                        Get.to(() => SelectHabitSlotScreen(subCategory: subCategories[index],));
                       },
                       showContainer: false,
                     ),

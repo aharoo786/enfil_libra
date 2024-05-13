@@ -302,7 +302,9 @@ class _LoginState extends State<Login> {
                                   ),
                                   SocialCard(
                                     icon: MyImgs.facebookIcon,
-                                    onTap: () {},
+                                    onTap: () {
+                                      authController.loginWithFacebook();
+                                    },
                                   )
                                 ],
                               ),

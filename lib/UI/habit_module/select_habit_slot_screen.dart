@@ -3,16 +3,22 @@ import 'package:enfil_libre/UI/values/my_imgs.dart';
 import 'package:enfil_libre/UI/widgets/custom_button.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
 import 'package:enfil_libre/controllers/habit_controller/habit_controller.dart';
+import 'package:enfil_libre/data/models/habit_module/get_catergories_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:signature/signature.dart';
 import '../values/my_colors.dart';
 import '../widgets/app_bar_widget.dart';
 
 class SelectHabitSlotScreen extends StatelessWidget {
-  SelectHabitSlotScreen({super.key});
+  SelectHabitSlotScreen({super.key, required this.subCategory});
+
+  final SubCategory subCategory;
+
   final List<Color> tempColors = [
     Colors.red,
     Colors.green,
@@ -29,6 +35,16 @@ class SelectHabitSlotScreen extends StatelessWidget {
   final List<String> frequencyText = ["Daily", "Weekly", "Monthly"];
   final List<String> slotText = ["Morning", "Evening", "Night", "Every Time"];
   final List<String> dayText = ["M", "T", "W", "T", "F", "S", "S"];
+  final List<String> counterNumber = ["1", "2", "3", "4", "5", "6", "7"];
+  final List<String> counterType = [
+    "Liters",
+    "Gallon",
+    "Time",
+    "Page",
+    "Kilometer"
+  ];
+  final List<String> counterHour = ["Per Hour"];
+
   final HabitController habitController = Get.find();
 
   @override
@@ -472,19 +488,138 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                   SizedBox(
                                     height: 20.h,
                                   ),
+                                  // SizedBox(
+                                  //   width: 284.w,
+                                  //   height: 184.h,
+                                  //   child: CupertinoPicker(
+                                  //     itemExtent: 40,
+                                  //     onSelectedItemChanged: (int value) {
+                                  //       print("Value  $value");
+                                  //     },
+                                  //     children: [
+                                  //       Row(
+                                  //         mainAxisAlignment:
+                                  //             MainAxisAlignment.spaceEvenly,
+                                  //         children: [
+                                  //           Expanded(
+                                  //             child: ListView.separated(
+                                  //                 itemBuilder: (BuildContext
+                                  //                             context,
+                                  //                         int index) =>
+                                  //                     Text(
+                                  //                         "${counterNumber[index]}"),
+                                  //                 separatorBuilder:
+                                  //                     (BuildContext context,
+                                  //                             int index) =>
+                                  //                         SizedBox(
+                                  //                           height: 10.h,
+                                  //                         ),
+                                  //                 itemCount:
+                                  //                     counterNumber.length),
+                                  //           ),
+                                  //           Expanded(
+                                  //             child: ListView.separated(
+                                  //                 itemBuilder: (BuildContext
+                                  //                             context,
+                                  //                         int index) =>
+                                  //                     Text(
+                                  //                         "${counterType[index]}"),
+                                  //                 separatorBuilder:
+                                  //                     (BuildContext context,
+                                  //                             int index) =>
+                                  //                         SizedBox(
+                                  //                           height: 10.h,
+                                  //                         ),
+                                  //                 itemCount:
+                                  //                     counterType.length),
+                                  //           ),
+                                  //           Expanded(
+                                  //             child: ListView.separated(
+                                  //                 itemBuilder: (BuildContext
+                                  //                             context,
+                                  //                         int index) =>
+                                  //                     Text(
+                                  //                         "${counterHour[index]}"),
+                                  //                 separatorBuilder:
+                                  //                     (BuildContext context,
+                                  //                             int index) =>
+                                  //                         SizedBox(
+                                  //                           height: 10.h,
+                                  //                         ),
+                                  //                 itemCount:
+                                  //                     counterHour.length),
+                                  //           ),
+                                  //         ],
+                                  //       )
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   SizedBox(
-                                    width: 284.w,
                                     height: 184.h,
-                                    child: CupertinoPicker(
-                                      itemExtent: 50,
-
-                                      onSelectedItemChanged: (int value) {
-                                        print("Value  $value");
-                                      },
+                                    width: 300.w,
+                                    child: Row(
                                       children: [
-                                        Text("Text"),
-                                        Text("Text"),
-                                        Text("Text")
+                                        Expanded(
+                                          child: CupertinoPicker(
+                                            itemExtent: 40,
+                                            onSelectedItemChanged: (int value) {
+                                              habitController.counterNumberIndex =
+                                                  value;
+                                            },
+                                            children: List<Widget>.generate(
+                                                counterNumber.length,
+                                                (int index) {
+                                              return Center(
+                                                child: Text(
+                                                    '${counterNumber[index]}'),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: CupertinoPicker(
+                                            itemExtent: 40,
+                                            onSelectedItemChanged: (int value) {
+                                              habitController.counterTypeIndex =
+                                                  value;
+                                            },
+                                            children: List<Widget>.generate(
+                                                counterType.length,
+                                                (int index) {
+                                              return Center(
+                                                child: Text(
+                                                  '${counterType[index]}',
+                                                  style: TextStyle(
+                                                      fontSize: 20.sp,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: CupertinoPicker(
+                                            itemExtent: 40,
+                                            onSelectedItemChanged: (int value) {
+                                              habitController.counterHourIndex =
+                                                  value;
+                                            },
+                                            children: List<Widget>.generate(
+                                                counterHour.length,
+                                                (int index) {
+                                              return Center(
+                                                child: Text(
+                                                  counterHour[index],
+                                                  style: TextStyle(
+                                                      fontSize: 18.sp,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -528,9 +663,12 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                     width: 284.w,
                                     height: 184.h,
                                     child: CupertinoTimerPicker(
-                                        mode: CupertinoTimerPickerMode.hms,
+                                        mode: CupertinoTimerPickerMode.hm,
                                         onTimerDurationChanged:
-                                            (Duration duration) {}),
+                                            (Duration duration) {
+                                          habitController.time =
+                                              "${duration.inHours}:${duration.inMinutes.remainder(60)}";
+                                        }),
                                   ),
                                   SizedBox(
                                     height: 45.h,
@@ -550,12 +688,33 @@ class SelectHabitSlotScreen extends StatelessWidget {
                                       CustomButton(
                                           text: "Save",
                                           onPressed: () {
-                                            Get.find<AuthController>()
-                                                .fromHabit = true;
-                                            Get.offAll(() => DashboardScreen(
-                                                  index: 2,
-                                                  fromHabit: true,
-                                                ));
+
+                                      print("   1112 2 2 ${  tempColors[
+                                      habitController
+                                          .selectedHabitColor
+                                          .value].value.toRadixString(16).substring(2).toUpperCase()}");
+                                            habitController.crateHabit(
+                                                subCategory.name,
+                                                tempColors[
+                                                        habitController
+                                                            .selectedHabitColor
+                                                            .value].value.toRadixString(16).substring(2).toUpperCase(),
+                                                habitController
+                                                            .selectedFrequency
+                                                            .value ==
+                                                        3
+                                                    ? dayText[habitController
+                                                        .selectedFrequencyDay
+                                                        .value]
+                                                    : frequencyText[
+                                                        habitController
+                                                            .selectedFrequency
+                                                            .value],
+                                                slotText[habitController
+                                                    .selectedSlot.value],
+                                                null,
+                                                subCategory.id.toString(),
+                                                "${counterNumber[habitController.counterNumberIndex]} ${counterType[habitController.counterTypeIndex]} ${counterHour[habitController.counterHourIndex]} ");
                                           },
                                           width: 160.w,
                                           roundCorner: 8),

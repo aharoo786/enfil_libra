@@ -8,20 +8,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../values/my_colors.dart';
 import '../../values/my_imgs.dart';
 import '../widgets/custom_progress_widget.dart';
 
 class CreateHabitScreen extends StatelessWidget {
-  const CreateHabitScreen({super.key, this.fromHabit = false});
+  CreateHabitScreen({super.key, this.fromHabit = false});
   final bool fromHabit;
+  final HabitController habitController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    return Get.find<AuthController>().fromHabit
-        ? const MyRoutinesScreen()
-        : Scaffold(
+    return Obx(() {
+      if (habitController.isHabitsLoad.value) {
+        if (habitController.getUserHabitUser!.data.isEmpty) {
+          return Scaffold(
             backgroundColor: MyColors.splashColor,
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,13 +35,6 @@ class CreateHabitScreen extends StatelessWidget {
                 Expanded(
                     child: Container(
                         decoration: const BoxDecoration(
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //       spreadRadius: 4,
-                            //       blurRadius: 4,
-                            //       offset: const Offset(0, 0),
-                            //       color: Colors.black.withOpacity(0.08))
-                            // ],
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(32),
@@ -96,5 +92,59 @@ class CreateHabitScreen extends StatelessWidget {
               ],
             ),
           );
+        } else {
+          return MyRoutinesScreen();
+        }
+      } else {
+        return Shimmer.fromColors(
+          baseColor: MyColors.shimmerBaseColor,
+          highlightColor: MyColors.shimmerHighlightColor,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20.h,
+              ),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 40.h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20.w),
+                    child: Text(
+                      'My Routines',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20.sp,
+                          color: MyColors.buttonColor),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        // shrinkWrap: true,
+                        itemBuilder: (context, index) => Container(
+                              color: MyColors.shimmerBaseColor,
+                              height: 96.h,
+                              margin: EdgeInsets.symmetric(horizontal: 20.w),
+                            ),
+                        separatorBuilder: (context, index) => SizedBox(
+                              height: 16.h,
+                            ),
+                        itemCount: 8),
+                  )
+                ],
+              ))
+            ],
+          ),
+        );
+      }
+    });
   }
 }

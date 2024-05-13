@@ -2,7 +2,8 @@ import 'package:pod_player/pod_player.dart';
 import 'package:flutter/material.dart';
 
 class PlayVideoFromYoutube extends StatefulWidget {
-  const PlayVideoFromYoutube({Key? key}) : super(key: key);
+  const PlayVideoFromYoutube({Key? key, required this.url}) : super(key: key);
+  final String url;
 
   @override
   State<PlayVideoFromYoutube> createState() => _PlayVideoFromYoutubeState();
@@ -14,8 +15,7 @@ class _PlayVideoFromYoutubeState extends State<PlayVideoFromYoutube> {
   @override
   void initState() {
     controller = PodPlayerController(
-      playVideoFrom: PlayVideoFrom.youtube(
-          'https://youtu.be/vrtuxyePrlg?si=gdzFeKtoB1tT-zZ9'),
+      playVideoFrom: PlayVideoFrom.network(widget.url),
     )..initialise();
     super.initState();
   }

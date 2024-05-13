@@ -52,7 +52,7 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"],
+    id: json["id"].toString(),
     firstName: json["first_name"],
     lastName: json["last_name"],
     email: json["email"],

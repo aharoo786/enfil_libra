@@ -7,6 +7,7 @@ import 'package:enfil_libre/data/models/get_user_profile.dart';
 import 'package:enfil_libre/data/models/user_model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -291,6 +292,27 @@ class AuthController extends GetxController implements GetxService {
         }
       }
     });
+  }
+
+  Future<void> loginWithFacebook() async {
+    try {
+
+      final LoginResult result = await FacebookAuth.instance.login();
+
+      // Check if the login was successful
+      if (result.status == LoginStatus.success) {
+        // Get the Facebook access token
+        final AccessToken accessToken = result.accessToken!;
+        final firebase_auth.AuthCredential credential =
+            firebase_auth.FacebookAuthProvider.credential(accessToken.token);
+        await _auth.signInWithCredential(credential);
+
+      } else {
+        print('Facebook Login Failed');
+      }
+    } catch (e) {
+      print('Facebook Login Error: $e');
+    }
   }
 
   TextEditingController forgotPasswordController = TextEditingController();
