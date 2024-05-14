@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-GetUserChallenges getUserChallengesFromJson(String str) => GetUserChallenges.fromJson(json.decode(str));
+GetUserChallenges getUserChallengesFromJson(String str) =>
+    GetUserChallenges.fromJson(json.decode(str));
 
-String getUserChallengesToJson(GetUserChallenges data) => json.encode(data.toJson());
+String getUserChallengesToJson(GetUserChallenges data) =>
+    json.encode(data.toJson());
 
 class GetUserChallenges {
   String status;
@@ -19,17 +21,19 @@ class GetUserChallenges {
     required this.data,
   });
 
-  factory GetUserChallenges.fromJson(Map<String, dynamic> json) => GetUserChallenges(
-    status: json["status"],
-    message: json["message"],
-    data: List<UserChallenges>.from(json["data"].map((x) => UserChallenges.fromJson(x))),
-  );
+  factory GetUserChallenges.fromJson(Map<String, dynamic> json) =>
+      GetUserChallenges(
+        status: json["status"],
+        message: json["message"],
+        data: List<UserChallenges>.from(
+            json["data"].map((x) => UserChallenges.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "status": status,
+        "message": message,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class UserChallenges {
@@ -56,26 +60,26 @@ class UserChallenges {
   });
 
   factory UserChallenges.fromJson(Map<String, dynamic> json) => UserChallenges(
-    id: json["id"],
-    userId: json["user_id"],
-    challengeId: json["challenge_id"],
-    days: json["days"],
-    rewards: json["rewards"],
-    status: json["status"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-    deletedAt: json["deleted_at"],
-  );
+        id: json["id"],
+        userId: json["user_id"].toString(),
+        challengeId: json["challenge_id"].toString(),
+        days: json["days"].toString(),
+        rewards: json["rewards"].toString(),
+        status: json["status"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        deletedAt: json["deleted_at"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "user_id": userId,
-    "challenge_id": challengeId,
-    "days": days,
-    "rewards": rewards,
-    "status": status,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
-    "deleted_at": deletedAt,
-  };
+        "id": id,
+        "user_id": userId,
+        "challenge_id": challengeId,
+        "days": days,
+        "rewards": rewards,
+        "status": status,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "deleted_at": deletedAt,
+      };
 }

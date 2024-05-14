@@ -60,7 +60,7 @@ class Challenges {
         id: json["id"],
         name: json["name"],
         rewardPoint: json["reward_point"],
-        numberOfDay: json["number_of_day"],
+        numberOfDay: json["number_of_day"].toString(),
         videoUrl: json["video_url"],
         description: json["description"],
         createdAt: DateTime.parse(json["created_at"]),

@@ -2,6 +2,7 @@ import 'package:enfil_libre/UI/widgets/app_bar_widget.dart';
 import 'package:enfil_libre/UI/widgets/custom_button.dart';
 import 'package:enfil_libre/UI/widgets/toasts.dart';
 import 'package:enfil_libre/controllers/challenge_controller/challenge_contoller.dart';
+import 'package:enfil_libre/data/models/get_challenges_model/get_challenges_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,7 +16,9 @@ import '../../values/my_imgs.dart';
 import '../video_player/video_player.dart';
 
 class StartChallengeScreen extends StatelessWidget {
-  StartChallengeScreen({super.key});
+  StartChallengeScreen({super.key, required this.challenges});
+
+  final Challenges challenges;
 
   final ChallengeController challengeController = Get.find();
   final SignatureController signatureControllerController = SignatureController(
@@ -298,7 +301,7 @@ class StartChallengeScreen extends StatelessWidget {
                                                       height: 20.h,
                                                       colorFilter:
                                                           const ColorFilter
-                                                                  .mode(
+                                                              .mode(
                                                               MyColors
                                                                   .buttonColor,
                                                               BlendMode.srcIn),
@@ -435,64 +438,76 @@ class StartChallengeScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: Container(
-        color: Colors.white,
-        padding:
-            EdgeInsets.only(bottom: 40.h, left: 55.w, right: 55.w, top: 10.h),
-        child:  Obx(
-            ()=>  challengeController.isChallengesLoad.value? CustomButton(
-              text: "Start",
-              onPressed: () {
-                signatureControllerController.clear();
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        content: Container(
-                          // height: 400,
-                          // width: 400,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "I commit to following the challenge and going to the end",
-                                style: textTheme.headlineSmall!.copyWith(
-                                    fontSize: 20.sp, fontWeight: FontWeight.w700),
+          color: Colors.white,
+          padding:
+              EdgeInsets.only(bottom: 40.h, left: 55.w, right: 55.w, top: 10.h),
+          child: Obx(() => challengeController.isChallengesLoad.value
+              ? CustomButton(
+                  text: "Start",
+                  onPressed: () {
+                    signatureControllerController.clear();
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Container(
+                              // height: 400,
+                              // width: 400,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "I commit to following the challenge and going to the end",
+                                    style: textTheme.headlineSmall!.copyWith(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  SizedBox(
+                                    height: 35.h,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Signature(
+                                      controller: signatureControllerController,
+                                      // width: 300,
+                                      height: 130.h,
+                                      backgroundColor: MyColors.inProgressColor,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 35.h,
+                                  ),
+                                  CustomButton(
+                                      text: "Start",
+                                      onPressed: () {
+                                        if (signatureControllerController
+                                            .isEmpty) {
+                                          CustomToast.failToast(
+                                              msg: "Please provide signature");
+                                        } else {
+                                          challengeController.addChallenge(
+                                              challengeController
+                                                  .challengesModel!.data[0].id
+                                                  .toString());
+                                        }
+                                      })
+                                ],
                               ),
-                              SizedBox(
-                                height: 35.h,
-                              ),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Signature(
-                                  controller: signatureControllerController,
-                                  // width: 300,
-                                  height: 130.h,
-                                  backgroundColor: MyColors.inProgressColor,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 35.h,
-                              ),
-                              CustomButton(text: "Start", onPressed: () {
-                                if(signatureControllerController.isEmpty){
-                                  CustomToast.failToast(msg: "Please provide signature");
-                                }
-                                else{
-                                  challengeController.addChallenge(challengeController.challengesModel!.data[0].id.toString());
-                                }
-                              })
-                            ],
-                          ),
-                        ),
-                      );
-                    });
-              })              :Shimmer.fromColors(baseColor: MyColors.shimmerBaseColor, highlightColor: MyColors.shimmerHighlightColor, child: CustomButton(text: '', onPressed: () {  },color: MyColors.shimmerBaseColor,))
-
-        )
-      ),
+                            ),
+                          );
+                        });
+                  })
+              : Shimmer.fromColors(
+                  baseColor: MyColors.shimmerBaseColor,
+                  highlightColor: MyColors.shimmerHighlightColor,
+                  child: CustomButton(
+                    text: '',
+                    onPressed: () {},
+                    color: MyColors.shimmerBaseColor,
+                  )))),
     );
   }
 }

@@ -108,6 +108,7 @@ class ChallengeController extends GetxController implements GetxService {
     });
   }
 
+
   addChallenge(String id) {
     Get.dialog(Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
@@ -130,6 +131,7 @@ class ChallengeController extends GetxController implements GetxService {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
               Get.back();
+              getUserChallengesFunc();
               CustomToast.successToast(msg: response.body["message"]);
             }
           } else {
@@ -143,8 +145,9 @@ class ChallengeController extends GetxController implements GetxService {
 
   @override
   void onInit() {
-    // TODO: implement onInit
+    getChallengesScreen();
     getUserChallengesFunc();
+
     super.onInit();
   }
 }

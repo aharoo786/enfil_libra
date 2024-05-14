@@ -18,6 +18,9 @@ class Constants {
   static String success = "success";
   static String accessToken = "accessToken";
   static String login = "login";
+  static String process = "process";
+  static String completed = "completed";
+  static String incomplete = "incomplete";
 
   ///end points
   static String signUpPath = "/sign-up";

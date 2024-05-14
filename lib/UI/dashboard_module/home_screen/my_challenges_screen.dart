@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../challenge_module/widgets/challenge_widget_start.dart';
 import '../../values/my_colors.dart';
 import '../../values/my_imgs.dart';
 import '../widgets/custom_progress_widget.dart';
@@ -82,21 +83,21 @@ class MyChallengesScreen extends StatelessWidget {
                                   text: "All",
                                 ),
                                 Tab(
-                                  text: "Pending",
-                                ),
-                                Tab(
                                   text: "In progress",
                                 ),
                                 Tab(
                                   text: "Finished",
-                                )
+                                ),
+                                Tab(
+                                  text: "Failed",
+                                ),
                               ]),
                         ),
                         Expanded(
                             child: TabBarView(
                           children: [
                             ///Alll Tab
-                            Obx(() => challengeController.isUserChallenges.value
+                            Obx(() => challengeController.isChallengesLoad.value
                                 ? GridView.builder(
                                     padding: EdgeInsets.symmetric(
                                         vertical: 20.h, horizontal: 20.w),
@@ -109,41 +110,14 @@ class MyChallengesScreen extends StatelessWidget {
                                           24.h, // Spacing between rows
                                     ),
                                     itemCount: challengeController
-                                        .getUserChallenges!.data.length,
+                                        .challengesModel!.data.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       var userChallenge = challengeController
-                                          .getUserChallenges!.data[index];
-                                      return ChallengeWidget(
+                                          .challengesModel!.data[index];
+                                      return ChallengeWidgetStart(
                                         index: index,
-                                        userChallenges: userChallenge,
-                                      );
-                                    },
-                                  )
-                                : shimmerChallenge()),
-
-                            ///Pending
-                            Obx(() => challengeController.isUserChallenges.value
-                                ? GridView.builder(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 20.h, horizontal: 20.w),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, // Number of columns
-                                      crossAxisSpacing:
-                                          14.w, // Spacing between columns
-                                      mainAxisSpacing:
-                                          24.h, // Spacing between rows
-                                    ),
-                                    itemCount:
-                                        challengeController.pendingList.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      var userChallenge = challengeController
-                                          .pendingList[index];
-                                      return ChallengeWidget(
-                                        index: index,
-                                        userChallenges: userChallenge,
+                                        challenge: userChallenge,
                                       );
                                     },
                                   )
@@ -201,7 +175,34 @@ class MyChallengesScreen extends StatelessWidget {
                                       );
                                     },
                                   )
-                                : shimmerChallenge())
+                                : shimmerChallenge()),
+
+                            ///Pending
+                            Obx(() => challengeController.isUserChallenges.value
+                                ? GridView.builder(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 20.h, horizontal: 20.w),
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2, // Number of columns
+                                      crossAxisSpacing:
+                                          14.w, // Spacing between columns
+                                      mainAxisSpacing:
+                                          24.h, // Spacing between rows
+                                    ),
+                                    itemCount:
+                                        challengeController.pendingList.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      var userChallenge = challengeController
+                                          .pendingList[index];
+                                      return ChallengeWidget(
+                                        index: index,
+                                        userChallenges: userChallenge,
+                                      );
+                                    },
+                                  )
+                                : shimmerChallenge()),
                           ],
                         ))
                       ],

@@ -6,17 +6,17 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../controllers/challenge_controller/challenge_contoller.dart';
-import '../../values/constants.dart';
+import '../../../data/models/get_challenges_model/get_challenges_model.dart';
 import '../../values/my_colors.dart';
 import '../../values/my_imgs.dart';
 import '../../widgets/custom_button.dart';
 import '../start_challege/start_challege_screen.dart';
 
-class ChallengeWidget extends StatelessWidget {
-  ChallengeWidget({super.key, required this.index, this.userChallenges});
+class ChallengeWidgetStart extends StatelessWidget {
+  ChallengeWidgetStart({super.key, required this.index, this.challenge});
 
   final int index;
-  final UserChallenges? userChallenges;
+  final Challenges? challenge;
 
   final List<Color> myColors = [
     MyColors.pendingColor,
@@ -30,8 +30,7 @@ class ChallengeWidget extends StatelessWidget {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         decoration: BoxDecoration(
-            color:
-                userChallenges!.status == Constants.process ? myColors[1] : myColors[0],
+            color: myColors[0],
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
@@ -68,7 +67,7 @@ class ChallengeWidget extends StatelessWidget {
                       width: 8.w,
                     ),
                     Text(
-                      userChallenges!.rewards,
+                      challenge!.rewardPoint,
                       style: textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 12.sp,
@@ -76,27 +75,27 @@ class ChallengeWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
-                  width: 12.w,
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.access_time,
-                      color: MyColors.buttonColor.withOpacity(0.4),
-                    ),
-                    SizedBox(
-                      width: 8.w,
-                    ),
-                    Text(
-                      '2 days left',
-                      style: textTheme.titleLarge!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12.sp,
-                          color: MyColors.buttonColor),
-                    ),
-                  ],
-                ),
+                // SizedBox(
+                //   width: 12.w,
+                // ),
+                // Row(
+                //   children: [
+                //     Icon(
+                //       Icons.access_time,
+                //       color: MyColors.buttonColor.withOpacity(0.4),
+                //     ),
+                //     SizedBox(
+                //       width: 8.w,
+                //     ),
+                //     Text(
+                //       '2 days left',
+                //       style: textTheme.titleLarge!.copyWith(
+                //           fontWeight: FontWeight.w600,
+                //           fontSize: 12.sp,
+                //           color: MyColors.buttonColor),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
             SizedBox(
@@ -125,50 +124,24 @@ class ChallengeWidget extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            userChallenges!.status == Constants.process
-                ? Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '25%',
-                          style: textTheme.titleLarge!.copyWith(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12.sp,
-                              color: MyColors.buttonColor),
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: LinearProgressIndicator(
-                          minHeight: 8.h,
-                          value: 0.5,
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                              MyColors
-                                  .primary2), // Color of the progress indicator
-                          backgroundColor: Colors.black.withOpacity(0.1),
-                        ),
-                      )
-                    ],
-                  )
-                : CustomButton(
-                    text: MyColors.finishedColor == myColors[index]
-                        ? "Finished"
-                        : "START",
-                    onPressed: () {
-                      // Get.to(() => StartChallengeScreen());
-                      // Get.find<ChallengeController>().getChallengesScreen();
-                    },
-                    height: 32.h,
-                    color: MyColors.finishedColor == myColors[index]
-                        ? const Color(0xff4ECB71)
-                        : MyColors.buttonColor,
-                    borderColor: MyColors.finishedColor == myColors[index]
-                        ? const Color(0xff4ECB71)
-                        : MyColors.primary2,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w700,
-                  )
+            CustomButton(
+              text: MyColors.finishedColor == myColors[index]
+                  ? "Finished"
+                  : "START",
+              onPressed: () {
+                Get.to(() => StartChallengeScreen(challenges: challenge!,));
+                // Get.find<ChallengeController>().getChallengesScreen();
+              },
+              height: 32.h,
+              color: MyColors.finishedColor == myColors[index]
+                  ? const Color(0xff4ECB71)
+                  : MyColors.buttonColor,
+              borderColor: MyColors.finishedColor == myColors[index]
+                  ? const Color(0xff4ECB71)
+                  : MyColors.primary2,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w700,
+            )
           ],
         ));
   }

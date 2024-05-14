@@ -23,7 +23,10 @@ class AuthController extends GetxController implements GetxService {
   SharedPreferences sharedPreferences;
   AuthRepo authRepo;
   NotificationServices notificationServices;
-  AuthController({required this.sharedPreferences, required this.authRepo,required this.notificationServices});
+  AuthController(
+      {required this.sharedPreferences,
+      required this.authRepo,
+      required this.notificationServices});
   CheckConnectionService connectionService = CheckConnectionService();
 
   var isLoginPassObscure = true.obs;
@@ -86,7 +89,8 @@ class AuthController extends GetxController implements GetxService {
           "last_name": lastName.text,
           "email": email.text,
           "password": password.text,
-          "password_confirmation": password.text
+          "password_confirmation": password.text,
+          "device_token":sharedPreferences.getString(Constants.deviceToken)
         }).then((response) {
           Get.log("response 111   ${response.body}");
           Get.back();
@@ -117,9 +121,12 @@ class AuthController extends GetxController implements GetxService {
         CustomToast.failToast(msg: "No internet Connection".tr);
         // Get.back();
       } else {
-        await authRepo
-            .loginRepo(formData: {"email": email, "password": password}).then(
-                (response) async {
+        await authRepo.loginRepo(formData: {
+          "email": email,
+          "password": password,
+          "device_token":
+              sharedPreferences.getString(Constants.deviceToken) ?? ""
+        }).then((response) async {
           Get.back();
           Get.log("login api response :${response.body}");
 
@@ -177,7 +184,8 @@ class AuthController extends GetxController implements GetxService {
         await authRepo.socialLoginRepo(formData: {
           "email": email,
           "type": loginType,
-          "name": name
+          "name": name,
+          "device_token":sharedPreferences.getString(Constants.deviceToken)
         }).then((response) async {
           Get.back();
           Get.log("login api response :${response.body}");
@@ -297,20 +305,18 @@ class AuthController extends GetxController implements GetxService {
 
   Future<void> loginWithFacebook() async {
     try {
-
-      final LoginResult result = await FacebookAuth.instance.login();
-
+       var result = await FacebookAuth.instance.login();
+      print("result  $result");
       // Check if the login was successful
-      if (result.status == LoginStatus.success) {
-        // Get the Facebook access token
-        final AccessToken accessToken = result.accessToken!;
-        final firebase_auth.AuthCredential credential =
-            firebase_auth.FacebookAuthProvider.credential(accessToken.token);
-        await _auth.signInWithCredential(credential);
-
-      } else {
-        print('Facebook Login Failed');
-      }
+      // if (result.status == LoginStatus.success) {
+      //   // Get the Facebook access token
+      //   final AccessToken accessToken = result.accessToken!;
+      //   final firebase_auth.AuthCredential credential =
+      //       firebase_auth.FacebookAuthProvider.credential(accessToken.tokenString);
+      //   await _auth.signInWithCredential(credential);
+      // } else {
+      //   print('Facebook Login Failed');
+      // }
     } catch (e) {
       print('Facebook Login Error: $e');
     }
@@ -620,7 +626,6 @@ class AuthController extends GetxController implements GetxService {
       }
     });
   }
-
 
   initializeFireBase() {
     notificationServices.requestNotificationPermission();

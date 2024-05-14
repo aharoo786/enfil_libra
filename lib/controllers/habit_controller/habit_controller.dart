@@ -33,6 +33,10 @@ class HabitController extends GetxController implements GetxService {
   var counterNumberIndex = 0;
   var counterTypeIndex = 0;
   var counterHourIndex = 0;
+  var showReminder = true.obs;
+  var showCounter = true.obs;
+  var showMinutes = true.obs;
+
 
   ///Models
   CategoriesModel? categoriesModel;
@@ -103,6 +107,7 @@ class HabitController extends GetxController implements GetxService {
       }
     });
   }
+
 
   crateHabit(String subCatName, String color, String frequency, String slot,
       String? reminder, String subCatId, String counterText) {
