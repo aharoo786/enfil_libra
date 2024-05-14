@@ -304,10 +304,19 @@ class AuthController extends GetxController implements GetxService {
   }
 
   Future<void> loginWithFacebook() async {
-    try {
-       var result = await FacebookAuth.instance.login();
-      print("result  $result");
-      // Check if the login was successful
+    //try {
+
+       // firebase_auth.FacebookAuthProvider provider=firebase_auth.FacebookAuthProvider();
+       //  provider.addScope("email");
+       // var authCredentials = await _auth.signInWithProvider(provider);
+
+      var result =  await FacebookAuth.instance.login(permissions: ["email"]);
+    //   print("result  $authCredentials");
+     //
+     // var  result2  = await result;
+       print("result  $result");
+
+    // Check if the login was successful
       // if (result.status == LoginStatus.success) {
       //   // Get the Facebook access token
       //   final AccessToken accessToken = result.accessToken!;
@@ -317,9 +326,9 @@ class AuthController extends GetxController implements GetxService {
       // } else {
       //   print('Facebook Login Failed');
       // }
-    } catch (e) {
-      print('Facebook Login Error: $e');
-    }
+    // } catch (e) {
+    //   print('Facebook Login Error: $e');
+    // }
   }
 
   TextEditingController forgotPasswordController = TextEditingController();

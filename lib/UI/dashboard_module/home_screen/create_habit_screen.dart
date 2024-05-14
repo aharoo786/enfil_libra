@@ -93,7 +93,7 @@ class CreateHabitScreen extends StatelessWidget {
             ),
           );
         } else {
-          return MyRoutinesScreen();
+          return MyRoutinesScreen(userHabits:habitController.getUserHabitUser!.data);
         }
       } else {
         return Shimmer.fromColors(

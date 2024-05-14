@@ -1,17 +1,21 @@
+import 'package:enfil_libre/UI/dashboard_module/widgets/my_routine_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../controllers/habit_controller/habit_controller.dart';
+import '../../../data/models/get_user_habit/get_user_habit.dart';
 import '../../habit_module/create_new_habit.dart';
 import '../../values/my_colors.dart';
 import '../../widgets/custom_button.dart';
 import '../widgets/custom_progress_widget.dart';
 
 class MyRoutinesScreen extends StatelessWidget {
-  const MyRoutinesScreen({super.key});
+  MyRoutinesScreen({super.key, required this.userHabits});
+  final List<UserHabit> userHabits;
 
+  final HabitController habitController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,14 +79,17 @@ class MyRoutinesScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: ListView.separated(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
                             physics: const BouncingScrollPhysics(),
                             // shrinkWrap: true,
                             itemBuilder: (context, index) =>
-                                const CustomProgressWidget(),
+                                CustomRoutineWidget(
+                                  userHabit: userHabits[index],
+                                ),
                             separatorBuilder: (context, index) => SizedBox(
                                   height: 16.h,
                                 ),
-                            itemCount: 8),
+                            itemCount: userHabits.length),
                       )
                     ],
                   )))
