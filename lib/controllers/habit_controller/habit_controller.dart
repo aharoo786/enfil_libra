@@ -1,4 +1,5 @@
 import 'package:enfil_libre/data/models/get_user_habit/get_user_habit.dart';
+import 'package:enfil_libre/data/models/get_user_habit_details/get_user_habit_details.dart';
 import 'package:enfil_libre/data/models/habit_module/get_catergories_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ class HabitController extends GetxController implements GetxService {
   ///variables
   var isCategoriesLoad = false.obs;
   var isHabitsLoad = false.obs;
+  var isHabitsDetailsLoad = false.obs;
   var selectedFrequency = 0.obs;
   var selectedFrequencyDay = 0.obs;
   var selectedHabitColor = 0.obs;
@@ -37,10 +39,10 @@ class HabitController extends GetxController implements GetxService {
   var showCounter = true.obs;
   var showMinutes = true.obs;
 
-
   ///Models
   CategoriesModel? categoriesModel;
   GetUserHabits? getUserHabitUser;
+  GetUserHabitDetails? getUserHabitDetails;
 
   getCategoriesScreen() async {
     isCategoriesLoad.value = false;
@@ -108,6 +110,40 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
+  getUserHabitDetailsFunc(String habitId) async {
+    isHabitsDetailsLoad.value = false;
+
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        await habitRepo
+            .getHabitDetailsRepo(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "",
+                habitId: habitId)
+            .then((response) async {
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              GetUserHabitDetails model =
+                  GetUserHabitDetails.fromJson(response.body);
+              if (model.status == Constants.success) {
+                getUserHabitDetails = model;
+                isHabitsDetailsLoad.value = true;
+              }
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
 
   crateHabit(String subCatName, String color, String frequency, String slot,
       String? reminder, String subCatId, String counterText) {

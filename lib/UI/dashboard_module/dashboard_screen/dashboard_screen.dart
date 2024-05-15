@@ -1,3 +1,4 @@
+import 'package:enfil_libre/UI/dashboard_module/widgets/home_bottom_sheets.dart';
 import 'package:enfil_libre/UI/reward_module/reward_home_screen.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +98,9 @@ class _DashboardScreen extends State<DashboardScreen> {
                   color: MyColors.buttonColor),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      HomeBottomSheets().showUpdateUserBottomSheet(context);
+                    },
                     icon: Icon(
                       Icons.notifications_none_outlined,
                       color: MyColors.iconColor2,

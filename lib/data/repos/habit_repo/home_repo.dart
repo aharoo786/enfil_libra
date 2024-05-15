@@ -25,6 +25,13 @@ class HabitRepo extends GetxService {
       HttpHeaders.authorizationHeader: "Bearer $accessToken"
     });
   }
+
+  Future<Response> getHabitDetailsRepo({required String accessToken,required String habitId}) async {
+    return await apiProvider.getData("${Constants.habit}/$habitId", headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+    });
+  }
   Future<Response> createHabitRepo({required Map<String, dynamic> formData,required String accessToken}) async {
     // int contentLength = utf8.encode(formData).length;
     return await apiProvider

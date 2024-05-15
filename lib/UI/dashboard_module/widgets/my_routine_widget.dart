@@ -1,4 +1,5 @@
 import 'package:enfil_libre/UI/habit_module/habit_details.dart';
+import 'package:enfil_libre/controllers/habit_controller/habit_controller.dart';
 import 'package:enfil_libre/data/models/get_user_habit/get_user_habit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,8 +18,8 @@ class CustomRoutineWidget extends StatelessWidget {
     var textTheme = theme.textTheme;
     return GestureDetector(
       onTap: () {
+        Get.find<HabitController>().getUserHabitDetailsFunc(userHabit.id.toString());
         Get.to(() => HabitDetailsScreen(
-              userHabit: userHabit,
             ));
       },
       child: Container(
