@@ -1,12 +1,24 @@
+import 'dart:async';
+import 'dart:ffi';
+
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../controllers/home_controller/home_controller.dart';
+import '../../../data/models/dashboard_module/overview_model.dart';
 import '../../values/my_colors.dart';
 import '../../values/my_imgs.dart';
 import 'custom_progress_widget.dart';
+import 'cutomProgressWidgetShimmer.dart';
 
 class CustomTabBar extends StatefulWidget {
   const CustomTabBar({super.key});
@@ -19,6 +31,7 @@ class CustomTabBarState extends State<CustomTabBar>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   AuthController authController = Get.find();
+  final HomeController homeController = Get.find();
 
   @override
   void initState() {
@@ -140,275 +153,407 @@ class CustomTabBarState extends State<CustomTabBar>
             child: TabBarView(
               controller: _tabController,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.w),
-                      child: Text(
-                        'Dashboard',
-                        style: textTheme.headlineSmall!.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20.sp,
-                            color: MyColors.buttonColor),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20.w),
-                      padding: EdgeInsets.only(
-                          top: 12.h, left: 12.w, right: 12.w, bottom: 25.w),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 0,
-                                blurRadius: 16,
-                                offset: Offset(0, 4),
-                                color: Colors.black.withOpacity(0.12))
-                          ]),
-                      child: Column(
+                ///Reward Tab
+                RefreshIndicator(
+                  onRefresh: () {
+                    Future.wait([
+                      homeController.getUpcomingRewards(),
+                      homeController.getUserStreak()
+                    ]);
+                    return Future(() => true);
+                  },
+                  color: MyColors.buttonColor,
+                  child: ListView(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Your next reward',
-                                style: textTheme.headlineSmall!.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 20.sp,
-                                    color: MyColors.buttonColor),
-                              ),
-                              SvgPicture.asset(MyImgs.rewardBig)
-                            ],
-                          ),
                           SizedBox(
-                            height: 16.h,
+                            height: 20.h,
                           ),
-                          Row(
-                            children: [
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    MyImgs.calender,
-                                    height: 20.h,
-                                    colorFilter: const ColorFilter.mode(
-                                        MyColors.primary2, BlendMode.srcIn),
-                                  ),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  Text(
-                                    '2 days left',
-                                    style: textTheme.titleLarge!.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12.sp,
-                                        color: MyColors.buttonColor),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 12.w,
-                              ),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    MyImgs.miniBadge,
-                                    height: 20.h,
-                                    colorFilter: const ColorFilter.mode(
-                                        MyColors.primary2, BlendMode.srcIn),
-                                  ),
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  Text(
-                                    '12',
-                                    style: textTheme.titleLarge!.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12.sp,
-                                        color: MyColors.buttonColor),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
+                          Padding(
+                            padding: EdgeInsets.only(left: 20.w),
                             child: Text(
-                              '50/100',
-                              style: textTheme.titleLarge!.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12.sp,
+                              'Dashboard',
+                              style: textTheme.headlineSmall!.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20.sp,
                                   color: MyColors.buttonColor),
                             ),
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: LinearProgressIndicator(
-                              value: 0.5,
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                  MyColors
-                                      .primary2), // Color of the progress indicator
-                              backgroundColor: Colors.black.withOpacity(0.1),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(horizontal: 20.w),
-                      padding: EdgeInsets.symmetric(vertical: 36.w),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 0,
-                                blurRadius: 16,
-                                offset: const Offset(0, 4),
-                                color: Colors.black.withOpacity(0.12))
-                          ]),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 36.h,
-                                width: 36.h,
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                    color: MyColors.splashColor),
-                                child: SvgPicture.asset(MyImgs.bigBadge),
-                              ),
-                              SizedBox(
-                                width: 16.w,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '3 days perfect!',
-                                    style: textTheme.headlineSmall!.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 20.sp,
-                                        color: MyColors.buttonColor),
-                                  ),
-                                  Text(
-                                    'Fantastic performance',
-                                    style: textTheme.bodySmall!.copyWith(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14.sp,
-                                        color: MyColors.hintText),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(horizontal: 20.w),
-                      padding: EdgeInsets.only(
-                          top: 16.h, left: 13.w, right: 13.w, bottom: 28.w),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 0,
-                                blurRadius: 16,
-                                offset: const Offset(0, 4),
-                                color: Colors.black.withOpacity(0.12))
-                          ]),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 36.h,
-                                width: 36.h,
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                    color: MyColors.splashColor),
-                                child: SvgPicture.asset(MyImgs.bigBadge),
-                              ),
-                              SizedBox(
-                                width: 16.w,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '21 days streak',
-                                    style: textTheme.headlineSmall!.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 20.sp,
-                                        color: MyColors.buttonColor),
-                                  ),
-                                  Text(
-                                    'Fantastic performance',
-                                    style: textTheme.bodySmall!.copyWith(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14.sp,
-                                        color: MyColors.hintText),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
                           SizedBox(
-                            height: 24.h,
+                            height: 20.h,
                           ),
+                          Obx(() => homeController.isUpcomingRewardsLoad.value
+                              ? homeController
+                                          .upcomingRewardsModel!.data.name !=
+                                      null
+                                  ? Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 20.w),
+                                      padding: EdgeInsets.only(
+                                          top: 12.h,
+                                          left: 12.w,
+                                          right: 12.w,
+                                          bottom: 25.w),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                spreadRadius: 0,
+                                                blurRadius: 16,
+                                                offset: Offset(0, 4),
+                                                color: Colors.black
+                                                    .withOpacity(0.12))
+                                          ]),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                homeController
+                                                    .upcomingRewardsModel!
+                                                    .data
+                                                    .name!,
+                                                style: textTheme.headlineSmall!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 20.sp,
+                                                        color: MyColors
+                                                            .buttonColor),
+                                              ),
+                                              SvgPicture.asset(MyImgs.rewardBig)
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 16.h,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    MyImgs.calender,
+                                                    height: 20.h,
+                                                    colorFilter:
+                                                        const ColorFilter.mode(
+                                                            MyColors.primary2,
+                                                            BlendMode.srcIn),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8.w,
+                                                  ),
+                                                  Text(
+                                                    '${homeController.upcomingRewardsModel!.data.remainingDays} days left',
+                                                    style: textTheme.titleLarge!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 12.sp,
+                                                            color: MyColors
+                                                                .buttonColor),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                width: 12.w,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    MyImgs.miniBadge,
+                                                    height: 20.h,
+                                                    colorFilter:
+                                                        const ColorFilter.mode(
+                                                            MyColors.primary2,
+                                                            BlendMode.srcIn),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8.w,
+                                                  ),
+                                                  Text(
+                                                    homeController
+                                                        .upcomingRewardsModel!
+                                                        .data
+                                                        .totalPoint!,
+                                                    style: textTheme.titleLarge!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 12.sp,
+                                                            color: MyColors
+                                                                .buttonColor),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 15.h,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              '${homeController.upcomingRewardsModel!.data.percentageCompleted}/${homeController.upcomingRewardsModel!.data.totalPoint}',
+                                              style: textTheme.titleLarge!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 12.sp,
+                                                      color:
+                                                          MyColors.buttonColor),
+                                            ),
+                                          ),
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: LinearProgressIndicator(
+                                              value: (homeController
+                                                      .upcomingRewardsModel!
+                                                      .data
+                                                      .percentageCompleted! /
+                                                  100),
+                                              valueColor:
+                                                  const AlwaysStoppedAnimation<
+                                                          Color>(
+                                                      MyColors
+                                                          .primary2), // Color of the progress indicator
+                                              backgroundColor:
+                                                  Colors.black.withOpacity(0.1),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : SizedBox.shrink()
+                              : Shimmer.fromColors(
+                                  baseColor: MyColors.shimmerBaseColor,
+                                  highlightColor:
+                                      MyColors.shimmerHighlightColor,
+                                  child: Container(
+                                    height: 140.h,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: MyColors.shimmerBaseColor,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              spreadRadius: 0,
+                                              blurRadius: 16,
+                                              offset: const Offset(0, 4),
+                                              color: Colors.black
+                                                  .withOpacity(0.12))
+                                        ]),
+                                  ),
+                                )),
                           SizedBox(
-                            height: 45.h,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) => Column(
+                            height: 16.h,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            margin: EdgeInsets.symmetric(horizontal: 20.w),
+                            padding: EdgeInsets.symmetric(vertical: 36.w),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      spreadRadius: 0,
+                                      blurRadius: 16,
+                                      offset: const Offset(0, 4),
+                                      color: Colors.black.withOpacity(0.12))
+                                ]),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 36.h,
+                                      width: 36.h,
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          color: MyColors.splashColor),
+                                      child: SvgPicture.asset(MyImgs.bigBadge),
+                                    ),
+                                    SizedBox(
+                                      width: 16.w,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Mo',
+                                          '3 days perfect!',
+                                          style: textTheme.headlineSmall!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 20.sp,
+                                                  color: MyColors.buttonColor),
+                                        ),
+                                        Text(
+                                          'Fantastic performance',
                                           style: textTheme.bodySmall!.copyWith(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 14.sp,
                                               color: MyColors.hintText),
                                         ),
-                                        Expanded(
-                                          child: Checkbox(
-                                              shape: const CircleBorder(),
-                                              activeColor: MyColors.buttonColor,
-                                              value: true,
-                                              onChanged: (value) {}),
-                                        )
                                       ],
                                     ),
-                                itemCount: 7),
-                          )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          Obx(() => homeController.isUserStreakLoad.value
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 20.w),
+                                  padding: EdgeInsets.only(
+                                      top: 16.h,
+                                      left: 13.w,
+                                      right: 13.w,
+                                      bottom: 28.w),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            spreadRadius: 0,
+                                            blurRadius: 16,
+                                            offset: const Offset(0, 4),
+                                            color:
+                                                Colors.black.withOpacity(0.12))
+                                      ]),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 36.h,
+                                            width: 36.h,
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                color: MyColors.splashColor),
+                                            child: SvgPicture.asset(
+                                                MyImgs.bigBadge),
+                                          ),
+                                          SizedBox(
+                                            width: 16.w,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '21 days streak',
+                                                style: textTheme.headlineSmall!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 20.sp,
+                                                        color: MyColors
+                                                            .buttonColor),
+                                              ),
+                                              Text(
+                                                'Fantastic performance',
+                                                style: textTheme.bodySmall!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: 14.sp,
+                                                        color:
+                                                            MyColors.hintText),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 24.h,
+                                      ),
+                                      SizedBox(
+                                        height: 45.h,
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, index) {
+                                              var streak = homeController
+                                                  .userStreakModel!.data[index];
+                                              String dayName =
+                                                  DateFormat('EEEE')
+                                                      .format(streak.day);
+                                              return Column(
+                                                children: [
+                                                  Text(
+                                                    dayName.substring(0, 2),
+                                                    style: textTheme.bodySmall!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 14.sp,
+                                                            color: MyColors
+                                                                .hintText),
+                                                  ),
+                                                  Expanded(
+                                                    child: Checkbox(
+                                                        shape:
+                                                            const CircleBorder(),
+                                                        activeColor: MyColors
+                                                            .buttonColor,
+                                                        value: streak.achieved,
+                                                        onChanged: (value) {}),
+                                                  )
+                                                ],
+                                              );
+                                            },
+                                            itemCount: homeController
+                                                .userStreakModel!.data.length),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Shimmer.fromColors(
+                                  baseColor: MyColors.shimmerBaseColor,
+                                  highlightColor:
+                                      MyColors.shimmerHighlightColor,
+                                  child: Container(
+                                    height: 160.h,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: MyColors.shimmerBaseColor,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              spreadRadius: 0,
+                                              blurRadius: 16,
+                                              offset: const Offset(0, 4),
+                                              color: Colors.black
+                                                  .withOpacity(0.12))
+                                        ]),
+                                  ),
+                                )),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+
+                /// Overview Tab
                 SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,7 +562,7 @@ class CustomTabBarState extends State<CustomTabBar>
                         height: 20.h,
                       ),
                       Padding(
-                        padding:  EdgeInsets.symmetric(horizontal:20.w),
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -431,7 +576,65 @@ class CustomTabBarState extends State<CustomTabBar>
                             SizedBox(
                               height: 20.h,
                             ),
-                            SvgPicture.asset(MyImgs.chart),
+                            // SvgPicture.asset(MyImgs.chart),
+                            Center(
+                              child: Obx(() => homeController
+                                      .isOverviewLoad.value
+                                  ? SizedBox(
+                                      height: 225.h,
+                                      child: SfCartesianChart(
+                                        primaryXAxis: const CategoryAxis(),
+                                        primaryYAxis: const NumericAxis(
+                                          minimum: 0,
+                                          maximum: 100,
+                                          interval: 10,
+                                        ),
+                                        series: <CartesianSeries>[
+                                          ColumnSeries<Overview, String>(
+                                            dataSource: homeController
+                                                .overviewModel!.data,
+                                            xValueMapper: (Overview data, _) =>
+                                                data.name,
+                                            yValueMapper: (Overview data, _) =>
+                                                data.percentageCompleted,
+                                            dataLabelSettings:
+                                                const DataLabelSettings(
+                                              isVisible: true,
+                                              textStyle: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.blue),
+                                              labelAlignment:
+                                                  ChartDataLabelAlignment.top,
+                                              useSeriesColor: false,
+                                            ),
+                                            color: Colors.blue,
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : Shimmer.fromColors(
+                                      baseColor: MyColors.shimmerBaseColor,
+                                      highlightColor:
+                                          MyColors.shimmerHighlightColor,
+                                      child: Container(
+                                        height: 225.h,
+                                        // margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            color: MyColors.shimmerBaseColor,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  spreadRadius: 0,
+                                                  blurRadius: 16,
+                                                  offset: const Offset(0, 4),
+                                                  color: Colors.black
+                                                      .withOpacity(0.12))
+                                            ]),
+                                      ),
+                                    )),
+                            ),
+
                             SizedBox(
                               height: 20.h,
                             ),
@@ -448,18 +651,46 @@ class CustomTabBarState extends State<CustomTabBar>
                       SizedBox(
                         height: 20.h,
                       ),
-                      ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) =>
-                              const CustomProgressWidget(),
-                          separatorBuilder: (context, index) => SizedBox(
-                                height: 16.h,
-                              ),
-                          itemCount: 4)
+                      Obx(
+                        () => ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              if (homeController.isRecentTaskLoad.value) {
+                                var overview = homeController
+                                    .recentTasksModel!.data[index];
+                                return CustomProgressWidget(
+                                  name: overview.name,
+                                  endedAt: overview.endedAt,
+                                  earnedRewards: overview.earnRewards,
+                                  totalRewards: overview.totalRewards,
+                                  percentage: overview.percentageCompleted,
+                                  id: overview.id,
+                                  numberOfDays: overview.days,
+                                  videoUrl: overview.description,
+                                  description: overview.description,
+                                  startedAt: overview.startedAt,
+                                );
+                              } else {
+                                return CustomProgressBarWidgetShimmer();
+                              }
+                            },
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 16.h,
+                                ),
+                            itemCount: homeController.isRecentTaskLoad.value
+                                ? homeController.recentTasksModel!.data.length >
+                                        3
+                                    ? 3
+                                    : homeController
+                                        .recentTasksModel!.data.length
+                                : 4),
+                      )
                     ],
                   ),
                 ),
+
+                ///Task Tab
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -467,7 +698,7 @@ class CustomTabBarState extends State<CustomTabBar>
                       height: 20.h,
                     ),
                     Padding(
-                      padding:  EdgeInsets.only(left: 20.w),
+                      padding: EdgeInsets.only(left: 20.w),
                       child: Text(
                         'All Tasks',
                         style: textTheme.headlineSmall!.copyWith(
@@ -480,15 +711,36 @@ class CustomTabBarState extends State<CustomTabBar>
                       height: 20.h,
                     ),
                     Expanded(
-                      child: ListView.separated(
-                          physics: const BouncingScrollPhysics(),
-                          // shrinkWrap: true,
-                          itemBuilder: (context, index) =>
-                              const CustomProgressWidget(),
-                          separatorBuilder: (context, index) => SizedBox(
-                                height: 16.h,
-                              ),
-                          itemCount: 8),
+                      child: Obx(
+                        () => ListView.separated(
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              if (homeController.isRecentTaskLoad.value) {
+                                var overview = homeController
+                                    .recentTasksModel!.data[index];
+                                return CustomProgressWidget(
+                                  name: overview.name,
+                                  endedAt: overview.endedAt,
+                                  earnedRewards: overview.earnRewards,
+                                  totalRewards: overview.totalRewards,
+                                  percentage: overview.percentageCompleted,
+                                  id: overview.id,
+                                  numberOfDays: overview.days,
+                                  videoUrl: overview.videoUrl,
+                                  description: overview.description,
+                                  startedAt: overview.startedAt,
+                                );
+                              } else {
+                                return CustomProgressBarWidgetShimmer();
+                              }
+                            },
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 16.h,
+                                ),
+                            itemCount: homeController.isRecentTaskLoad.value
+                                ? homeController.recentTasksModel!.data.length
+                                : 4),
+                      ),
                     )
                   ],
                 )
@@ -498,6 +750,19 @@ class CustomTabBarState extends State<CustomTabBar>
         ],
       );
     });
+  }
+
+  List<ChartData> getChartData() {
+    return [
+      ChartData('Day 1', 54),
+      ChartData('Day 2', 64),
+      ChartData('Day 3', 54),
+      ChartData('Day 4', 68),
+      ChartData('Day 5', 44),
+      ChartData('Day 6', 30),
+      ChartData('Day 7', 74),
+      ChartData('Day 8', 84),
+    ];
   }
 
   @override
@@ -511,4 +776,10 @@ class CustomTabBarState extends State<CustomTabBar>
   void _onTabChanged() {
     authController.update();
   }
+}
+
+class ChartData {
+  ChartData(this.x, this.y);
+  final String x;
+  final double y;
 }

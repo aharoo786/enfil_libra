@@ -39,7 +39,7 @@ class UserHabit {
   String frequency;
   dynamic slot;
   String counter;
-  DateTime? reminder;
+  String? reminder;
 
   UserHabit({
     required this.id,
@@ -58,7 +58,7 @@ class UserHabit {
     frequency: json["frequency"],
     slot: json["slot"],
     counter: json["counter"],
-    reminder: json["reminder"] == null ? null : DateTime.parse(json["reminder"]),
+    reminder: json["reminder"] ??"N/A"
   );
 
   Map<String, dynamic> toJson() => {
@@ -68,6 +68,6 @@ class UserHabit {
     "frequency": frequency,
     "slot": slot,
     "counter": counter,
-    "reminder": reminder?.toIso8601String(),
+    "reminder": reminder,
   };
 }

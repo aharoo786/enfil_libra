@@ -43,11 +43,13 @@ class ChallengeWidgetStart extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Do 100 pushups daily for 1 hour',
+              challenge!.name,
               style: textTheme.headlineSmall!.copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 16.sp,
                   color: MyColors.buttonColor),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             SizedBox(
               height: 15.h,
@@ -121,24 +123,19 @@ class ChallengeWidgetStart extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              height: 10.h,
-            ),
+            const Spacer(),
             CustomButton(
-              text: MyColors.finishedColor == myColors[index]
-                  ? "Finished"
-                  : "START",
+              text: "START",
               onPressed: () {
-                Get.to(() => StartChallengeScreen(challenges: challenge!,));
-                // Get.find<ChallengeController>().getChallengesScreen();
+                Get.to(() => StartChallengeScreen(
+                    challenges: challenge!, fromStart: true));
+
+                // Get.find<ChallengeController>()
+                //     .getUserChallengeHistory(challenge!.id.toString());
               },
               height: 32.h,
-              color: MyColors.finishedColor == myColors[index]
-                  ? const Color(0xff4ECB71)
-                  : MyColors.buttonColor,
-              borderColor: MyColors.finishedColor == myColors[index]
-                  ? const Color(0xff4ECB71)
-                  : MyColors.primary2,
+              color: MyColors.buttonColor,
+              borderColor: MyColors.primary2,
               fontSize: 12.sp,
               fontWeight: FontWeight.w700,
             )

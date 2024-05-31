@@ -11,8 +11,9 @@ import '../values/my_colors.dart';
 
 class HelpingWidgets {
   PreferredSizeWidget appBarWidget(onTap,
-      {String? text, Color? color, Color? statusBarColor}) {
+      {String? text, Color? color, Color? statusBarColor,Color? textColor}) {
     return AppBar(
+      automaticallyImplyLeading: false,
       systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: statusBarColor ?? MyColors.containerColor),
       backgroundColor: color ?? MyColors.bodyBackground,
@@ -24,6 +25,7 @@ class HelpingWidgets {
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 20.sp,
+                  color: textColor??Colors.black,
                   fontFamily: Constants.KarlaFamily),
             )
           : null,

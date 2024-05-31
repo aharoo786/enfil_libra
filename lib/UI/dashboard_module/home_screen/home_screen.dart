@@ -1,3 +1,4 @@
+import 'package:enfil_libre/controllers/home_controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,7 +12,8 @@ import '../../values/my_imgs.dart';
 import '../widgets/custom_tab_bar.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,20 +29,19 @@ class HomeScreen extends StatelessWidget {
           ),
           Expanded(
               child: Container(
-            decoration: const BoxDecoration(
-                // boxShadow: [
-                //   BoxShadow(
-                //       spreadRadius: 4,
-                //       blurRadius: 4,
-                //       offset: const Offset(0, 0),
-                //       color: Colors.black.withOpacity(0.08))
-                // ],
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32),
-                    topRight: Radius.circular(32))),
-            child:const CustomTabBar()
-          ))
+                  decoration: const BoxDecoration(
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //       spreadRadius: 4,
+                      //       blurRadius: 4,
+                      //       offset: const Offset(0, 0),
+                      //       color: Colors.black.withOpacity(0.08))
+                      // ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(32),
+                          topRight: Radius.circular(32))),
+                  child: const CustomTabBar()))
         ],
       ),
     );

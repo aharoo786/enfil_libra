@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:enfil_libre/UI/auth_module/onboarding/welcom_screen.dart';
 import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import 'package:enfil_libre/UI/widgets/otp_bottom_sheet_widget.dart';
 import 'package:enfil_libre/data/models/get_user_profile.dart';
@@ -90,7 +91,7 @@ class AuthController extends GetxController implements GetxService {
           "email": email.text,
           "password": password.text,
           "password_confirmation": password.text,
-          "device_token":sharedPreferences.getString(Constants.deviceToken)
+          "device_token": sharedPreferences.getString(Constants.deviceToken)
         }).then((response) {
           Get.log("response 111   ${response.body}");
           Get.back();
@@ -185,7 +186,7 @@ class AuthController extends GetxController implements GetxService {
           "email": email,
           "type": loginType,
           "name": name,
-          "device_token":sharedPreferences.getString(Constants.deviceToken)
+          "device_token": sharedPreferences.getString(Constants.deviceToken)
         }).then((response) async {
           Get.back();
           Get.log("login api response :${response.body}");
@@ -306,26 +307,26 @@ class AuthController extends GetxController implements GetxService {
   Future<void> loginWithFacebook() async {
     //try {
 
-       // firebase_auth.FacebookAuthProvider provider=firebase_auth.FacebookAuthProvider();
-       //  provider.addScope("email");
-       // var authCredentials = await _auth.signInWithProvider(provider);
+    // firebase_auth.FacebookAuthProvider provider=firebase_auth.FacebookAuthProvider();
+    //  provider.addScope("email");
+    // var authCredentials = await _auth.signInWithProvider(provider);
 
-      var result =  await FacebookAuth.instance.login(permissions: ["email"]);
+    var result = await FacebookAuth.instance.login(permissions: ["email"]);
     //   print("result  $authCredentials");
-     //
-     // var  result2  = await result;
-       print("result  $result");
+    //
+    // var  result2  = await result;
+    print("result  $result");
 
     // Check if the login was successful
-      // if (result.status == LoginStatus.success) {
-      //   // Get the Facebook access token
-      //   final AccessToken accessToken = result.accessToken!;
-      //   final firebase_auth.AuthCredential credential =
-      //       firebase_auth.FacebookAuthProvider.credential(accessToken.tokenString);
-      //   await _auth.signInWithCredential(credential);
-      // } else {
-      //   print('Facebook Login Failed');
-      // }
+    // if (result.status == LoginStatus.success) {
+    //   // Get the Facebook access token
+    //   final AccessToken accessToken = result.accessToken!;
+    //   final firebase_auth.AuthCredential credential =
+    //       firebase_auth.FacebookAuthProvider.credential(accessToken.tokenString);
+    //   await _auth.signInWithCredential(credential);
+    // } else {
+    //   print('Facebook Login Failed');
+    // }
     // } catch (e) {
     //   print('Facebook Login Error: $e');
     // }
@@ -645,6 +646,49 @@ class AuthController extends GetxController implements GetxService {
 
     notificationServices.getDeviceToken();
     //print('device token ${localStorageMethods.getDvToken()}');
+  }
+
+  sessionCheck() async {
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        await authRepo
+            .sessionCheck(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "")
+            .then((response) async {
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: "Session Expire");
+              Get.offAll(() => const WelcomeScreen());
+            } else if (response.body["status"] == Constants.success) {
+              UserModel model = UserModel.fromJson(response.body);
+              if (model.status == Constants.success) {
+                CustomToast.successToast(msg: response.body["message"]);
+                sharedPreferences.setString(
+                    Constants.userUid, model.data.user.id);
+                sharedPreferences.setString(
+                    Constants.email, model.data.user.email);
+
+                sharedPreferences.setString(
+                    Constants.accessToken, model.data.accessToken);
+
+                sharedPreferences.setBool(Constants.login, true);
+                userModel = model;
+                Get.to(() => DashboardScreen());
+              }
+            } else {
+              CustomToast.failToast(msg: "Session Expire");
+              Get.offAll(() => const WelcomeScreen());
+            }
+          } else {
+            CustomToast.failToast(msg: "Session Expire");
+            Get.offAll(() => const WelcomeScreen());
+          }
+        });
+      }
+    });
   }
 
   @override

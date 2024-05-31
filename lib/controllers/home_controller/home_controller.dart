@@ -11,49 +11,47 @@ import '../../UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import '../../UI/values/constants.dart';
 import '../../UI/widgets/toasts.dart';
 import '../../data/GetServices/CheckConnectionService.dart';
+import '../../data/models/dashboard_module/overview_model.dart';
+import '../../data/models/dashboard_module/recent_task_model.dart';
+import '../../data/models/dashboard_module/upcoming_rewards_model.dart';
+import '../../data/models/dashboard_module/user_rewards_model.dart';
+import '../../data/models/dashboard_module/user_streak_model.dart';
 import '../../data/models/get_user_profile.dart';
 import '../../data/repos/habit_repo/home_repo.dart';
+import '../../data/repos/home_repo/home_repo.dart';
 import '../auth_controller/auth_controller.dart';
 
-class HabitController extends GetxController implements GetxService {
+class HomeController extends GetxController implements GetxService {
   SharedPreferences sharedPreferences;
-  HabitRepo habitRepo;
+  HomeRepo homeRepo;
 
-  HabitController({required this.sharedPreferences, required this.habitRepo});
+  HomeController({required this.sharedPreferences, required this.homeRepo});
 
   CheckConnectionService connectionService = CheckConnectionService();
 
   ///variables
-  var isCategoriesLoad = false.obs;
-  var isHabitsLoad = false.obs;
-  var isHabitsDetailsLoad = false.obs;
-  var selectedFrequency = 0.obs;
-  var selectedFrequencyDay = 0.obs;
-  var selectedHabitColor = 0.obs;
-  var selectedSlot = 0.obs;
-  String? time;
-  String? reminderTime;
-  var counterNumberIndex = 0;
-  var counterTypeIndex = 0;
-  var counterHourIndex = 0;
-  var showReminder = true.obs;
-  var showCounter = true.obs;
-  var showMinutes = true.obs;
+  var isUsersRewardsLoad = false.obs;
+  var isOverviewLoad = false.obs;
+  var isRecentTaskLoad = false.obs;
+  var isUpcomingRewardsLoad = false.obs;
+  var isUserStreakLoad = false.obs;
 
   ///Models
-  CategoriesModel? categoriesModel;
-  GetUserHabits? getUserHabitUser;
-  GetUserHabitDetails? getUserHabitDetails;
+  UpcomingRewardsModel? upcomingRewardsModel;
+  UserRewardsModel? userRewardsModel;
+  RecentTasksModel? recentTasksModel;
+  UserStreakModel? userStreakModel;
+  OverviewModel? overviewModel;
 
-  getCategoriesScreen() async {
-    isCategoriesLoad.value = false;
+  Future getUpcomingRewards() async {
+    isUpcomingRewardsLoad.value = false;
 
     await connectionService.checkConnection().then((internet) async {
       if (!internet) {
         CustomToast.noInternetToast();
       } else {
-        await habitRepo
-            .getCategoriesRepo(
+        await homeRepo
+            .getUpcomingRewardsRepo(
                 accessToken:
                     sharedPreferences.getString(Constants.accessToken) ?? "")
             .then((response) async {
@@ -61,10 +59,11 @@ class HabitController extends GetxController implements GetxService {
             if (response.body["status"] == Constants.failure) {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
-              CategoriesModel model = CategoriesModel.fromJson(response.body);
+              UpcomingRewardsModel model =
+                  UpcomingRewardsModel.fromJson(response.body);
               if (model.status == Constants.success) {
-                categoriesModel = model;
-                isCategoriesLoad.value = true;
+                upcomingRewardsModel = model;
+                isUpcomingRewardsLoad.value = true;
               }
             } else {
               CustomToast.failToast(
@@ -78,15 +77,15 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
-  getUserHabits() async {
-    isHabitsLoad.value = false;
+  Future getOverview() async {
+    isOverviewLoad.value = false;
 
     await connectionService.checkConnection().then((internet) async {
       if (!internet) {
         CustomToast.noInternetToast();
       } else {
-        await habitRepo
-            .getHabitsRepo(
+        await homeRepo
+            .getOverviewRepo(
                 accessToken:
                     sharedPreferences.getString(Constants.accessToken) ?? "")
             .then((response) async {
@@ -94,10 +93,10 @@ class HabitController extends GetxController implements GetxService {
             if (response.body["status"] == Constants.failure) {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
-              GetUserHabits model = GetUserHabits.fromJson(response.body);
+              OverviewModel model = OverviewModel.fromJson(response.body);
               if (model.status == Constants.success) {
-                getUserHabitUser = model;
-                isHabitsLoad.value = true;
+                overviewModel = model;
+                isOverviewLoad.value = true;
               }
             } else {
               CustomToast.failToast(
@@ -111,28 +110,26 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
-  getUserHabitDetailsFunc(String habitId) async {
-    isHabitsDetailsLoad.value = false;
+  Future getRecentTasks() async {
+    isRecentTaskLoad.value = false;
 
     await connectionService.checkConnection().then((internet) async {
       if (!internet) {
         CustomToast.noInternetToast();
       } else {
-        await habitRepo
-            .getHabitDetailsRepo(
+        await homeRepo
+            .getRecentTasksRepo(
                 accessToken:
-                    sharedPreferences.getString(Constants.accessToken) ?? "",
-                habitId: habitId)
+                    sharedPreferences.getString(Constants.accessToken) ?? "")
             .then((response) async {
           if (response.statusCode == 200) {
             if (response.body["status"] == Constants.failure) {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
-              GetUserHabitDetails model =
-                  GetUserHabitDetails.fromJson(response.body);
+              RecentTasksModel model = RecentTasksModel.fromJson(response.body);
               if (model.status == Constants.success) {
-                getUserHabitDetails = model;
-                isHabitsDetailsLoad.value = true;
+                recentTasksModel = model;
+                isRecentTaskLoad.value = true;
               }
             } else {
               CustomToast.failToast(
@@ -146,45 +143,63 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
-  crateHabit(String subCatName, String color, String frequency, String slot,
-      String? reminder, String subCatId, String counterText) {
-    Get.dialog(const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false);
-    connectionService.checkConnection().then((value) async {
-      if (!value) {
-        Get.back();
+  Future getUsersRewards() async {
+    isUsersRewardsLoad.value = false;
 
-        CustomToast.failToast(msg: "No internet Connection".tr);
-        // Get.back();
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
       } else {
-        await habitRepo.createHabitRepo(
-            formData: {
-              "name": subCatName,
-              "color": color,
-              "frequency": frequency.toLowerCase(),
-              "slot": slot.toLowerCase(),
-              "reminder": reminder,
-              "counter": counterText,
-              "time": time,
-              "sub_category_id": subCatId
-            },
-            accessToken: sharedPreferences.getString(Constants.accessToken) ??
-                "").then((response) async {
-          Get.back();
-          Get.log("login api response :${response.body}");
-
+        await homeRepo
+            .getUsersRewardsRepo(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "")
+            .then((response) async {
           if (response.statusCode == 200) {
-            //   Get.back();
             if (response.body["status"] == Constants.failure) {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
-              CustomToast.successToast(msg: response.body["message"]);
+              UserRewardsModel model = UserRewardsModel.fromJson(response.body);
+              if (model.status == Constants.success) {
+                userRewardsModel = model;
+                isUsersRewardsLoad.value = true;
+              }
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
 
-              Get.offAll(() => DashboardScreen(
-                    index: 2,
-                    fromHabit: true,
-                  ));
-              getUserHabits();
+  Future getUserStreak() async {
+    isUserStreakLoad.value = false;
+
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        await homeRepo
+            .getUserStreakRepo(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "")
+            .then((response) async {
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              UserStreakModel model = UserStreakModel.fromJson(response.body);
+              if (model.status == Constants.success) {
+                userStreakModel = model;
+                isUserStreakLoad.value = true;
+              }
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
             }
           } else {
             CustomToast.failToast(msg: response.body["message"]);
@@ -196,8 +211,13 @@ class HabitController extends GetxController implements GetxService {
 
   @override
   void onInit() {
-    // TODO: implement onInit
-    getUserHabits();
+    Future.wait([
+      getRecentTasks(),
+      getUpcomingRewards(),
+      getUsersRewards(),
+      getOverview(),
+      getUserStreak()
+    ]);
     super.onInit();
   }
 }

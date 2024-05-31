@@ -110,4 +110,10 @@ class AuthRepo extends GetxService {
           HttpHeaders.authorizationHeader: "Bearer $accessToken"
         });
   }
+  Future<Response> sessionCheck({required String accessToken}) async {
+    return await apiProvider.getData(Constants.session, headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+    });
+  }
 }

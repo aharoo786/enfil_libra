@@ -323,7 +323,7 @@ class SignUpScreen extends StatelessWidget {
                                     authController.handleappleLogin();
 
                                   },),
-                                  SocialCard(icon: MyImgs.facebookIcon,onTap: (){},)
+                                  // SocialCard(icon: MyImgs.facebookIcon,onTap: (){},)
                                 ],
                               ),
                               SizedBox(

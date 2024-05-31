@@ -1,3 +1,4 @@
+import 'package:enfil_libre/UI/habit_module/widgets/bottom_sheets.dart';
 import 'package:enfil_libre/UI/widgets/app_bar_widget.dart';
 import 'package:enfil_libre/controllers/habit_controller/habit_controller.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,9 @@ import '../values/my_imgs.dart';
 class HabitDetailsScreen extends StatelessWidget {
   HabitDetailsScreen({
     super.key,
+    required this.color
   });
+  String color;
 
   final HabitController habitController = Get.find();
 
@@ -38,8 +41,9 @@ class HabitDetailsScreen extends StatelessWidget {
                 color: Colors.white,
                 border: Border(
                   left: BorderSide(
-                    color: Colors.black,
-                    width: 4.0.w,
+                    color: HabitBottomSheets(). hexToColor(color), // Convert and use the color
+
+                  width: 4.0.w,
                   ),
                 ),
                 boxShadow: [

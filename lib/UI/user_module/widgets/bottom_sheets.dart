@@ -1,3 +1,4 @@
+import 'package:enfil_libre/UI/auth_module/onboarding/welcom_screen.dart';
 import 'package:enfil_libre/UI/widgets/custom_textfield.dart';
 import 'package:enfil_libre/UI/widgets/toasts.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
@@ -570,7 +571,7 @@ class UserProfileBottomSheets {
                     onPressed: () {
                       authController.clearLocalStorage();
 
-                      Navigator.of(context).pop();
+                      Get.offAll(() => WelcomeScreen());
                     },
                     width: 300.w,
                   ),

@@ -19,13 +19,33 @@ class ChallengeRepo extends GetxService {
       HttpHeaders.authorizationHeader: "Bearer $accessToken"
     });
   }
+
+  Future<Response> getChallengeHistoryRepo(
+      {required String accessToken, required String id}) async {
+    return await apiProvider
+        .getData("${Constants.getChallengeHistory}/$id", headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+    });
+  } Future<Response> getChallengeCheckIn(
+      {required String accessToken, required String id}) async {
+    return await apiProvider
+        .getData("${Constants.getChallengeCheckIn}/$id", headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+    });
+  }
+
   Future<Response> getUserChallengesRepo({required String accessToken}) async {
     return await apiProvider.getData(Constants.getUserChallenges, headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       HttpHeaders.authorizationHeader: "Bearer $accessToken"
     });
   }
-  Future<Response> addUserChallengeRepo({required Map<String, dynamic> formData,required String accessToken}) async {
+
+  Future<Response> addUserChallengeRepo(
+      {required Map<String, dynamic> formData,
+      required String accessToken}) async {
     // int contentLength = utf8.encode(formData).length;
     return await apiProvider
         .setFormData(url: Constants.addChallenge, formData: formData, headers: {
@@ -33,5 +53,4 @@ class ChallengeRepo extends GetxService {
       HttpHeaders.authorizationHeader: "Bearer $accessToken"
     });
   }
-
 }

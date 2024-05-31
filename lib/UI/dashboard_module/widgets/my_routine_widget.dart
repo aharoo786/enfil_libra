@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../habit_module/widgets/bottom_sheets.dart';
 import '../../values/my_colors.dart';
 import '../../values/my_imgs.dart';
 
@@ -19,7 +20,7 @@ class CustomRoutineWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.find<HabitController>().getUserHabitDetailsFunc(userHabit.id.toString());
-        Get.to(() => HabitDetailsScreen(
+        Get.to(() => HabitDetailsScreen(color: userHabit.color,
             ));
       },
       child: Container(
@@ -30,8 +31,9 @@ class CustomRoutineWidget extends StatelessWidget {
             color: Colors.white,
             border: Border(
               left: BorderSide(
-                color: Colors.black,
-                width: 4.0.w,
+                color:  HabitBottomSheets().hexToColor(userHabit.color), // Convert and use the color
+
+              width: 4.0.w,
               ),
             ),
             boxShadow: [
@@ -94,4 +96,5 @@ class CustomRoutineWidget extends StatelessWidget {
       ),
     );
   }
+
 }

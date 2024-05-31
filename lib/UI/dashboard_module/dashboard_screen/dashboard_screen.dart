@@ -21,7 +21,8 @@ import '../widgets/custom_bottomNavigationBar.dart';
 class DashboardScreen extends StatefulWidget {
   int? index;
   bool fromHabit;
-  DashboardScreen({Key? key, this.index = 0,this.fromHabit=false}) : super(key: key);
+  DashboardScreen({Key? key, this.index = 0, this.fromHabit = false})
+      : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreen();
@@ -46,8 +47,11 @@ class _DashboardScreen extends State<DashboardScreen> {
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,
       appBar: widget.index == 3
-          ? HelpingWidgets()
-              .appBarWidget(null, text: "Badges", statusBarColor: Colors.white)
+          ? HelpingWidgets().appBarWidget(null,
+              text: "Rewards",
+              statusBarColor: MyColors.buttonColor,
+              color: MyColors.buttonColor,
+              textColor: Colors.white)
           : AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
                   statusBarColor: MyColors.splashColor),

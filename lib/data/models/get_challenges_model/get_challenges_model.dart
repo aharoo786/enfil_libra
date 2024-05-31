@@ -25,7 +25,8 @@ class GetChallengesModel {
       GetChallengesModel(
         status: json["status"],
         message: json["message"],
-        data: List<Challenges>.from(json["data"].map((x) => Challenges.fromJson(x))),
+        data: List<Challenges>.from(
+            json["data"].map((x) => Challenges.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,8 +43,8 @@ class Challenges {
   String numberOfDay;
   String videoUrl;
   String description;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String startedDate;
+  String endedDate;
 
   Challenges({
     required this.id,
@@ -52,20 +53,19 @@ class Challenges {
     required this.numberOfDay,
     required this.videoUrl,
     required this.description,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.startedDate,
+    required this.endedDate,
   });
 
   factory Challenges.fromJson(Map<String, dynamic> json) => Challenges(
-        id: json["id"],
-        name: json["name"],
-        rewardPoint: json["reward_point"],
-        numberOfDay: json["number_of_day"].toString(),
-        videoUrl: json["video_url"],
-        description: json["description"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-      );
+      id: json["id"],
+      name: json["name"],
+      rewardPoint: json["reward_point"],
+      numberOfDay: json["number_of_day"].toString(),
+      videoUrl: json["video_url"],
+      description: json["description"] ?? "N/A",
+      startedDate: json["started_at"]??"N/A",
+      endedDate: json["ended_at"]??"N/A");
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -74,7 +74,7 @@ class Challenges {
         "number_of_day": numberOfDay,
         "video_url": videoUrl,
         "description": description,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "endedDate": endedDate,
+        "startedDate": startedDate,
       };
 }

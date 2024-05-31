@@ -300,12 +300,12 @@ class _LoginState extends State<Login> {
                                       authController.handleappleLogin();
                                     },
                                   ),
-                                  SocialCard(
-                                    icon: MyImgs.facebookIcon,
-                                    onTap: () {
-                                      authController.loginWithFacebook();
-                                    },
-                                  )
+                                  // SocialCard(
+                                  //   icon: MyImgs.facebookIcon,
+                                  //   onTap: () {
+                                  //     authController.loginWithFacebook();
+                                  //   },
+                                  // )
                                 ],
                               ),
                               SizedBox(

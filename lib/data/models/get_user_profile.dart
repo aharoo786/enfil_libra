@@ -54,7 +54,7 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"].toString(),
     firstName: json["first_name"],
-    lastName: json["last_name"],
+    lastName: json["last_name"]??"",
     email: json["email"],
     image: json["image"],
     gender: json["gender"],

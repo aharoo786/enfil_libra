@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
 
         theme: Styles.appTheme,
         getPages: [
-          GetPage<void>(page: () => const SplashScreen(), name: '/'),
+          GetPage<void>(page: () => SplashScreen(), name: '/'),
         ],
         // home: BuySubscriptions(),
       ),

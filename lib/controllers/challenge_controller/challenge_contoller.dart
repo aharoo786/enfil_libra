@@ -1,4 +1,6 @@
+import 'package:enfil_libre/controllers/home_controller/home_controller.dart';
 import 'package:enfil_libre/data/models/get_user_challenges/get_user_challenges.dart';
+import 'package:enfil_libre/data/models/user_challenge_history/user_challenge_history.dart';
 import 'package:enfil_libre/data/repos/challenge_repo/challenge_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,12 +23,14 @@ class ChallengeController extends GetxController implements GetxService {
   ///variables
   var isChallengesLoad = false.obs;
   var isUserChallenges = false.obs;
+  var isUserChallengeHistoryLoad = false.obs;
 
   ///Models
   GetChallengesModel? challengesModel;
   GetUserChallenges? getUserChallenges;
+  UserChallengeHistory? userChallengeHistory;
 
-  getChallengesScreen() async {
+  Future getChallengesScreen() async {
     isChallengesLoad.value = false;
     await connectionService.checkConnection().then((internet) async {
       if (!internet) {
@@ -59,11 +63,81 @@ class ChallengeController extends GetxController implements GetxService {
     });
   }
 
-  List<UserChallenges> pendingList=[];
-  List<UserChallenges> inProgress=[];
-  List<UserChallenges> finishedList=[];
+  getUserChallengeHistory(String id) async {
+    isUserChallengeHistoryLoad.value = false;
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        await challengeRepo
+            .getChallengeHistoryRepo(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "",
+                id: id)
+            .then((response) async {
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              UserChallengeHistory model =
+                  UserChallengeHistory.fromJson(response.body);
+              if (model.status == Constants.success) {
+                userChallengeHistory = model;
+                isUserChallengeHistoryLoad.value = true;
+              }
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
 
-  getUserChallengesFunc() async {
+  getUserChallengeCheckIn(String id) async {
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        Get.dialog(const Center(child: CircularProgressIndicator()),
+            barrierDismissible: false);
+        await challengeRepo
+            .getChallengeCheckIn(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "",
+                id: id)
+            .then((response) async {
+          Get.back();
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              CustomToast.successToast(
+                  msg: response.body["message"] ??
+                      "Challenge updated successfully");
+
+              Future.wait([getChallengesScreen(), getUserChallengesFunc()]);
+              Get.back();
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
+
+  List<Record> pendingList = [];
+  List<Record> inProgress = [];
+  List<Record> finishedList = [];
+
+  Future getUserChallengesFunc() async {
     isUserChallenges.value = false;
     await connectionService.checkConnection().then((internet) async {
       if (!internet) {
@@ -83,16 +157,15 @@ class ChallengeController extends GetxController implements GetxService {
               if (model.status == Constants.success) {
                 getUserChallenges = model;
                 isUserChallenges.value = true;
-
-                for (var element in getUserChallenges!.data) {
-                  if(element.status=="process"){
-                    inProgress.add(element);
-                  }
-                  else if(element.status=="finished"){
-                    finishedList.add(element);
-                  }
-                  else{
-                    pendingList.add(element);
+                if (getUserChallenges!.data.record != null) {
+                  for (var element in getUserChallenges!.data.record!) {
+                    if (element.status == "process") {
+                      inProgress.add(element);
+                    } else if (element.status == "finished") {
+                      finishedList.add(element);
+                    } else {
+                      pendingList.add(element);
+                    }
                   }
                 }
               }
@@ -107,7 +180,6 @@ class ChallengeController extends GetxController implements GetxService {
       }
     });
   }
-
 
   addChallenge(String id) {
     Get.dialog(Center(child: CircularProgressIndicator()),
@@ -141,7 +213,6 @@ class ChallengeController extends GetxController implements GetxService {
       }
     });
   }
-
 
   @override
   void onInit() {

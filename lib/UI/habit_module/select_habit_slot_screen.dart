@@ -35,7 +35,7 @@ class SelectHabitSlotScreen extends StatelessWidget {
 
   final List<String> frequencyText = ["Daily", "Weekly", "Monthly"];
   final List<String> slotText = ["Morning", "Evening", "Night", "Every Time"];
-  final List<String> dayText = ["M", "T", "W", "T", "F", "S", "S"];
+  final List<String> dayText = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   final HabitController habitController = Get.find();
 
@@ -227,7 +227,7 @@ class SelectHabitSlotScreen extends StatelessWidget {
                   Obx(
                     () => habitController.selectedFrequency.value == 3
                         ? SizedBox(
-                            height: 60.h,
+                            height: 40.h,
                             child: ListView.separated(
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, index) => dayWidget(
@@ -468,8 +468,9 @@ class SelectHabitSlotScreen extends StatelessWidget {
       },
       child: Obx(
         () => Container(
-          height: 60.h,
-          width: 40.w,
+          height: 40.h,
+          // width: 40.w,
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: selectedIndex.value == index

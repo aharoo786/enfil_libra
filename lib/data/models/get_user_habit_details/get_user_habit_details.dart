@@ -46,7 +46,7 @@ class Data {
   String frequency;
   dynamic slot;
   String counter;
-  DateTime reminder;
+  String reminder;
   String createdAt;
 
   Data({
@@ -75,7 +75,7 @@ class Data {
         frequency: json["frequency"],
         slot: json["slot"],
         counter: json["counter"],
-        reminder: DateTime.parse(json["reminder"] ?? DateTime.now().toString()),
+        reminder: json["reminder"] ??"N/A",
         createdAt: json["created_at"],
       );
 
@@ -90,7 +90,7 @@ class Data {
         "frequency": frequency,
         "slot": slot,
         "counter": counter,
-        "reminder": reminder.toIso8601String(),
+        "reminder": reminder,
         "created_at": createdAt,
       };
 }

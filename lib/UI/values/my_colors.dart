@@ -17,6 +17,7 @@ class MyColors {
   static const Color buttonColor = Color(0xFF1D4184);
   static const Color primary2 = Color(0xFFFF794F);
   static const Color pendingColor = Color(0xFFFFECE8);
+  static const Color startColor =  Color(0xff4ECB71);
   static const Color inProgressColor = Color(0xFFE9F1FF);
   static const Color purpleColor = Color(0xFF7E6EE0);
   static Color borderColor = purpleColor.withOpacity(0.2);
