@@ -299,7 +299,7 @@ class CustomTabBarState extends State<CustomTabBar>
                                           Align(
                                             alignment: Alignment.centerRight,
                                             child: Text(
-                                              '${homeController.upcomingRewardsModel!.data.percentageCompleted}/${homeController.upcomingRewardsModel!.data.totalPoint}',
+                                              '${homeController.upcomingRewardsModel!.data.percentageCompleted}/100',
                                               style: textTheme.titleLarge!
                                                   .copyWith(
                                                       fontWeight:

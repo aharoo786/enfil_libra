@@ -3,6 +3,7 @@ import 'package:enfil_libre/data/models/get_user_habit_details/get_user_habit_de
 import 'package:enfil_libre/data/models/habit_module/get_catergories_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,8 +32,8 @@ class HabitController extends GetxController implements GetxService {
   var selectedFrequencyDay = 0.obs;
   var selectedHabitColor = 0.obs;
   var selectedSlot = 0.obs;
-  String? time;
-  String? reminderTime;
+  String time = DateFormat('hh:mm a').format(DateTime.now());
+  String reminderTime = DateFormat('hh:mm a').format(DateTime.now());
   var counterNumberIndex = 0;
   var counterTypeIndex = 0;
   var counterHourIndex = 0;
@@ -146,8 +147,14 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
-  crateHabit(String subCatName, String color, String frequency, String slot,
-      String? reminder, String subCatId, String counterText) {
+  crateHabit(
+      {required String subCatName,
+      required String color,
+      required String frequency,
+      required String slot,
+      String? reminder,
+      required String subCatId,
+      required String? counterText}) {
     Get.dialog(const Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
     connectionService.checkConnection().then((value) async {
@@ -165,7 +172,7 @@ class HabitController extends GetxController implements GetxService {
               "slot": slot.toLowerCase(),
               "reminder": reminder,
               "counter": counterText,
-              "time": time,
+              "time": showMinutes.value ? time : null,
               "sub_category_id": subCatId
             },
             accessToken: sharedPreferences.getString(Constants.accessToken) ??

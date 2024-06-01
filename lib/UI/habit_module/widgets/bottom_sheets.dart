@@ -191,14 +191,16 @@ class HabitBottomSheets {
                             ? SizedBox(
                                 width: 284.w,
                                 height: 184.h,
-                                child: CupertinoTimerPicker(
-                                    mode: CupertinoTimerPickerMode.hm,
-                                    onTimerDurationChanged:
-                                        (Duration duration) {
-                                      habitController.time =
-                                          "${duration.inHours}:${duration.inMinutes.remainder(60)}";
-                                    }),
-                              )
+                                child: CupertinoDatePicker(
+                                  mode: CupertinoDatePickerMode.time,
+                                  initialDateTime: DateTime.now(),
+                                  onDateTimeChanged: (DateTime dateTime) {
+                                    habitController.time =
+                                        DateFormat('hh:mm a').format(dateTime);
+                                    // Handle selected time here
+                                    // You can convert the selected time to AM/PM format
+                                  },
+                                ))
                             : SizedBox.shrink()),
                         SizedBox(
                           height: 45.h,
@@ -218,24 +220,29 @@ class HabitBottomSheets {
                                 text: "Save",
                                 onPressed: () {
                                   habitController.crateHabit(
-                                      subCategory.name,
-                                      tempColors[habitController
+                                      subCatName: subCategory.name,
+                                      color: tempColors[habitController
                                               .selectedHabitColor.value]
                                           .value
                                           .toRadixString(16)
                                           .substring(2)
                                           .toUpperCase(),
-                                      habitController.selectedFrequency.value ==
+                                      frequency: habitController
+                                                  .selectedFrequency.value ==
                                               3
                                           ? dayText[habitController
                                               .selectedFrequencyDay.value]
                                           : frequencyText[habitController
                                               .selectedFrequency.value],
-                                      slotText[
+                                      slot: slotText[
                                           habitController.selectedSlot.value],
-                                      habitController.reminderTime,
-                                      subCategory.id.toString(),
-                                      "${counterNumber[habitController.counterNumberIndex]} ${counterType[habitController.counterTypeIndex]} ${counterHour[habitController.counterHourIndex]} ");
+                                      reminder: habitController.showReminder.value
+                                          ? habitController.reminderTime
+                                          : null,
+                                      subCatId: subCategory.id.toString(),
+                                      counterText: habitController.showCounter.value
+                                          ? "${counterNumber[habitController.counterNumberIndex]} ${counterType[habitController.counterTypeIndex]} ${counterHour[habitController.counterHourIndex]}"
+                                          : null);
                                 },
                                 width: 160.w,
                                 roundCorner: 8),
@@ -295,6 +302,7 @@ class HabitBottomSheets {
       ],
     );
   }
+
   Color hexToColor(String hex) {
     // Ensure that the hex string is valid and properly formatted
     hex = hex.replaceFirst('#', ''); // Remove '#' if present

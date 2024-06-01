@@ -156,6 +156,9 @@ class ChallengeController extends GetxController implements GetxService {
                   GetUserChallenges.fromJson(response.body);
               if (model.status == Constants.success) {
                 getUserChallenges = model;
+                inProgress.clear();
+                finishedList.clear();
+                pendingList.clear();
                 isUserChallenges.value = true;
                 if (getUserChallenges!.data.record != null) {
                   for (var element in getUserChallenges!.data.record!) {
@@ -182,7 +185,7 @@ class ChallengeController extends GetxController implements GetxService {
   }
 
   addChallenge(String id) {
-    Get.dialog(Center(child: CircularProgressIndicator()),
+    Get.dialog(const Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
     connectionService.checkConnection().then((value) async {
       if (!value) {
