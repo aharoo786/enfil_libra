@@ -14,12 +14,11 @@ import '../widgets/custom_tab_bar.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var textTheme = theme.textTheme;
-    return Scaffold(
+    return  Scaffold(
       backgroundColor: MyColors.splashColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

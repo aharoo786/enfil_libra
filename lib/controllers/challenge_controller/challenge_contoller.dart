@@ -1,3 +1,4 @@
+import 'package:enfil_libre/UI/challenge_module/start_challege/start_challege_screen.dart';
 import 'package:enfil_libre/controllers/home_controller/home_controller.dart';
 import 'package:enfil_libre/data/models/get_user_challenges/get_user_challenges.dart';
 import 'package:enfil_libre/data/models/user_challenge_history/user_challenge_history.dart';
@@ -184,7 +185,7 @@ class ChallengeController extends GetxController implements GetxService {
     });
   }
 
-  addChallenge(String id) {
+  addChallenge(String id, Challenges? challenges) {
     Get.dialog(const Center(child: CircularProgressIndicator()),
         barrierDismissible: false);
     connectionService.checkConnection().then((value) async {
@@ -206,8 +207,13 @@ class ChallengeController extends GetxController implements GetxService {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
               Get.back();
-              getUserChallengesFunc();
+              if (challenges != null) {
+                Get.back();
+                Get.to(()=>StartChallengeScreen(challenges: challenges,fromStart: false,));
+                getUserChallengeHistory(challenges.id.toString());
+              }
               CustomToast.successToast(msg: response.body["message"]);
+              Future.wait([getUserChallengesFunc(), getChallengesScreen()]);
             }
           } else {
             CustomToast.failToast(msg: response.body["message"]);

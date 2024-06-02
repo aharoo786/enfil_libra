@@ -11,7 +11,7 @@ String userStreakModelToJson(UserStreakModel data) => json.encode(data.toJson())
 class UserStreakModel {
   String status;
   String message;
-  List<UserStreak> data;
+  Data data;
 
   UserStreakModel({
     required this.status,
@@ -22,32 +22,52 @@ class UserStreakModel {
   factory UserStreakModel.fromJson(Map<String, dynamic> json) => UserStreakModel(
     status: json["status"],
     message: json["message"],
-    data: List<UserStreak>.from(json["data"].map((x) => UserStreak.fromJson(x))),
+    data: Data.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
     "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": data.toJson(),
   };
 }
 
-class UserStreak {
+class Data {
+  int fantastic;
+  List<Steak> steak;
+
+  Data({
+    required this.fantastic,
+    required this.steak,
+  });
+
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    fantastic: json["fantastic"],
+    steak: List<Steak>.from(json["steak"].map((x) => Steak.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "fantastic": fantastic,
+    "steak": List<dynamic>.from(steak.map((x) => x.toJson())),
+  };
+}
+
+class Steak {
   DateTime day;
   bool achieved;
 
-  UserStreak({
+  Steak({
     required this.day,
     required this.achieved,
   });
 
-  factory UserStreak.fromJson(Map<String, dynamic> json) => UserStreak(
+  factory Steak.fromJson(Map<String, dynamic> json) => Steak(
     day: DateTime.parse(json["day"]),
     achieved: json["achieved"],
   );
 
   Map<String, dynamic> toJson() => {
-    "day": "${day.year.toString().padLeft(4, '0')}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}",
+    "day": day.toIso8601String(),
     "achieved": achieved,
   };
 }

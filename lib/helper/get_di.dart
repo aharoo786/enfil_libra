@@ -18,7 +18,7 @@ Future init() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   Get.lazyPut(() => sharedPreferences);
   NotificationServices notificationServices =
-  NotificationServices(sharedPreferences: sharedPreferences);
+      NotificationServices(sharedPreferences: sharedPreferences);
   Get.lazyPut(() => ApiProvider());
   Get.lazyPut(() => AuthRepo(apiProvider: Get.find()));
   Get.lazyPut(() => HabitRepo(apiProvider: Get.find()));
@@ -26,11 +26,20 @@ Future init() async {
   Get.lazyPut(() => ChallengeRepo(apiProvider: Get.find()));
 
   Get.lazyPut(() => AuthController(
-      sharedPreferences: sharedPreferences, authRepo: Get.find(), notificationServices: notificationServices));
+      sharedPreferences: sharedPreferences,
+      authRepo: Get.find(),
+      notificationServices: notificationServices));
   Get.lazyPut(() => HabitController(
       sharedPreferences: sharedPreferences, habitRepo: Get.find()));
   Get.lazyPut(() => HomeController(
       sharedPreferences: sharedPreferences, homeRepo: Get.find()));
   Get.lazyPut(() => ChallengeController(
       sharedPreferences: sharedPreferences, challengeRepo: Get.find()));
+}
+
+void handleLogout() {
+  Get.delete<AuthController>();
+  Get.delete<HabitController>();
+  Get.delete<HomeController>();
+  Get.delete<ChallengeController>();
 }

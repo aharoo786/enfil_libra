@@ -16,6 +16,7 @@ class MyImgs {
 
   ///Icons
   static const String googleIcon = "assets/icons/google.svg";
+  static const String lockIcon = "assets/icons/lockIcon.svg";
   static const String newChat = "assets/icons/newChat.png";
   static const String logoutGate = "assets/icons/logoutGate.svg";
   static const String starFill = "assets/icons/starFill.svg";

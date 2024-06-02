@@ -15,8 +15,9 @@ class _PlayVideoFromYoutubeState extends State<PlayVideoFromYoutube> {
   @override
   void initState() {
     controller = PodPlayerController(
-      playVideoFrom: PlayVideoFrom.network(widget.url),
+      playVideoFrom: PlayVideoFrom.youtube(widget.url),
     )..initialise();
+    controller.togglePlayPause();
     super.initState();
   }
 

@@ -18,6 +18,7 @@ import '../../UI/values/constants.dart';
 import '../../UI/widgets/toasts.dart';
 import '../../data/GetServices/CheckConnectionService.dart';
 import '../../data/repos/auth_repo/auth_repo.dart';
+import '../../helper/get_di.dart';
 import '../../helper/notification_services.dart';
 
 class AuthController extends GetxController implements GetxService {
@@ -102,6 +103,10 @@ class AuthController extends GetxController implements GetxService {
             } else if (response.body["status"] == Constants.success) {
               if (response.body["data"]["next"] == "otp") {
                 Get.bottomSheet(otpBottomSheet(context, email.text));
+                firstName.clear();
+                lastName.clear();
+                email.clear();
+                password.clear();
               }
             }
           } else {
@@ -162,7 +167,7 @@ class AuthController extends GetxController implements GetxService {
               sharedPreferences.setString(
                   Constants.accessToken, model.data.accessToken);
               sharedPreferences.setBool(Constants.login, true);
-              Get.to(() => DashboardScreen());
+              Get.offAll(() => DashboardScreen());
             }
           } else {
             CustomToast.failToast(msg: response.body["message"]);
@@ -221,7 +226,7 @@ class AuthController extends GetxController implements GetxService {
 
                 sharedPreferences.setBool(Constants.login, true);
                 userModel = model;
-                Get.to(() => DashboardScreen());
+                Get.offAll(() => DashboardScreen());
               }
             }
           } else {
@@ -446,10 +451,15 @@ class AuthController extends GetxController implements GetxService {
   //   });
   // }
 
-  clearLocalStorage() {
+  clearLocalStorage() async {
+    loginEmail.clear();
+    loginPassword.clear();
     sharedPreferences.clear();
+    await googleSignIn.signOut();
     CustomToast.successToast(msg: "Log out successfully");
-    Get.offAll(() => Login());
+    init();
+    Get.offAll(() => const WelcomeScreen());
+
   }
 
   verifyEmail({
@@ -483,7 +493,7 @@ class AuthController extends GetxController implements GetxService {
 
                 sharedPreferences.setBool(Constants.login, true);
                 userModel = model;
-                Get.to(() => DashboardScreen());
+                Get.offAll(() => DashboardScreen());
               }
             } else {
               CustomToast.failToast(
@@ -627,7 +637,7 @@ class AuthController extends GetxController implements GetxService {
               sharedPreferences.setString(
                   Constants.accessToken, model.data.accessToken);
               sharedPreferences.setBool(Constants.login, true);
-              Get.to(() => DashboardScreen());
+              Get.offAll(() => DashboardScreen());
             }
           } else {
             CustomToast.failToast(msg: response.body["message"]);
@@ -676,7 +686,7 @@ class AuthController extends GetxController implements GetxService {
 
                 sharedPreferences.setBool(Constants.login, true);
                 userModel = model;
-                Get.to(() => DashboardScreen());
+                Get.offAll(() => DashboardScreen());
               }
             } else {
               CustomToast.failToast(msg: "Session Expire");

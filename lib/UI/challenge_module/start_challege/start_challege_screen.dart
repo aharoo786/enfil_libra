@@ -3,7 +3,9 @@ import 'package:enfil_libre/UI/widgets/custom_button.dart';
 import 'package:enfil_libre/UI/widgets/toasts.dart';
 import 'package:enfil_libre/controllers/challenge_controller/challenge_contoller.dart';
 import 'package:enfil_libre/data/models/get_challenges_model/get_challenges_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -21,7 +23,7 @@ class StartChallengeScreen extends StatelessWidget {
       {super.key, required this.challenges, this.fromStart = false});
 
   final Challenges challenges;
-  final bool fromStart;
+  bool fromStart;
 
   final ChallengeController challengeController = Get.find();
   final SignatureController signatureControllerController = SignatureController(
@@ -144,83 +146,93 @@ class StartChallengeScreen extends StatelessWidget {
                                         height: 15.h,
                                       ),
                                       Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                MyImgs.calender,
-                                                height: 20.h,
-                                                colorFilter: ColorFilter.mode(
-                                                    MyColors.buttonColor
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  MyImgs.calender,
+                                                  height: 20.h,
+                                                  colorFilter: ColorFilter.mode(
+                                                      MyColors.buttonColor
+                                                          .withOpacity(0.4),
+                                                      BlendMode.srcIn),
+                                                ),
+                                                SizedBox(
+                                                  width: 8.w,
+                                                ),
+                                                Text(
+                                                  'Start date',
+                                                  style: textTheme.titleLarge!
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12.sp,
+                                                    color: MyColors.buttonColor
                                                         .withOpacity(0.4),
-                                                    BlendMode.srcIn),
-                                              ),
-                                              SizedBox(
-                                                width: 8.w,
-                                              ),
-                                              Text(
-                                                'Start date',
-                                                style: textTheme.titleLarge!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 12.sp,
-                                                  color: MyColors.buttonColor
-                                                      .withOpacity(0.4),
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: 12.w,
-                                              ),
-                                              Text(
-                                                challenges.startedDate,
-                                                style: textTheme.titleLarge!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 12.sp,
-                                                  color: MyColors.black,
+                                                SizedBox(
+                                                  width: 12.w,
                                                 ),
-                                              ),
-                                            ],
+                                                Expanded(
+                                                  child: Text(
+                                                    challenges.startedDate,
+                                                    style: textTheme.titleLarge!
+                                                        .copyWith(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 12.sp,
+                                                      color: MyColors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          SizedBox(
-                                            width: 12.w,
-                                          ),
-                                          Row(
-                                            children: [
-                                              SvgPicture.asset(
-                                                MyImgs.calender,
-                                                height: 20.h,
-                                                colorFilter: ColorFilter.mode(
-                                                    MyColors.buttonColor
+                                          // SizedBox(
+                                          //   width: 12.w,
+                                          // ),
+
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  MyImgs.calender,
+                                                  height: 20.h,
+                                                  colorFilter: ColorFilter.mode(
+                                                      MyColors.buttonColor
+                                                          .withOpacity(0.4),
+                                                      BlendMode.srcIn),
+                                                ),
+                                                SizedBox(
+                                                  width: 8.w,
+                                                ),
+                                                Text(
+                                                  'End date',
+                                                  style: textTheme.titleLarge!
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12.sp,
+                                                    color: MyColors.buttonColor
                                                         .withOpacity(0.4),
-                                                    BlendMode.srcIn),
-                                              ),
-                                              SizedBox(
-                                                width: 8.w,
-                                              ),
-                                              Text(
-                                                'End date',
-                                                style: textTheme.titleLarge!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 12.sp,
-                                                  color: MyColors.buttonColor
-                                                      .withOpacity(0.4),
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: 12.w,
-                                              ),
-                                              Text(
-                                                challenges.endedDate,
-                                                style: textTheme.titleLarge!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 12.sp,
-                                                  color: MyColors.black,
+                                                SizedBox(
+                                                  width: 12.w,
                                                 ),
-                                              ),
-                                            ],
+                                                Expanded(
+                                                  child: Text(
+                                                    challenges.endedDate,
+                                                    style: textTheme.titleLarge!
+                                                        .copyWith(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 12.sp,
+                                                      color: MyColors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -282,77 +294,94 @@ class StartChallengeScreen extends StatelessWidget {
                                                           .data
                                                           .challengeHistories[
                                                       index];
-                                              return Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 12.w),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    color: Colors.white,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          spreadRadius: 0,
-                                                          blurRadius: 16,
-                                                          offset: const Offset(
-                                                              0, 4),
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.12))
-                                                    ]),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          MyImgs.calender,
-                                                          height: 20.h,
-                                                          colorFilter:
-                                                              const ColorFilter
-                                                                  .mode(
-                                                                  MyColors
-                                                                      .buttonColor,
-                                                                  BlendMode
-                                                                      .srcIn),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 8.w,
-                                                        ),
-                                                        Text(
-                                                          DateFormat(
-                                                                  "dd/MM/yyyy")
-                                                              .format(
-                                                                  challengeHistory
-                                                                      .endedAt),
-                                                          style: textTheme
-                                                              .titleLarge!
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontSize:
-                                                                      16.sp,
-                                                                  color: MyColors
-                                                                      .black),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Checkbox(
-                                                        shape:
-                                                            const CircleBorder(),
-                                                        activeColor:
-                                                            const Color(
-                                                                0xff4ECB71),
-                                                        value: challengeHistory
-                                                                    .status ==
-                                                                "1"
-                                                            ? true
-                                                            : false,
-                                                        onChanged: (value) {}),
-                                                  ],
+                                              bool isAfter = compareDates(
+                                                  challengeHistory.endedAt,
+                                                  true);
+                                              bool isBefore = compareDates(
+                                                  challengeHistory.endedAt,
+                                                  false);
+
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  if (!isAfter && !isBefore) {
+                                                    if (challengeHistory
+                                                            .status ==
+                                                        "1") {
+                                                      CustomToast.failToast(
+                                                          msg:
+                                                              "You have already subscribed");
+                                                    } else {
+                                                      signatureDialog(context);
+                                                    }
+                                                  }
+                                                },
+                                                child: Container(
+                                                  height: 52.h,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 12.w),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      color: Colors.white,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            spreadRadius: 0,
+                                                            blurRadius: 16,
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 4),
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.12))
+                                                      ]),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            MyImgs.calender,
+                                                            height: 20.h,
+                                                            colorFilter:
+                                                                const ColorFilter
+                                                                    .mode(
+                                                                    MyColors
+                                                                        .buttonColor,
+                                                                    BlendMode
+                                                                        .srcIn),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 8.w,
+                                                          ),
+                                                          Text(
+                                                            DateFormat(
+                                                                    "dd/MM/yyyy")
+                                                                .format(
+                                                                    challengeHistory
+                                                                        .endedAt),
+                                                            style: textTheme
+                                                                .titleLarge!
+                                                                .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontSize:
+                                                                        16.sp,
+                                                                    color: MyColors
+                                                                        .black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      checkWidget(
+                                                          isAfter,
+                                                          isBefore,
+                                                          challengeHistory
+                                                              .status)
+                                                    ],
+                                                  ),
                                                 ),
                                               );
                                             },
@@ -413,71 +442,106 @@ class StartChallengeScreen extends StatelessWidget {
                     )))
           ],
         ),
-        bottomNavigationBar: Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(
-                bottom: 40.h, left: 55.w, right: 55.w, top: 10.h),
-            child: CustomButton(
-                text: "Start",
-                onPressed: () {
-                  signatureControllerController.clear();
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: Container(
-                            height: 350.h,
-                            width: 400,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "I commit to following the challenge and going to the end",
-                                  style: textTheme.headlineSmall!.copyWith(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                SizedBox(
-                                  height: 35.h,
-                                ),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Signature(
-                                    controller: signatureControllerController,
-                                    // width: 300,
-                                    height: 130.h,
-                                    backgroundColor: MyColors.inProgressColor,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 35.h,
-                                ),
-                                CustomButton(
-                                    text: "Start",
-                                    onPressed: () {
-                                      if (signatureControllerController
-                                          .isEmpty) {
-                                        CustomToast.failToast(
-                                            msg: "Please provide signature");
-                                      } else {
-                                        if (fromStart) {
-                                          challengeController.addChallenge(
-                                              challenges.id.toString());
-                                        } else {
-                                          challengeController
-                                              .getUserChallengeCheckIn(
-                                                  challenges.id.toString());
-                                        }
-                                      }
-                                    })
-                              ],
-                            ),
-                          ),
-                        );
-                      });
-                })));
+        bottomNavigationBar: fromStart
+            ? Container(
+                color: Colors.white,
+                padding: EdgeInsets.only(
+                    bottom: 40.h, left: 55.w, right: 55.w, top: 10.h),
+                child: CustomButton(
+                    text: "Start",
+                    onPressed: () {
+                      signatureDialog(context);
+                    }))
+            : null);
+  }
+
+  bool compareDates(DateTime challengeEndDate, bool isAfterTrue) {
+    DateTime now = DateTime.now();
+    DateTime currentDate = DateTime(now.year, now.month, now.day);
+    DateTime challengeEndDateOnly = DateTime(
+        challengeEndDate.year, challengeEndDate.month, challengeEndDate.day);
+    bool isAfter;
+    if (isAfterTrue) {
+      isAfter = challengeEndDateOnly.isAfter(currentDate);
+    } else {
+      isAfter = challengeEndDateOnly.isBefore(currentDate);
+    }
+
+    return isAfter;
+  }
+
+  Widget checkWidget(bool isAfter, bool isBefore, String status) {
+    if (isAfter) {
+      return SvgPicture.asset(MyImgs.lockIcon);
+    } else if (status == "0" && isBefore) {
+      return const Icon(
+        Icons.clear,
+        color: Colors.red,
+      );
+    } else {
+      return Checkbox(
+          shape: const CircleBorder(),
+          activeColor: const Color(0xff4ECB71),
+          value: status == "1" ? true : false,
+          onChanged: (value) {});
+    }
+  }
+
+  signatureDialog(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+    signatureControllerController.clear();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Container(
+              height: 350.h,
+              width: 400,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "I commit to following the challenge and going to the end",
+                    style: textTheme.headlineSmall!
+                        .copyWith(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 35.h,
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Signature(
+                      controller: signatureControllerController,
+                      // width: 300,
+                      height: 130.h,
+                      backgroundColor: MyColors.inProgressColor,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35.h,
+                  ),
+                  CustomButton(
+                      text: "Start",
+                      onPressed: () {
+                        if (signatureControllerController.isEmpty) {
+                          CustomToast.failToast(
+                              msg: "Please provide signature");
+                        } else {
+                          if (fromStart) {
+                            challengeController.addChallenge(
+                                challenges.id.toString(), challenges);
+                          } else {
+                            challengeController.getUserChallengeCheckIn(
+                                challenges.id.toString());
+                          }
+                        }
+                      })
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
