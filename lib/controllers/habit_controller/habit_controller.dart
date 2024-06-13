@@ -79,7 +79,7 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
-  getUserHabits() async {
+  Future getUserHabits() async {
     isHabitsLoad.value = false;
 
     await connectionService.checkConnection().then((internet) async {

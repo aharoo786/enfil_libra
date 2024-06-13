@@ -36,14 +36,14 @@ class UserRewardsModel {
 }
 
 class Data {
-  int reward;
+  String reward;
 
   Data({
     required this.reward,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        reward: json["reward"],
+        reward: json["reward"].toString(),
       );
 
   Map<String, dynamic> toJson() => {

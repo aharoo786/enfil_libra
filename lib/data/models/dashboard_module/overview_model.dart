@@ -1,17 +1,12 @@
-// To parse this JSON data, do
-//
-//     final overviewModel = overviewModelFromJson(jsonString);
+OverviewModel overviewModelFromJson(Map<String, dynamic> json) =>
+    OverviewModel.fromJson(json);
 
-import 'dart:convert';
-
-OverviewModel overviewModelFromJson(String str) => OverviewModel.fromJson(json.decode(str));
-
-String overviewModelToJson(OverviewModel data) => json.encode(data.toJson());
+Map<String, dynamic> overviewModelToJson(OverviewModel data) => data.toJson();
 
 class OverviewModel {
-  String status;
-  String message;
-  List<Overview> data;
+  final String status;
+  final String message;
+  final Map<String, dynamic> data;
 
   OverviewModel({
     required this.status,
@@ -19,35 +14,23 @@ class OverviewModel {
     required this.data,
   });
 
-  factory OverviewModel.fromJson(Map<String, dynamic> json) => OverviewModel(
-    status: json["status"],
-    message: json["message"],
-    data: List<Overview>.from(json["data"].map((x) => Overview.fromJson(x))),
-  );
+  factory OverviewModel.fromJson(Map<String, dynamic> json) {
+    Map<String, dynamic> data = {};
+    if (json['data'] != null) {
+      data = Map<String, dynamic>.from(json['data']);
+    }
+    return OverviewModel(
+      status: json['status'],
+      message: json['message'],
+      data: data,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
-}
-
-class Overview {
-  String name;
-  int percentageCompleted;
-
-  Overview({
-    required this.name,
-    required this.percentageCompleted,
-  });
-
-  factory Overview.fromJson(Map<String, dynamic> json) => Overview(
-    name: json["name"],
-    percentageCompleted: json["percentage_completed"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "percentage_completed": percentageCompleted,
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status,
+      'message': message,
+      'data': data,
+    };
+  }
 }

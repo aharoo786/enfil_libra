@@ -216,61 +216,68 @@ class RewardHomeScreen extends StatelessWidget {
             height: 40.h,
           ),
           Expanded(
-              child: GridView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            // Number of cross-axis (horizontal) children to include in the GridView
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 13.h,
-                childAspectRatio: 0.93,
-                crossAxisSpacing: 13.w),
-            // Provide a builder function that generates the items dynamically
-            itemBuilder: (context, index) {
-              // Return a simple Container with some text inside
-              return Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 14.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: MyColors.borderColor),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                        spreadRadius: 0,
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                        color: Colors.black.withOpacity(0.12))
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 60.h,
-                        width: 60.h,
-                        padding: EdgeInsets.all(12.h),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: MyColors.primary2),
-                            color: Colors.white),
-                        child: SvgPicture.asset(MyImgs.medal),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await homeController
+                      .getUsersRewards(); // Await the Future
+                },
+                color: MyColors.buttonColor,
+                child: GridView.builder(
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
+                            // Number of cross-axis (horizontal) children to include in the GridView
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 13.h,
+                  childAspectRatio: 0.93,
+                  crossAxisSpacing: 13.w),
+                            // Provide a builder function that generates the items dynamically
+                            itemBuilder: (context, index) {
+                // Return a simple Container with some text inside
+                return Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 14.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: MyColors.borderColor),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                          spreadRadius: 0,
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                          color: Colors.black.withOpacity(0.12))
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 60.h,
+                          width: 60.h,
+                          padding: EdgeInsets.all(12.h),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: MyColors.primary2),
+                              color: Colors.white),
+                          child: SvgPicture.asset(MyImgs.medal),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Text(
-                      "Gold",
-                      style: textTheme.headlineLarge!.copyWith(
-                          fontSize: 20.sp, fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ),
-              );
-            },
-            // Set the total number of items in the GridView
-            itemCount: 20,
-          ))
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Text(
+                        "Gold",
+                        style: textTheme.headlineLarge!.copyWith(
+                            fontSize: 20.sp, fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                );
+                            },
+                            // Set the total number of items in the GridView
+                            itemCount: 20,
+                          ),
+              ))
         ],
       ),
     );

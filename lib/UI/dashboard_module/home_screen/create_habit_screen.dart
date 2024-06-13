@@ -26,74 +26,87 @@ class CreateHabitScreen extends StatelessWidget {
         if (habitController.getUserHabitUser!.data.isEmpty) {
           return Scaffold(
             backgroundColor: MyColors.splashColor,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 20.h,
-                ),
-                Expanded(
-                    child: Container(
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(32),
-                                topRight: Radius.circular(32))),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 60.h,
-                            ),
-                            Text(
-                              'Create your first Habit',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 32.sp,
-                                  color: MyColors.buttonColor),
-                            ),
-                            SizedBox(
-                              height: 16.h,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                'Let\'s start your journey to personal growth by creating your first habit.',
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await habitController.getUserHabits(); // Await the Future
+              },
+              color: MyColors.buttonColor,
+              child: ListView(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Container(
+                          height: MediaQuery.of(context).size.height -
+                              kToolbarHeight -
+                              120,
+                          decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(32),
+                                  topRight: Radius.circular(32))),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 60.h,
+                              ),
+                              Text(
+                                'Create your first Habit',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 20.sp,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 32.sp,
+                                    color: MyColors.buttonColor),
+                              ),
+                              SizedBox(
+                                height: 16.h,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Text(
+                                  'Let\'s start your journey to personal growth by creating your first habit.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 20.sp,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Spacer(),
-                            SvgPicture.asset(MyImgs.createHabitVector),
-                            SizedBox(
-                              height: 60.h,
-                            ),
-                            CustomButton(
-                              text: "+ Create a habit",
-                              width: 190.w,
-                              onPressed: () {
-                                Get.find<HabitController>()
-                                    .getCategoriesScreen();
-                                Get.to(() => CreateNewHabit());
-                              },
-                              color: Colors.white,
-                              textColor: MyColors.buttonColor,
-                            ),
-                            SizedBox(
-                              height: 60.h,
-                            ),
-                          ],
-                        )))
-              ],
+                              Spacer(),
+                              SvgPicture.asset(MyImgs.createHabitVector),
+                              SizedBox(
+                                height: 60.h,
+                              ),
+                              CustomButton(
+                                text: "+ Create a habit",
+                                width: 190.w,
+                                onPressed: () {
+                                  Get.find<HabitController>()
+                                      .getCategoriesScreen();
+                                  Get.to(() => CreateNewHabit());
+                                },
+                                color: Colors.white,
+                                textColor: MyColors.buttonColor,
+                              ),
+                              SizedBox(
+                                height: 60.h,
+                              ),
+                            ],
+                          ))
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         } else {
-          return MyRoutinesScreen(userHabits:habitController.getUserHabitUser!.data);
+          return MyRoutinesScreen(
+              userHabits: habitController.getUserHabitUser!.data);
         }
       } else {
         return Shimmer.fromColors(

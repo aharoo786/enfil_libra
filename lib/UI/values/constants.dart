@@ -27,8 +27,10 @@ class Constants {
   static String loginPath = "/sign-in";
   static String habit = "/habit";
   static String getUpcomingRewards = "/upcoming-rewards";
+  static String getNotifications = "/notifications";
   static String session = "/expired";
   static String getUserStreak = "/user-streak";
+  static String getUserOverScore = "/rewards-over-view";
   static String getOverview = "/over-view";
   static String getUsersRewards = "/rewards";
   static String getRecentTasks = "/recent-tasks";

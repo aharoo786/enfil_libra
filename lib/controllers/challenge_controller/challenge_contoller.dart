@@ -1,4 +1,5 @@
 import 'package:enfil_libre/UI/challenge_module/start_challege/start_challege_screen.dart';
+import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import 'package:enfil_libre/controllers/home_controller/home_controller.dart';
 import 'package:enfil_libre/data/models/get_user_challenges/get_user_challenges.dart';
 import 'package:enfil_libre/data/models/user_challenge_history/user_challenge_history.dart';
@@ -64,7 +65,7 @@ class ChallengeController extends GetxController implements GetxService {
     });
   }
 
-  getUserChallengeHistory(String id) async {
+ Future  getUserChallengeHistory(String id) async {
     isUserChallengeHistoryLoad.value = false;
     await connectionService.checkConnection().then((internet) async {
       if (!internet) {
@@ -120,7 +121,7 @@ class ChallengeController extends GetxController implements GetxService {
                   msg: response.body["message"] ??
                       "Challenge updated successfully");
 
-              Future.wait([getChallengesScreen(), getUserChallengesFunc()]);
+              Future.wait([getChallengesScreen(), getUserChallengesFunc(),getUserChallengeHistory(id)]);
               Get.back();
             } else {
               CustomToast.failToast(
@@ -163,9 +164,9 @@ class ChallengeController extends GetxController implements GetxService {
                 isUserChallenges.value = true;
                 if (getUserChallenges!.data.record != null) {
                   for (var element in getUserChallenges!.data.record!) {
-                    if (element.status == "process") {
+                    if (element.status == Constants.process) {
                       inProgress.add(element);
-                    } else if (element.status == "finished") {
+                    } else if (element.status == Constants.completed) {
                       finishedList.add(element);
                     } else {
                       pendingList.add(element);
@@ -208,9 +209,10 @@ class ChallengeController extends GetxController implements GetxService {
             } else if (response.body["status"] == Constants.success) {
               Get.back();
               if (challenges != null) {
-                Get.back();
-                Get.to(()=>StartChallengeScreen(challenges: challenges,fromStart: false,));
-                getUserChallengeHistory(challenges.id.toString());
+                Get.offAll(() => DashboardScreen(
+                      index: 1,
+                      myChallengeTabIndex: 1,
+                    ));
               }
               CustomToast.successToast(msg: response.body["message"]);
               Future.wait([getUserChallengesFunc(), getChallengesScreen()]);

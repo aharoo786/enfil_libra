@@ -12,12 +12,8 @@ import '../../../helper/validators.dart';
 import '../../values/dimens.dart';
 import '../../values/my_colors.dart';
 import '../../values/my_imgs.dart';
-import '../../widgets/app_bar_widget.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_textfield.dart';
-import '../../widgets/otp_bottom_sheet_widget.dart';
-import '../../widgets/otp_fields.dart';
-import '../email_verification/otp_screen.dart';
 import '../login/login.dart';
 import '../widgets/socialCard.dart';
 
@@ -315,8 +311,8 @@ class SignUpScreen extends StatelessWidget {
                                 height: 20.h,
                               ),
                                Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                 mainAxisAlignment:
+                                 MainAxisAlignment.spaceEvenly,
                                 children: [
                                   SocialCard(icon: MyImgs.googleIcon,onTap: (){authController.showEmailsDialog();},),
                                   SocialCard(icon: MyImgs.appleIcon,onTap: (){

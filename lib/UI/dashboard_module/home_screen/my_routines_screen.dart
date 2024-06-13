@@ -78,18 +78,30 @@ class MyRoutinesScreen extends StatelessWidget {
                         height: 20.h,
                       ),
                       Expanded(
-                        child: ListView.separated(
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            await habitController
+                                .getUserHabits(); // Await the Future
+                          },
+                          color: MyColors.buttonColor,
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
                             padding: EdgeInsets.symmetric(vertical: 10.h),
-                            physics: const BouncingScrollPhysics(),
-                            // shrinkWrap: true,
-                            itemBuilder: (context, index) =>
-                                CustomRoutineWidget(
-                                  userHabit: userHabits[index],
-                                ),
-                            separatorBuilder: (context, index) => SizedBox(
-                                  height: 16.h,
-                                ),
-                            itemCount: userHabits.length),
+                            child: ListView.separated(
+                              physics:
+                                  const NeverScrollableScrollPhysics(), // Disable scrolling for the inner ListView
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) =>
+                                  CustomRoutineWidget(
+                                userHabit: userHabits[index],
+                              ),
+                              separatorBuilder: (context, index) => SizedBox(
+                                height: 16.h,
+                              ),
+                              itemCount: userHabits.length,
+                            ),
+                          ),
+                        ),
                       )
                     ],
                   )))

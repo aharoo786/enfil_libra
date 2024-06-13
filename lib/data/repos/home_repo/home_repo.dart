@@ -20,15 +20,36 @@ class HomeRepo extends GetxService {
     });
   }
 
-  Future<Response> getUserStreakRepo({required String accessToken}) async {
-    return await apiProvider.getData(Constants.getUserStreak, headers: {
+  Future<Response> getNotificationRepo({required String accessToken}) async {
+    return await apiProvider.getData(Constants.getNotifications, headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       HttpHeaders.authorizationHeader: "Bearer $accessToken"
     });
   }
 
-  Future<Response> getOverviewRepo({required String accessToken}) async {
-    return await apiProvider.getData(Constants.getOverview, headers: {
+  Future<Response> readNotificationRepo({required String accessToken,required String id}) async {
+    return await apiProvider.getData("${Constants.getNotifications}/$id/read", headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+    });
+  }
+
+  Future<Response> getUserStreakRepo({required String accessToken}) async {
+    return await apiProvider.getData(Constants.getUserStreak, headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+    });
+  }Future<Response> getUserOverviewScore({required String accessToken}) async {
+    return await apiProvider.getData(Constants.getUserOverScore, headers: {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $accessToken"
+    });
+  }
+
+  Future<Response> getOverviewRepo({required String accessToken,required String filter}) async {
+    return await apiProvider.getData("${
+      Constants.getOverview
+    }?type=${filter}", headers: {
       HttpHeaders.contentTypeHeader: "application/json",
       HttpHeaders.authorizationHeader: "Bearer $accessToken"
     });

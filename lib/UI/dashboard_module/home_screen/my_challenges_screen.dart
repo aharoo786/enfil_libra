@@ -15,7 +15,8 @@ import '../../values/my_imgs.dart';
 import '../widgets/custom_progress_widget.dart';
 
 class MyChallengesScreen extends StatelessWidget {
-  MyChallengesScreen({super.key});
+  MyChallengesScreen({super.key, this.tabIndex = 0});
+  final int tabIndex;
   final ChallengeController challengeController = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class MyChallengesScreen extends StatelessWidget {
       backgroundColor: MyColors.splashColor,
       body: DefaultTabController(
         length: 4,
+        initialIndex: tabIndex,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,109 +100,150 @@ class MyChallengesScreen extends StatelessWidget {
                           children: [
                             ///Alll Tab
                             Obx(() => challengeController.isChallengesLoad.value
-                                ? GridView.builder(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 20.h, horizontal: 20.w),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, // Number of columns
-                                      crossAxisSpacing:
-                                          14.w, // Spacing between columns
-                                      mainAxisSpacing:
-                                          24.h, // Spacing between rows
-                                    ),
-                                    itemCount: challengeController
-                                        .challengesModel!.data.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      var userChallenge = challengeController
-                                          .challengesModel!.data[index];
-                                      return ChallengeWidgetStart(
-                                        index: index,
-                                        challenge: userChallenge,
-                                      );
+                                ? RefreshIndicator(
+                                    onRefresh: () {
+                                      Future.wait([
+                                        challengeController
+                                            .getChallengesScreen(),
+                                      ]);
+                                      return Future(() => true);
+
                                     },
+                              color: MyColors.buttonColor,
+                                    child: GridView.builder(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 20.h, horizontal: 20.w),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2, // Number of columns
+                                        crossAxisSpacing:
+                                            14.w, // Spacing between columns
+                                        mainAxisSpacing:
+                                            24.h, // Spacing between rows
+                                      ),
+                                      itemCount: challengeController
+                                          .challengesModel!.data.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        var userChallenge = challengeController
+                                            .challengesModel!.data[index];
+                                        return ChallengeWidgetStart(
+                                          index: index,
+                                          challenge: userChallenge,
+                                        );
+                                      },
+                                    ),
                                   )
                                 : shimmerChallenge()),
 
                             /// in Progress
                             Obx(() => challengeController.isUserChallenges.value
-                                ? GridView.builder(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 20.h, horizontal: 20.w),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, // Number of columns
-                                      crossAxisSpacing:
-                                          14.w, // Spacing between columns
-                                      mainAxisSpacing:
-                                          24.h, // Spacing between rows
-                                    ),
-                                    itemCount:
-                                        challengeController.inProgress.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      var userChallenge =
-                                          challengeController.inProgress[index];
-                                      return ChallengeWidget(
-                                        index: index,
-                                        userChallenges: userChallenge,
-                                      );
+                                ? RefreshIndicator(
+                                    onRefresh: () {
+                                      Future.wait([
+                                        challengeController
+                                            .getUserChallengesFunc(),
+                                      ]);
+                                      return Future(() => true);
                                     },
+                              color: MyColors.buttonColor,
+                                    child: GridView.builder(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 20.h, horizontal: 20.w),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2, // Number of columns
+                                        crossAxisSpacing:
+                                            14.w, // Spacing between columns
+                                        mainAxisSpacing:
+                                            24.h, // Spacing between rows
+                                      ),
+                                      itemCount:
+                                          challengeController.inProgress.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        var userChallenge = challengeController
+                                            .inProgress[index];
+                                        return ChallengeWidget(
+                                          index: index,
+                                          userChallenges: userChallenge,
+                                        );
+                                      },
+                                    ),
                                   )
                                 : shimmerChallenge()),
 
                             ///Finished
                             Obx(() => challengeController.isUserChallenges.value
-                                ? GridView.builder(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 20.h, horizontal: 20.w),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, // Number of columns
-                                      crossAxisSpacing:
-                                          14.w, // Spacing between columns
-                                      mainAxisSpacing:
-                                          24.h, // Spacing between rows
-                                    ),
-                                    itemCount:
-                                        challengeController.finishedList.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      var userChallenge = challengeController
-                                          .finishedList[index];
-                                      return ChallengeWidget(
-                                        index: index,
-                                        userChallenges: userChallenge,
-                                      );
+                                ? RefreshIndicator(
+                                    onRefresh: () {
+                                      Future.wait([
+                                        challengeController
+                                            .getUserChallengesFunc(),
+                                      ]);
+                                      return Future(() => true);
                                     },
+                              color: MyColors.buttonColor,
+                                    child: GridView.builder(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 20.h, horizontal: 20.w),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2, // Number of columns
+                                        crossAxisSpacing:
+                                            14.w, // Spacing between columns
+                                        mainAxisSpacing:
+                                            24.h, // Spacing between rows
+                                      ),
+                                      itemCount: challengeController
+                                          .finishedList.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        var userChallenge = challengeController
+                                            .finishedList[index];
+                                        return ChallengeWidget(
+                                          index: index,
+                                          userChallenges: userChallenge,
+                                        );
+                                      },
+                                    ),
                                   )
                                 : shimmerChallenge()),
 
                             ///Pending
                             Obx(() => challengeController.isUserChallenges.value
-                                ? GridView.builder(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 20.h, horizontal: 20.w),
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, // Number of columns
-                                      crossAxisSpacing:
-                                          14.w, // Spacing between columns
-                                      mainAxisSpacing:
-                                          24.h, // Spacing between rows
-                                    ),
-                                    itemCount:
-                                        challengeController.pendingList.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      var userChallenge = challengeController
-                                          .pendingList[index];
-                                      return ChallengeWidget(
-                                        index: index,
-                                        userChallenges: userChallenge,
-                                      );
+                                ? RefreshIndicator(
+                                    onRefresh: () {
+                                      Future.wait([
+                                        challengeController
+                                            .getUserChallengesFunc(),
+                                      ]);
+                                      return Future(() => true);
                                     },
+                              color: MyColors.buttonColor,
+                                    child: GridView.builder(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 20.h, horizontal: 20.w),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2, // Number of columns
+                                        crossAxisSpacing:
+                                            14.w, // Spacing between columns
+                                        mainAxisSpacing:
+                                            24.h, // Spacing between rows
+                                      ),
+                                      itemCount: challengeController
+                                          .pendingList.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        var userChallenge = challengeController
+                                            .pendingList[index];
+                                        return ChallengeWidget(
+                                          index: index,
+                                          userChallenges: userChallenge,
+                                        );
+                                      },
+                                    ),
                                   )
                                 : shimmerChallenge()),
                           ],

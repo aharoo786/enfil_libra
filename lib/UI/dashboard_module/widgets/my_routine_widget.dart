@@ -49,19 +49,19 @@ class CustomRoutineWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  userHabit.counter,
+                  userHabit.name,
                   style: textTheme.headlineSmall!.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 16.sp,
                       color: MyColors.buttonColor),
                 ),
-                Text(
-                  '5/13/2024',
-                  style: textTheme.headlineSmall!.copyWith(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 16.sp,
-                      color: MyColors.buttonColor),
-                ),
+                // Text(
+                //   '5/13/2024',
+                //   style: textTheme.headlineSmall!.copyWith(
+                //       fontWeight: FontWeight.w300,
+                //       fontSize: 16.sp,
+                //       color: MyColors.buttonColor),
+                // ),
                 // SvgPicture.asset(MyImgs.rewardBig)
               ],
             ),
@@ -80,7 +80,7 @@ class CustomRoutineWidget extends StatelessWidget {
                   width: 8.w,
                 ),
                 Text(
-                  '07:30 PM - 09:30 PM ',
+                 userHabit.reminder?? userHabit.frequency,
                   style: textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 12.sp,

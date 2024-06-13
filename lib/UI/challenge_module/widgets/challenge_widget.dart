@@ -56,7 +56,9 @@ class ChallengeWidget extends StatelessWidget {
           decoration: BoxDecoration(
               color: userChallenges!.status == Constants.process
                   ? myColors[1]
-                  : myColors[0],
+                  : userChallenges!.status == Constants.completed
+                      ? myColors[2]
+                      : myColors[0],
               borderRadius: BorderRadius.circular(8),
               boxShadow: [
                 BoxShadow(
@@ -188,18 +190,28 @@ class ChallengeWidget extends StatelessWidget {
                       ],
                     )
                   : CustomButton(
-                      text: "Finished",
+                      text: userChallenges!.status == Constants.completed
+                          ? "Finished"
+                          : "Failed",
                       onPressed: () {
-                        // Get.to(() => StartChallengeScreen());
-                        // Get.find<ChallengeController>().getChallengesScreen();
+                        Get.to(() => StartChallengeScreen(
+                              challenges: Challenges(
+                                id: userChallenges!.id,
+                                name: userChallenges!.name,
+                                rewardPoint: userChallenges!.totalRewards,
+                                numberOfDay: userChallenges!.days,
+                                videoUrl: userChallenges!.videoUrl,
+                                description: userChallenges!.description,
+                                startedDate: userChallenges!.startedAt,
+                                endedDate: userChallenges!.endedAt,
+                              ),
+                              showReward: true,
+                              earnedRewards: userChallenges!.earnRewards,
+                            ));
                       },
                       height: 32.h,
-                      color: MyColors.finishedColor == myColors[index]
-                          ? const Color(0xff4ECB71)
-                          : MyColors.buttonColor,
-                      borderColor: MyColors.finishedColor == myColors[index]
-                          ? const Color(0xff4ECB71)
-                          : MyColors.primary2,
+                      color: const Color(0xff4ECB71),
+                      borderColor: const Color(0xff4ECB71),
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
                     )

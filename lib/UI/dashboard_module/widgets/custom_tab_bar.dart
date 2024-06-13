@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 
 import 'package:enfil_libre/UI/dashboard_module/widgets/create_new_challenge.dart';
+import 'package:enfil_libre/UI/dashboard_module/widgets/overview_score_widget.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -18,6 +20,7 @@ import '../../../controllers/home_controller/home_controller.dart';
 import '../../../data/models/dashboard_module/overview_model.dart';
 import '../../values/my_colors.dart';
 import '../../values/my_imgs.dart';
+import '../../widgets/radial_axis.dart';
 import 'custom_progress_widget.dart';
 import 'cutomProgressWidgetShimmer.dart';
 
@@ -157,7 +160,7 @@ class CustomTabBarState extends State<CustomTabBar>
                 ///Reward Tab
                 Obx(() {
                   if (homeController.isUpcomingRewardsLoad.value) {
-                    if (homeController.upcomingRewardsModel!.data.name !=
+                    if (homeController.upcomingRewardsModel!.data[0].name !=
                         null) {
                       return RefreshIndicator(
                         onRefresh: () {
@@ -186,176 +189,196 @@ class CustomTabBarState extends State<CustomTabBar>
                                         color: MyColors.buttonColor),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
                                 Obx(() => homeController
                                         .isUpcomingRewardsLoad.value
-                                    ? homeController.upcomingRewardsModel!.data
-                                                .name !=
+                                    ? homeController.upcomingRewardsModel!
+                                                .data[0].name !=
                                             null
-                                        ? Container(
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 20.w),
-                                            padding: EdgeInsets.only(
-                                                top: 12.h,
-                                                left: 12.w,
-                                                right: 12.w,
-                                                bottom: 25.w),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      spreadRadius: 0,
-                                                      blurRadius: 16,
-                                                      offset: Offset(0, 4),
-                                                      color: Colors.black
-                                                          .withOpacity(0.12))
-                                                ]),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      homeController
-                                                          .upcomingRewardsModel!
-                                                          .data
-                                                          .name!,
-                                                      style: textTheme
-                                                          .headlineSmall!
-                                                          .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              fontSize: 20.sp,
-                                                              color: MyColors
-                                                                  .buttonColor),
-                                                    ),
-                                                    SvgPicture.asset(
-                                                        MyImgs.rewardBig)
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 16.h,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          MyImgs.calender,
-                                                          height: 20.h,
-                                                          colorFilter:
-                                                              const ColorFilter
-                                                                  .mode(
-                                                                  MyColors
-                                                                      .primary2,
-                                                                  BlendMode
-                                                                      .srcIn),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 8.w,
-                                                        ),
-                                                        Text(
-                                                          '${homeController.upcomingRewardsModel!.data.remainingDays} days left',
+                                        ? SizedBox(
+                                            height: 190.h,
+                                            child: ListView.separated(
+                                              scrollDirection: Axis.horizontal,
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 20.h),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                var reward = homeController
+                                                    .upcomingRewardsModel!
+                                                    .data[index];
+                                                return Container(
+                                                  width: 374.w,
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 20.w),
+                                                  padding: EdgeInsets.only(
+                                                      top: 12.h,
+                                                      left: 12.w,
+                                                      right: 12.w,
+                                                      bottom: 25.w),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      color: Colors.white,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            spreadRadius: 0,
+                                                            blurRadius: 16,
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 4),
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.12))
+                                                      ]),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Text(
+                                                              reward.name!,
+                                                              style: textTheme
+                                                                  .headlineSmall!
+                                                                  .copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          20.sp,
+                                                                      color: MyColors
+                                                                          .buttonColor),
+                                                              maxLines: 2,
+                                                            ),
+                                                          ),
+                                                          SvgPicture.asset(
+                                                              MyImgs.rewardBig)
+                                                        ],
+                                                      ),
+                                                      const Spacer(),
+                                                      Row(
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                MyImgs.calender,
+                                                                height: 20.h,
+                                                                colorFilter: const ColorFilter
+                                                                    .mode(
+                                                                    MyColors
+                                                                        .primary2,
+                                                                    BlendMode
+                                                                        .srcIn),
+                                                              ),
+                                                              SizedBox(
+                                                                width: 8.w,
+                                                              ),
+                                                              Text(
+                                                                '${reward.remainingDays} days left',
+                                                                style: textTheme.titleLarge!.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        12.sp,
+                                                                    color: MyColors
+                                                                        .buttonColor),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            width: 12.w,
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                MyImgs
+                                                                    .miniBadge,
+                                                                height: 20.h,
+                                                                colorFilter: const ColorFilter
+                                                                    .mode(
+                                                                    MyColors
+                                                                        .primary2,
+                                                                    BlendMode
+                                                                        .srcIn),
+                                                              ),
+                                                              SizedBox(
+                                                                width: 8.w,
+                                                              ),
+                                                              Text(
+                                                                reward
+                                                                    .totalPoint!,
+                                                                style: textTheme.titleLarge!.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        12.sp,
+                                                                    color: MyColors
+                                                                        .buttonColor),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        ],
+                                                      ),
+                                                      const Spacer(),
+                                                      Align(
+                                                        alignment: Alignment
+                                                            .centerRight,
+                                                        child: Text(
+                                                          '${(reward.percentageCompleted.toInt())}/100',
                                                           style: textTheme
                                                               .titleLarge!
                                                               .copyWith(
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w600,
+                                                                          .w700,
                                                                   fontSize:
                                                                       12.sp,
                                                                   color: MyColors
                                                                       .buttonColor),
                                                         ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      width: 12.w,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          MyImgs.miniBadge,
-                                                          height: 20.h,
-                                                          colorFilter:
-                                                              const ColorFilter
-                                                                  .mode(
+                                                      ),
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        child:
+                                                            LinearProgressIndicator(
+                                                          value: (reward
+                                                                  .percentageCompleted /
+                                                              100),
+                                                          valueColor:
+                                                              const AlwaysStoppedAnimation<
+                                                                      Color>(
                                                                   MyColors
-                                                                      .primary2,
-                                                                  BlendMode
-                                                                      .srcIn),
+                                                                      .primary2),
+                                                          // Color of the progress indicator
+                                                          backgroundColor:
+                                                              Colors.black
+                                                                  .withOpacity(
+                                                                      0.1),
                                                         ),
-                                                        SizedBox(
-                                                          width: 8.w,
-                                                        ),
-                                                        Text(
-                                                          homeController
-                                                              .upcomingRewardsModel!
-                                                              .data
-                                                              .totalPoint!,
-                                                          style: textTheme
-                                                              .titleLarge!
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  fontSize:
-                                                                      12.sp,
-                                                                  color: MyColors
-                                                                      .buttonColor),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 15.h,
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Text(
-                                                    '${homeController.upcomingRewardsModel!.data.percentageCompleted}/100',
-                                                    style: textTheme.titleLarge!
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            fontSize: 12.sp,
-                                                            color: MyColors
-                                                                .buttonColor),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ),
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  child:
-                                                      LinearProgressIndicator(
-                                                    value: (homeController
-                                                            .upcomingRewardsModel!
-                                                            .data
-                                                            .percentageCompleted! /
-                                                        100),
-                                                    valueColor:
-                                                        const AlwaysStoppedAnimation<
-                                                                Color>(
-                                                            MyColors.primary2),
-                                                    // Color of the progress indicator
-                                                    backgroundColor: Colors
-                                                        .black
-                                                        .withOpacity(0.1),
-                                                  ),
-                                                ),
-                                              ],
+                                                );
+                                              },
+                                              separatorBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return SizedBox(width: 16.w);
+                                              },
+                                              itemCount: homeController
+                                                  .upcomingRewardsModel!
+                                                  .data
+                                                  .length,
                                             ),
                                           )
-                                        : SizedBox.shrink()
+                                        : const SizedBox.shrink()
                                     : Shimmer.fromColors(
                                         baseColor: MyColors.shimmerBaseColor,
                                         highlightColor:
@@ -378,9 +401,6 @@ class CustomTabBarState extends State<CustomTabBar>
                                               ]),
                                         ),
                                       )),
-                                SizedBox(
-                                  height: 16.h,
-                                ),
                                 Obx(() => homeController.isUserStreakLoad.value
                                     ? Column(
                                         children: [
@@ -734,10 +754,12 @@ class CustomTabBarState extends State<CustomTabBar>
                   onRefresh: () {
                     Future.wait([
                       homeController.getOverview(),
-                      homeController.getRecentTasks()
+                      homeController.getRecentTasks(),
+                      homeController.getOverviewScore()
                     ]);
                     return Future(() => true);
                   },
+                  color: MyColors.buttonColor,
                   child: ListView(
                     children: [
                       Column(
@@ -752,11 +774,124 @@ class CustomTabBarState extends State<CustomTabBar>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Dashboard',
+                                  'Overview',
                                   style: textTheme.headlineSmall!.copyWith(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 20.sp,
                                       color: MyColors.buttonColor),
+                                ),
+                                SizedBox(
+                                  height: 20.h,
+                                ),
+                                Obx(() => homeController
+                                        .isOverviewScoreModelLoad.value
+                                    ? Container(
+                                        padding: const EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 16,
+                                                spreadRadius: 0,
+                                                offset: const Offset(0, 4),
+                                                color: Colors.black
+                                                    .withOpacity(0.12),
+                                              )
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(12)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            OverviewScoreWidget(
+                                                percent:
+                                                    "${homeController.overviewScoreModel!.data.weeklyRewards}%",
+                                                scoreText: "Weekly Score"),
+                                            OverviewScoreWidget(
+                                                percent:
+                                                    "+${homeController.overviewScoreModel!.data.monthlyRewards}%",
+                                                scoreText: "Month"),
+                                            OverviewScoreWidget(
+                                                percent:
+                                                    "+${homeController.overviewScoreModel!.data.yearlyRewards}%",
+                                                scoreText: "Year"),
+                                            OverviewScoreWidget(
+                                                percent:
+                                                    "${homeController.overviewScoreModel!.data.totalRewards}",
+                                                scoreText: "Total Points"),
+                                            RadialAxisWidget(
+                                              progressBarValue: homeController
+                                                  .overviewScoreModel!
+                                                  .data
+                                                  .completedPercentage,
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : shimmerWidget(65)),
+                                SizedBox(
+                                  height: 20.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Score',
+                                      style: textTheme.headlineSmall!.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16.sp,
+                                          color: MyColors.buttonColor),
+                                    ),
+                                    Obx(
+                                      () => Container(
+                                        width: 85.w,
+                                        height: 28.h,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 8.w),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: MyColors.buttonColor,
+                                                width: 1.h),
+                                            borderRadius:
+                                                BorderRadius.circular(4)),
+                                        child: DropdownButton<String>(
+                                          value: homeController
+                                              .selectedFilterType.value,
+                                          elevation: 4,
+                                          style: TextStyle(
+                                              fontSize: 12.sp,
+                                              color: MyColors.buttonColor),
+                                          isExpanded: true,
+                                          icon: const Icon((Icons
+                                              .keyboard_arrow_down_outlined)),
+                                          dropdownColor: Colors.white,
+                                          underline: const SizedBox(),
+                                          focusColor: Colors.white,
+                                          items: [
+                                            ...homeController.filterType
+                                                .map((value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(
+                                                  value,
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ],
+                                          onChanged: (data) {
+                                            homeController.selectedFilterType
+                                                .value = data!;
+                                            homeController.getOverview();
+                                            //  authController.selectedGender = data;
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 20.h,
@@ -766,64 +901,59 @@ class CustomTabBarState extends State<CustomTabBar>
                                   child: Obx(() => homeController
                                           .isOverviewLoad.value
                                       ? SizedBox(
-                                          height: 225.h,
+                                          height: 225,
                                           child: SfCartesianChart(
-                                            primaryXAxis: const CategoryAxis(),
+                                            primaryXAxis: const CategoryAxis(
+                                              interval: 1,
+                                            ),
                                             primaryYAxis: const NumericAxis(
                                               minimum: 0,
                                               maximum: 100,
-                                              interval: 10,
+                                              interval: 20,
                                             ),
                                             series: <CartesianSeries>[
-                                              ColumnSeries<Overview, String>(
+                                              LineSeries<Map<String, dynamic>,
+                                                  String>(
                                                 dataSource: homeController
-                                                    .overviewModel!.data,
+                                                    .overViewDataList,
                                                 xValueMapper:
-                                                    (Overview data, _) =>
-                                                        data.name,
-                                                yValueMapper: (Overview data,
-                                                        _) =>
-                                                    data.percentageCompleted,
+                                                    (Map<String, dynamic> data,
+                                                            _) =>
+                                                        data["key"],
+                                                yValueMapper:
+                                                    (Map<String, dynamic> data,
+                                                            _) =>
+                                                        data["value"],
                                                 dataLabelSettings:
                                                     const DataLabelSettings(
-                                                  isVisible: true,
+                                                  isVisible: false,
                                                   textStyle: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.blue),
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.blue,
+                                                  ),
                                                   labelAlignment:
                                                       ChartDataLabelAlignment
                                                           .top,
                                                   useSeriesColor: false,
                                                 ),
-                                                color: Colors.blue,
+                                                markerSettings:
+                                                    const MarkerSettings(
+                                                  isVisible: true,
+                                                  shape: DataMarkerType.circle,
+                                                  borderWidth: 2,
+                                                  color: MyColors.buttonColor,
+                                                  borderColor:
+                                                      MyColors.buttonColor,
+                                                ),
+                                                enableTooltip: true,
+                                                color: MyColors.primary2,
                                               )
                                             ],
+                                            tooltipBehavior:
+                                                TooltipBehavior(enable: true),
                                           ),
                                         )
-                                      : Shimmer.fromColors(
-                                          baseColor: MyColors.shimmerBaseColor,
-                                          highlightColor:
-                                              MyColors.shimmerHighlightColor,
-                                          child: Container(
-                                            height: 225.h,
-                                            // margin: EdgeInsets.symmetric(horizontal: 20.w),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                color:
-                                                    MyColors.shimmerBaseColor,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      spreadRadius: 0,
-                                                      blurRadius: 16,
-                                                      offset:
-                                                          const Offset(0, 4),
-                                                      color: Colors.black
-                                                          .withOpacity(0.12))
-                                                ]),
-                                          ),
-                                        )),
+                                      : shimmerWidget(225)),
                                 ),
 
                                 SizedBox(
@@ -909,6 +1039,7 @@ class CustomTabBarState extends State<CustomTabBar>
                     Future.wait([homeController.getRecentTasks()]);
                     return Future(() => true);
                   },
+                  color: MyColors.buttonColor,
                   child: ListView(
                     children: [
                       Column(
@@ -1005,6 +1136,27 @@ class CustomTabBarState extends State<CustomTabBar>
 
   void _onTabChanged() {
     authController.update();
+  }
+
+  shimmerWidget(double height) {
+    return Shimmer.fromColors(
+      baseColor: MyColors.shimmerBaseColor,
+      highlightColor: MyColors.shimmerHighlightColor,
+      child: Container(
+        height: height.h,
+        // margin: EdgeInsets.symmetric(horizontal: 20.w),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: MyColors.shimmerBaseColor,
+            boxShadow: [
+              BoxShadow(
+                  spreadRadius: 0,
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                  color: Colors.black.withOpacity(0.12))
+            ]),
+      ),
+    );
   }
 }
 

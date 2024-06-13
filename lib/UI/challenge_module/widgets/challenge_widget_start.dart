@@ -18,19 +18,13 @@ class ChallengeWidgetStart extends StatelessWidget {
   final int index;
   final Challenges? challenge;
 
-  final List<Color> myColors = [
-    MyColors.pendingColor,
-    MyColors.inProgressColor,
-    MyColors.finishedColor,
-    MyColors.finishedColor,
-  ];
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         decoration: BoxDecoration(
-            color: myColors[0],
+            color: MyColors.pendingColor,
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
@@ -103,26 +97,26 @@ class ChallengeWidgetStart extends StatelessWidget {
             SizedBox(
               height: 10.h,
             ),
-            Row(
-              children: [
-                SvgPicture.asset(
-                  MyImgs.calender,
-                  height: 20.h,
-                  colorFilter: ColorFilter.mode(
-                      MyColors.buttonColor.withOpacity(0.4), BlendMode.srcIn),
-                ),
-                SizedBox(
-                  width: 8.w,
-                ),
-                Text(
-                  '07:30 PM - 09:30 PM ',
-                  style: textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.sp,
-                      color: MyColors.buttonColor),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     SvgPicture.asset(
+            //       MyImgs.calender,
+            //       height: 20.h,
+            //       colorFilter: ColorFilter.mode(
+            //           MyColors.buttonColor.withOpacity(0.4), BlendMode.srcIn),
+            //     ),
+            //     SizedBox(
+            //       width: 8.w,
+            //     ),
+            //     Text(
+            //       '07:30 PM - 09:30 PM ',
+            //       style: textTheme.titleLarge!.copyWith(
+            //           fontWeight: FontWeight.w600,
+            //           fontSize: 12.sp,
+            //           color: MyColors.buttonColor),
+            //     ),
+            //   ],
+            // ),
             const Spacer(),
             CustomButton(
               text: "START",

@@ -1,3 +1,5 @@
+import 'package:enfil_libre/data/models/dashboard_module/get_all_notifications.dart';
+import 'package:enfil_libre/data/models/dashboard_module/overview_score_model.dart';
 import 'package:enfil_libre/data/models/get_user_habit/get_user_habit.dart';
 import 'package:enfil_libre/data/models/get_user_habit_details/get_user_habit_details.dart';
 import 'package:enfil_libre/data/models/habit_module/get_catergories_model.dart';
@@ -29,12 +31,19 @@ class HomeController extends GetxController implements GetxService {
 
   CheckConnectionService connectionService = CheckConnectionService();
 
+  var filterType = ["Week", "Month", "Year"].obs;
+  var selectedFilterType = "Week".obs;
+
   ///variables
   var isUsersRewardsLoad = false.obs;
   var isOverviewLoad = false.obs;
   var isRecentTaskLoad = false.obs;
   var isUpcomingRewardsLoad = false.obs;
+  var isNotificationLoad = false.obs;
   var isUserStreakLoad = false.obs;
+  var isOverviewScoreModelLoad = false.obs;
+
+  List<Map<String, dynamic>> overViewDataList = [];
 
   ///Models
   UpcomingRewardsModel? upcomingRewardsModel;
@@ -42,6 +51,8 @@ class HomeController extends GetxController implements GetxService {
   RecentTasksModel? recentTasksModel;
   UserStreakModel? userStreakModel;
   OverviewModel? overviewModel;
+  OverviewScoreModel? overviewScoreModel;
+  GetAllNotifications? getAllNotifications;
 
   Future getUpcomingRewards() async {
     isUpcomingRewardsLoad.value = false;
@@ -77,6 +88,70 @@ class HomeController extends GetxController implements GetxService {
     });
   }
 
+  Future getNotificationList() async {
+    isNotificationLoad.value = false;
+
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        await homeRepo
+            .getNotificationRepo(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "")
+            .then((response) async {
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              GetAllNotifications model =
+                  GetAllNotifications.fromJson(response.body);
+              if (model.status == Constants.success) {
+                getAllNotifications = model;
+                isNotificationLoad.value = true;
+              }
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
+
+  Future readNotificationList(String id) async {
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        await homeRepo
+            .readNotificationRepo(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "",
+                id: id)
+            .then((response) async {
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              GetAllNotifications model =
+                  GetAllNotifications.fromJson(response.body);
+              if (model.status == Constants.success) {}
+            } else {
+              // CustomToast.failToast(
+              //     msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            // CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
+
   Future getOverview() async {
     isOverviewLoad.value = false;
 
@@ -87,7 +162,8 @@ class HomeController extends GetxController implements GetxService {
         await homeRepo
             .getOverviewRepo(
                 accessToken:
-                    sharedPreferences.getString(Constants.accessToken) ?? "")
+                    sharedPreferences.getString(Constants.accessToken) ?? "",
+                filter: selectedFilterType.value.toLowerCase())
             .then((response) async {
           if (response.statusCode == 200) {
             if (response.body["status"] == Constants.failure) {
@@ -96,6 +172,12 @@ class HomeController extends GetxController implements GetxService {
               OverviewModel model = OverviewModel.fromJson(response.body);
               if (model.status == Constants.success) {
                 overviewModel = model;
+                overViewDataList = [];
+
+                overviewModel!.data.forEach((key, value) {
+                  overViewDataList.add({"key": key, "value": value});
+                });
+
                 isOverviewLoad.value = true;
               }
             } else {
@@ -209,6 +291,40 @@ class HomeController extends GetxController implements GetxService {
     });
   }
 
+  Future getOverviewScore() async {
+    isOverviewScoreModelLoad.value = false;
+
+    await connectionService.checkConnection().then((internet) async {
+      if (!internet) {
+        CustomToast.noInternetToast();
+      } else {
+        await homeRepo
+            .getUserOverviewScore(
+                accessToken:
+                    sharedPreferences.getString(Constants.accessToken) ?? "")
+            .then((response) async {
+          if (response.statusCode == 200) {
+            if (response.body["status"] == Constants.failure) {
+              CustomToast.failToast(msg: response.body["message"]);
+            } else if (response.body["status"] == Constants.success) {
+              OverviewScoreModel model =
+                  OverviewScoreModel.fromJson(response.body);
+              if (model.status == Constants.success) {
+                overviewScoreModel = model;
+                isOverviewScoreModelLoad.value = true;
+              }
+            } else {
+              CustomToast.failToast(
+                  msg: "Some Error has occurred, Try Again Later");
+            }
+          } else {
+            CustomToast.failToast(msg: response.body["message"]);
+          }
+        });
+      }
+    });
+  }
+
   @override
   void onInit() {
     Future.wait([
@@ -216,7 +332,8 @@ class HomeController extends GetxController implements GetxService {
       getUpcomingRewards(),
       getUsersRewards(),
       getOverview(),
-      getUserStreak()
+      getUserStreak(),
+      getOverviewScore()
     ]);
     super.onInit();
   }

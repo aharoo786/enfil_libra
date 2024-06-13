@@ -112,7 +112,7 @@ class CustomTextFieldBorder extends StatelessWidget {
           }
           return null;
         },
-        style: textTheme.bodyText1!.copyWith(
+        style: textTheme.headlineSmall!.copyWith(
             fontSize: fontSize ?? 16.sp,
             height: 1,
             color: textColor ?? MyColors.textColor,

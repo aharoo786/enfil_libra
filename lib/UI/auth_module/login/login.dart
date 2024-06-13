@@ -286,7 +286,7 @@ class _LoginState extends State<Login> {
                               ),
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   SocialCard(
                                     icon: MyImgs.googleIcon,

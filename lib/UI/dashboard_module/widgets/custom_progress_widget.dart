@@ -132,7 +132,7 @@ class CustomProgressWidget extends StatelessWidget {
                       width: 8.w,
                     ),
                     Text(
-                      '12',
+                      earnedRewards ?? "0",
                       style: textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.w600,
                           fontSize: 12.sp,
@@ -159,7 +159,7 @@ class CustomProgressWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: LinearProgressIndicator(
                 minHeight: 8.h,
-                value: percentage == null ? 0.5 : percentage! / 100,
+                value: percentage == null ? 0.0 : percentage! / 100,
                 valueColor: const AlwaysStoppedAnimation<Color>(
                     MyColors.primary2), // Color of the progress indicator
                 backgroundColor: Colors.black.withOpacity(0.1),

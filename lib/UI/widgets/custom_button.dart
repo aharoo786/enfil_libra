@@ -50,7 +50,7 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           text,
-          style:   textTheme.headline2!.copyWith(fontSize: fontSize?? 16.sp,color:
+          style:   textTheme.headlineSmall!.copyWith(fontSize: fontSize?? 16.sp,color:
           textColor?? MyColors.textColor2,
             fontWeight:fontWeight?? FontWeight.w700
           ),

@@ -20,8 +20,13 @@ import '../widgets/custom_bottomNavigationBar.dart';
 
 class DashboardScreen extends StatefulWidget {
   int? index;
+  int myChallengeTabIndex;
   bool fromHabit;
-  DashboardScreen({Key? key, this.index = 0, this.fromHabit = false})
+  DashboardScreen(
+      {Key? key,
+      this.index = 0,
+      this.fromHabit = false,
+      this.myChallengeTabIndex = 0})
       : super(key: key);
 
   @override
@@ -30,12 +35,19 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreen extends State<DashboardScreen> {
   // int _currentIndex = wi;
-  final List<Widget> _widgetOption = [
-    HomeScreen(),
-    MyChallengesScreen(),
-    CreateHabitScreen(),
-    RewardHomeScreen()
-  ];
+  late final List<Widget> _widgetOption;
+  @override
+  void initState() {
+    _widgetOption = [
+      HomeScreen(),
+      MyChallengesScreen(
+        tabIndex: widget.myChallengeTabIndex,
+      ),
+      CreateHabitScreen(),
+      RewardHomeScreen()
+    ];
+    super.initState();
+  }
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
 

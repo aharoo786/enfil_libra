@@ -64,14 +64,14 @@ class HomeScreen extends StatelessWidget {
           ),
           title: Text(
             title,
-            style: textTheme.headline1!.copyWith(
+            style: textTheme.headlineSmall!.copyWith(
                 fontSize: 24.sp,
                 fontFamily: Constants.poppinsFamily,
                 fontWeight: FontWeight.w500),
           ),
           subtitle: Text(
             subTitle,
-            style: textTheme.headline5!.copyWith(
+            style: textTheme.headlineSmall!.copyWith(
                 fontFamily: Constants.poppinsFamily,
                 fontWeight: FontWeight.w500),
           ),
