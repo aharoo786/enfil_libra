@@ -41,7 +41,7 @@ class Challenges {
   String name;
   String rewardPoint;
   String numberOfDay;
-  String videoUrl;
+  String? videoUrl;
   String description;
   String startedDate;
   String endedDate;

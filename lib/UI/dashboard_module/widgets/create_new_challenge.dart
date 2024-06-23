@@ -11,28 +11,23 @@ import '../../values/my_imgs.dart';
 import '../../widgets/custom_button.dart';
 
 class CreateNewChallenge extends StatelessWidget {
-  CreateNewChallenge({super.key});
+  Future<void> Function() onRefresh;
+  CreateNewChallenge({super.key, required this.onRefresh});
   final HomeController homeController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.splashColor,
       body: RefreshIndicator(
-        onRefresh: () {
-          Future.wait([
-            homeController.getUpcomingRewards(),
-            homeController.getUserStreak()
-          ]);
-          return Future(() => true);
-        },
+        onRefresh: onRefresh,
+        color: MyColors.buttonColor ,
         child: ListView(
-
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 650.h,
+                    height: 650.h,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                     ),
@@ -43,7 +38,7 @@ class CreateNewChallenge extends StatelessWidget {
                           height: 60.h,
                         ),
                         Text(
-                          'Start Your first Challenge',
+                          'Start Challenge',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
@@ -54,8 +49,7 @@ class CreateNewChallenge extends StatelessWidget {
                           height: 16.h,
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
                             'Let\'s start your journey to personal growth by creating your first Challenge.',
                             textAlign: TextAlign.center,
@@ -65,8 +59,11 @@ class CreateNewChallenge extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 30.h,),
-                        Expanded(child: SvgPicture.asset(MyImgs.createHabitVector)),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        Expanded(
+                            child: SvgPicture.asset(MyImgs.createHabitVector)),
                         SizedBox(
                           height: 60.h,
                         ),

@@ -134,7 +134,17 @@ class MyChallengesScreen extends StatelessWidget {
                                       },
                                     ),
                                   )
-                                : shimmerChallenge()),
+                                : RefreshIndicator(
+                                onRefresh: () {
+                                  Future.wait([
+                                    challengeController
+                                        .getChallengesScreen(),
+                                  ]);
+                                  return Future(() => true);
+
+                                },
+                                color: MyColors.buttonColor,
+                                child: shimmerChallenge())),
 
                             /// in Progress
                             Obx(() => challengeController.isUserChallenges.value

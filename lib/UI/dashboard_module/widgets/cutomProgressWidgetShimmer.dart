@@ -5,7 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import '../../values/my_colors.dart';
 
 class CustomProgressBarWidgetShimmer extends StatelessWidget {
-  const CustomProgressBarWidgetShimmer({super.key});
+ final  double horizontalPadding;
+  const CustomProgressBarWidgetShimmer({super.key,this.horizontalPadding=0});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class CustomProgressBarWidgetShimmer extends StatelessWidget {
       highlightColor: MyColors.shimmerHighlightColor,
       child: Container(
         height: 100.h,
-        margin: EdgeInsets.symmetric(horizontal: 20.w),
+        margin: EdgeInsets.symmetric(horizontal: horizontalPadding.w),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: MyColors.shimmerBaseColor,

@@ -75,13 +75,13 @@ class WelcomeScreen extends StatelessWidget {
                   SizedBox(
                     height: 40.h,
                   ),
-                  TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Continue as guest user",
-                        style: textTheme.bodySmall!
-                            .copyWith(fontWeight: FontWeight.w700,fontSize: 16.sp),
-                      ))
+                  // TextButton(
+                  //     onPressed: () {},
+                  //     child: Text(
+                  //       "Continue as guest user",
+                  //       style: textTheme.bodySmall!
+                  //           .copyWith(fontWeight: FontWeight.w700,fontSize: 16.sp),
+                  //     ))
                 ],
               ),
             ),

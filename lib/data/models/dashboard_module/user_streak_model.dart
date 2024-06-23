@@ -43,12 +43,12 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     fantastic: json["fantastic"],
-    steak: List<Steak>.from(json["steak"].map((x) => Steak.fromJson(x))),
+    steak: List<Steak>.from(json["streak"].map((x) => Steak.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "fantastic": fantastic,
-    "steak": List<dynamic>.from(steak.map((x) => x.toJson())),
+    "streak": List<dynamic>.from(steak.map((x) => x.toJson())),
   };
 }
 

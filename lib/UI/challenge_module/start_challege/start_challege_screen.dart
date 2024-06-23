@@ -83,12 +83,20 @@ class StartChallengeScreen extends StatelessWidget {
                             SizedBox(
                               height: 20.h,
                             ),
-                            SizedBox(
+                            Container(
                               height: 175.h,
                               width: MediaQuery.of(context).size.width,
-                              child: PlayVideoFromYoutube(
-                                url: challenges.videoUrl,
-                              ),
+                              padding: challenges.videoUrl == null
+                                  ? EdgeInsets.symmetric(horizontal: 20.w)
+                                  : null,
+                              color: challenges.videoUrl == null
+                                  ? Colors.black
+                                  : Colors.transparent,
+                              child: challenges.videoUrl == null
+                                  ? const Center(child: Icon(Icons.play_arrow,color: Colors.white,size: 40,))
+                                  : PlayVideoFromYoutube(
+                                      url: challenges.videoUrl!,
+                                    ),
                             ),
                             Column(
                               children: [
@@ -367,7 +375,7 @@ class StartChallengeScreen extends StatelessWidget {
                                                                         0.3)),
                                                       ),
                                                       Text(
-                                                        "${earnedRewards??0} Points",
+                                                        "${earnedRewards ?? 0} Points",
                                                         style: textTheme
                                                             .headlineSmall!
                                                             .copyWith(

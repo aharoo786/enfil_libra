@@ -19,8 +19,10 @@ class CustomRoutineWidget extends StatelessWidget {
     var textTheme = theme.textTheme;
     return GestureDetector(
       onTap: () {
-        Get.find<HabitController>().getUserHabitDetailsFunc(userHabit.id.toString());
-        Get.to(() => HabitDetailsScreen(color: userHabit.color,
+        Get.find<HabitController>()
+            .getUserHabitDetailsFunc(userHabit.id.toString());
+        Get.to(() => HabitDetailsScreen(
+              color: userHabit.color,
             ));
       },
       child: Container(
@@ -31,9 +33,10 @@ class CustomRoutineWidget extends StatelessWidget {
             color: Colors.white,
             border: Border(
               left: BorderSide(
-                color:  HabitBottomSheets().hexToColor(userHabit.color), // Convert and use the color
+                color: HabitBottomSheets()
+                    .hexToColor(userHabit.color), // Convert and use the color
 
-              width: 4.0.w,
+                width: 4.0.w,
               ),
             ),
             boxShadow: [
@@ -80,7 +83,9 @@ class CustomRoutineWidget extends StatelessWidget {
                   width: 8.w,
                 ),
                 Text(
-                 userHabit.reminder?? userHabit.frequency,
+                  userHabit.reminder == "null" || userHabit.reminder == null
+                      ? userHabit.frequency
+                      : userHabit.reminder!,
                   style: textTheme.titleLarge!.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 12.sp,
@@ -96,5 +101,4 @@ class CustomRoutineWidget extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -172,7 +172,7 @@ class HabitController extends GetxController implements GetxService {
               "slot": slot.toLowerCase(),
               "reminder": reminder,
               "counter": counterText,
-              "time": showMinutes.value ? time : null,
+              "time": showMinutes.value ? time : "null",
               "sub_category_id": subCatId
             },
             accessToken: sharedPreferences.getString(Constants.accessToken) ??

@@ -65,7 +65,7 @@ class ChallengeController extends GetxController implements GetxService {
     });
   }
 
- Future  getUserChallengeHistory(String id) async {
+  Future getUserChallengeHistory(String id) async {
     isUserChallengeHistoryLoad.value = false;
     await connectionService.checkConnection().then((internet) async {
       if (!internet) {
@@ -120,8 +120,19 @@ class ChallengeController extends GetxController implements GetxService {
               CustomToast.successToast(
                   msg: response.body["message"] ??
                       "Challenge updated successfully");
-
-              Future.wait([getChallengesScreen(), getUserChallengesFunc(),getUserChallengeHistory(id)]);
+              HomeController home = Get.find();
+              Future.wait([
+                getUserChallengesFunc(),
+                getChallengesScreen(),
+                home.getRecentTasks(),
+                home.getUsersRewards(),
+                home.getOverviewScore(),
+                home.getOverview(),
+                home.getUpcomingRewards(),
+                home.getUserStreak(),
+                getUserChallengeHistory(id)
+              ]);
+              home.update();
               Get.back();
             } else {
               CustomToast.failToast(
@@ -215,7 +226,18 @@ class ChallengeController extends GetxController implements GetxService {
                     ));
               }
               CustomToast.successToast(msg: response.body["message"]);
-              Future.wait([getUserChallengesFunc(), getChallengesScreen()]);
+              HomeController home = Get.find();
+              Future.wait([
+                getUserChallengesFunc(),
+                getChallengesScreen(),
+                home.getRecentTasks(),
+                home.getUsersRewards(),
+                home.getOverviewScore(),
+                home.getOverview(),
+                home.getUpcomingRewards(),
+                home.getUserStreak(),
+              ]);
+              home.update();
             }
           } else {
             CustomToast.failToast(msg: response.body["message"]);

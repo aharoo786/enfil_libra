@@ -176,7 +176,7 @@ class HabitBottomSheets {
                                     ],
                                   ),
                                 )
-                              : SizedBox.shrink(),
+                              : const SizedBox.shrink(),
                         ),
                         SizedBox(
                           height: 20.h,
@@ -194,14 +194,15 @@ class HabitBottomSheets {
                                 child: CupertinoDatePicker(
                                   mode: CupertinoDatePickerMode.time,
                                   initialDateTime: DateTime.now(),
+                                  use24hFormat: true,
                                   onDateTimeChanged: (DateTime dateTime) {
                                     habitController.time =
-                                        DateFormat('hh:mm a').format(dateTime);
+                                        DateFormat('hh:mm').format(dateTime);
                                     // Handle selected time here
                                     // You can convert the selected time to AM/PM format
                                   },
                                 ))
-                            : SizedBox.shrink()),
+                            : const SizedBox.shrink()),
                         SizedBox(
                           height: 45.h,
                         ),
@@ -238,11 +239,11 @@ class HabitBottomSheets {
                                           habitController.selectedSlot.value],
                                       reminder: habitController.showReminder.value
                                           ? habitController.reminderTime
-                                          : null,
+                                          : "null",
                                       subCatId: subCategory.id.toString(),
                                       counterText: habitController.showCounter.value
                                           ? "${counterNumber[habitController.counterNumberIndex]} ${counterType[habitController.counterTypeIndex]} ${counterHour[habitController.counterHourIndex]}"
-                                          : null);
+                                          : "null");
                                 },
                                 width: 160.w,
                                 roundCorner: 8),

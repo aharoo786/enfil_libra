@@ -455,11 +455,10 @@ class AuthController extends GetxController implements GetxService {
     loginEmail.clear();
     loginPassword.clear();
     sharedPreferences.clear();
-    await googleSignIn.signOut();
+    googleSignOut();
     CustomToast.successToast(msg: "Log out successfully");
     init();
     Get.offAll(() => const WelcomeScreen());
-
   }
 
   verifyEmail({
@@ -658,6 +657,12 @@ class AuthController extends GetxController implements GetxService {
     //print('device token ${localStorageMethods.getDvToken()}');
   }
 
+  googleSignOut() async {
+    if (await googleSignIn.isSignedIn()) {
+      await GoogleSignIn().signOut();
+    }
+  }
+
   sessionCheck() async {
     await connectionService.checkConnection().then((internet) async {
       if (!internet) {
@@ -671,6 +676,7 @@ class AuthController extends GetxController implements GetxService {
           if (response.statusCode == 200) {
             if (response.body["status"] == Constants.failure) {
               CustomToast.failToast(msg: "Session Expire");
+              googleSignOut();
               Get.offAll(() => const WelcomeScreen());
             } else if (response.body["status"] == Constants.success) {
               UserModel model = UserModel.fromJson(response.body);
@@ -690,10 +696,12 @@ class AuthController extends GetxController implements GetxService {
               }
             } else {
               CustomToast.failToast(msg: "Session Expire");
+              googleSignOut();
               Get.offAll(() => const WelcomeScreen());
             }
           } else {
             CustomToast.failToast(msg: "Session Expire");
+            googleSignOut();
             Get.offAll(() => const WelcomeScreen());
           }
         });

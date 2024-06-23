@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 
+import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import 'package:enfil_libre/UI/dashboard_module/widgets/create_new_challenge.dart';
 import 'package:enfil_libre/UI/dashboard_module/widgets/overview_score_widget.dart';
 import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
@@ -207,9 +208,15 @@ class CustomTabBarState extends State<CustomTabBar>
                                                     .upcomingRewardsModel!
                                                     .data[index];
                                                 return Container(
-                                                  width: 374.w,
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 20.w),
+                                                  width: homeController
+                                                              .upcomingRewardsModel!
+                                                              .data
+                                                              .length ==
+                                                          1
+                                                      ? 374.w
+                                                      : 330.w,
+                                                  margin: EdgeInsets.only(
+                                                      left: 20.w),
                                                   padding: EdgeInsets.only(
                                                       top: 12.h,
                                                       left: 12.w,
@@ -425,35 +432,18 @@ class CustomTabBarState extends State<CustomTabBar>
                                                 ]),
                                             child: Column(
                                               children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      height: 36.h,
-                                                      width: 36.h,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(4),
-                                                          color: MyColors
-                                                              .splashColor),
-                                                      child: SvgPicture.asset(
-                                                          MyImgs.bigBadge),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 16.w,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          '${homeController.userStreakModel!.data.fantastic} days perfect!',
+                                                homeController.userStreakModel!
+                                                            .data.fantastic ==
+                                                        0
+                                                    ? GestureDetector(
+                                                        onTap: () {
+                                                          Get.offAll(() =>
+                                                              DashboardScreen(
+                                                                index: 1,
+                                                              ));
+                                                        },
+                                                        child: Text(
+                                                          'Subscribe challenge',
                                                           style: textTheme
                                                               .headlineSmall!
                                                               .copyWith(
@@ -461,171 +451,219 @@ class CustomTabBarState extends State<CustomTabBar>
                                                                       FontWeight
                                                                           .w700,
                                                                   fontSize:
-                                                                      20.sp,
+                                                                      22.sp,
                                                                   color: MyColors
                                                                       .buttonColor),
                                                         ),
-                                                        Text(
-                                                          'Fantastic performance',
-                                                          style: textTheme
-                                                              .bodySmall!
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontSize:
-                                                                      14.sp,
-                                                                  color: MyColors
-                                                                      .hintText),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
+                                                      )
+                                                    : Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Container(
+                                                            height: 36.h,
+                                                            width: 36.h,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            4),
+                                                                color: MyColors
+                                                                    .splashColor),
+                                                            child: SvgPicture
+                                                                .asset(MyImgs
+                                                                    .bigBadge),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 16.w,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                '${homeController.userStreakModel!.data.fantastic} days perfect!',
+                                                                style: textTheme.headlineSmall!.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontSize:
+                                                                        20.sp,
+                                                                    color: MyColors
+                                                                        .buttonColor),
+                                                              ),
+                                                              Text(
+                                                                'Fantastic performance',
+                                                                style: textTheme.bodySmall!.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    color: MyColors
+                                                                        .hintText),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                               ],
                                             ),
                                           ),
                                           SizedBox(
                                             height: 16.h,
                                           ),
-                                          Container(
-                                            alignment: Alignment.center,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 20.w),
-                                            padding: EdgeInsets.only(
-                                                top: 16.h,
-                                                left: 13.w,
-                                                right: 13.w,
-                                                bottom: 28.w),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      spreadRadius: 0,
-                                                      blurRadius: 16,
-                                                      offset:
-                                                          const Offset(0, 4),
-                                                      color: Colors.black
-                                                          .withOpacity(0.12))
-                                                ]),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      height: 36.h,
-                                                      width: 36.h,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              5),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(4),
-                                                          color: MyColors
-                                                              .splashColor),
-                                                      child: SvgPicture.asset(
-                                                          MyImgs.bigBadge),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 16.w,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          '21 days streak',
-                                                          style: textTheme
-                                                              .headlineSmall!
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  fontSize:
-                                                                      20.sp,
-                                                                  color: MyColors
-                                                                      .buttonColor),
-                                                        ),
-                                                        Text(
-                                                          'Fantastic performance',
-                                                          style: textTheme
-                                                              .bodySmall!
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontSize:
-                                                                      14.sp,
-                                                                  color: MyColors
-                                                                      .hintText),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 24.h,
-                                                ),
-                                                SizedBox(
-                                                  height: 45.h,
-                                                  child: ListView.builder(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        var streak =
-                                                            homeController
-                                                                .userStreakModel!
-                                                                .data
-                                                                .steak[index];
-                                                        String dayName =
-                                                            DateFormat('EEEE')
-                                                                .format(
-                                                                    streak.day);
-                                                        return Column(
-                                                          children: [
-                                                            Text(
-                                                              dayName.substring(
-                                                                  0, 2),
-                                                              style: textTheme
-                                                                  .bodySmall!
-                                                                  .copyWith(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400,
-                                                                      fontSize:
-                                                                          14.sp,
-                                                                      color: MyColors
-                                                                          .hintText),
-                                                            ),
-                                                            Expanded(
-                                                              child: Checkbox(
-                                                                  shape:
-                                                                      const CircleBorder(),
-                                                                  activeColor:
-                                                                      MyColors
-                                                                          .buttonColor,
-                                                                  value: streak
-                                                                      .achieved,
-                                                                  onChanged:
-                                                                      (value) {}),
-                                                            )
-                                                          ],
-                                                        );
-                                                      },
-                                                      itemCount: homeController
-                                                          .userStreakModel!
-                                                          .data
-                                                          .steak
-                                                          .length),
+                                          homeController.userStreakModel!.data
+                                                      .fantastic ==
+                                                  0
+                                              ? const SizedBox.shrink()
+                                              : Container(
+                                                  alignment: Alignment.center,
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 20.w),
+                                                  padding: EdgeInsets.only(
+                                                      top: 16.h,
+                                                      left: 13.w,
+                                                      right: 13.w,
+                                                      bottom: 28.w),
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      color: Colors.white,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            spreadRadius: 0,
+                                                            blurRadius: 16,
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 4),
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.12))
+                                                      ]),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Container(
+                                                            height: 36.h,
+                                                            width: 36.h,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5),
+                                                            decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            4),
+                                                                color: MyColors
+                                                                    .splashColor),
+                                                            child: SvgPicture
+                                                                .asset(MyImgs
+                                                                    .bigBadge),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 16.w,
+                                                          ),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                '${homeController.userStreakModel!.data.fantastic} days streak',
+                                                                style: textTheme.headlineSmall!.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontSize:
+                                                                        20.sp,
+                                                                    color: MyColors
+                                                                        .buttonColor),
+                                                              ),
+                                                              Text(
+                                                                'Fantastic performance',
+                                                                style: textTheme.bodySmall!.copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        14.sp,
+                                                                    color: MyColors
+                                                                        .hintText),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 24.h,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 45.h,
+                                                        child: ListView.builder(
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              var streak =
+                                                                  homeController
+                                                                      .userStreakModel!
+                                                                      .data
+                                                                      .steak[index];
+                                                              String dayName =
+                                                                  DateFormat(
+                                                                          'EEEE')
+                                                                      .format(streak
+                                                                          .day);
+                                                              return Column(
+                                                                children: [
+                                                                  Text(
+                                                                    dayName
+                                                                        .substring(
+                                                                            0,
+                                                                            2),
+                                                                    style: textTheme.bodySmall!.copyWith(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400,
+                                                                        fontSize: 14
+                                                                            .sp,
+                                                                        color: MyColors
+                                                                            .hintText),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Checkbox(
+                                                                        shape:
+                                                                            const CircleBorder(),
+                                                                        activeColor:
+                                                                            MyColors
+                                                                                .buttonColor,
+                                                                        value: streak
+                                                                            .achieved,
+                                                                        onChanged:
+                                                                            (value) {}),
+                                                                  )
+                                                                ],
+                                                              );
+                                                            },
+                                                            itemCount:
+                                                                homeController
+                                                                    .userStreakModel!
+                                                                    .data
+                                                                    .steak
+                                                                    .length),
+                                                      )
+                                                    ],
+                                                  ),
                                                 )
-                                              ],
-                                            ),
-                                          )
                                         ],
                                       )
                                     : Shimmer.fromColors(
@@ -684,64 +722,86 @@ class CustomTabBarState extends State<CustomTabBar>
                         ),
                       );
                     } else {
-                      return CreateNewChallenge();
+                      return CreateNewChallenge(
+                        onRefresh: () {
+                          Future.wait([
+                            homeController.getUpcomingRewards(),
+                            homeController.getUserStreak()
+                          ]);
+                          return Future(() => true);
+                        },
+                      );
                     }
                   } else {
-                    return Shimmer.fromColors(
-                      baseColor: MyColors.shimmerBaseColor,
-                      highlightColor: MyColors.shimmerHighlightColor,
-                      child: Column(
+                    return RefreshIndicator(
+                      onRefresh: () {
+                        Future.wait([
+                          homeController.getUpcomingRewards(),
+                          homeController.getUserStreak()
+                        ]);
+                        return Future(() => true);
+                      },
+                      color: MyColors.buttonColor,
+                      child: ListView(
                         children: [
-                          SizedBox(
-                            height: 40.h,
-                          ),
-                          Container(
-                            height: 140.h,
-                            margin: EdgeInsets.symmetric(horizontal: 20.w),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: MyColors.shimmerBaseColor,
-                                boxShadow: [
-                                  BoxShadow(
-                                      spreadRadius: 0,
-                                      blurRadius: 16,
-                                      offset: const Offset(0, 4),
-                                      color: Colors.black.withOpacity(0.12))
-                                ]),
-                          ),
-                          SizedBox(
-                            height: 16.h,
-                          ),
-                          Container(
-                            height: 160.h,
-                            margin: EdgeInsets.symmetric(horizontal: 20.w),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: MyColors.shimmerBaseColor,
-                                boxShadow: [
-                                  BoxShadow(
-                                      spreadRadius: 0,
-                                      blurRadius: 16,
-                                      offset: const Offset(0, 4),
-                                      color: Colors.black.withOpacity(0.12))
-                                ]),
-                          ),
-                          SizedBox(
-                            height: 16.h,
-                          ),
-                          Container(
-                            height: 160.h,
-                            margin: EdgeInsets.symmetric(horizontal: 20.w),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: MyColors.shimmerBaseColor,
-                                boxShadow: [
-                                  BoxShadow(
-                                      spreadRadius: 0,
-                                      blurRadius: 16,
-                                      offset: const Offset(0, 4),
-                                      color: Colors.black.withOpacity(0.12))
-                                ]),
+                          Shimmer.fromColors(
+                            baseColor: MyColors.shimmerBaseColor,
+                            highlightColor: MyColors.shimmerHighlightColor,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 40.h,
+                                ),
+                                Container(
+                                  height: 140.h,
+                                  margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: MyColors.shimmerBaseColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            spreadRadius: 0,
+                                            blurRadius: 16,
+                                            offset: const Offset(0, 4),
+                                            color: Colors.black.withOpacity(0.12))
+                                      ]),
+                                ),
+                                SizedBox(
+                                  height: 16.h,
+                                ),
+                                Container(
+                                  height: 160.h,
+                                  margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: MyColors.shimmerBaseColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            spreadRadius: 0,
+                                            blurRadius: 16,
+                                            offset: const Offset(0, 4),
+                                            color: Colors.black.withOpacity(0.12))
+                                      ]),
+                                ),
+                                SizedBox(
+                                  height: 16.h,
+                                ),
+                                Container(
+                                  height: 160.h,
+                                  margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: MyColors.shimmerBaseColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            spreadRadius: 0,
+                                            blurRadius: 16,
+                                            offset: const Offset(0, 4),
+                                            color: Colors.black.withOpacity(0.12))
+                                      ]),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -750,288 +810,370 @@ class CustomTabBarState extends State<CustomTabBar>
                 }),
 
                 /// Overview Tab
-                RefreshIndicator(
-                  onRefresh: () {
-                    Future.wait([
-                      homeController.getOverview(),
-                      homeController.getRecentTasks(),
-                      homeController.getOverviewScore()
-                    ]);
-                    return Future(() => true);
-                  },
-                  color: MyColors.buttonColor,
-                  child: ListView(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                Obx(() {
+                  if (homeController.isRecentTaskLoad.value) {
+                    // if (homeController.recentTasksModel == null ||
+                    //     homeController.recentTasksModel!.data.isEmpty) {
+                    //   return CreateNewChallenge(
+                    //     onRefresh: () {
+                    //       Future.wait([
+                    //         homeController.getOverview(),
+                    //         homeController.getRecentTasks(),
+                    //         homeController.getOverviewScore()
+                    //       ]);
+                    //       return Future(() => true);
+                    //     },
+                    //   );
+                    // } else {
+                    return RefreshIndicator(
+                      onRefresh: () {
+                        Future.wait([
+                          homeController.getOverview(),
+                          homeController.getRecentTasks(),
+                          homeController.getOverviewScore()
+                        ]);
+                        return Future(() => true);
+                      },
+                      color: MyColors.buttonColor,
+                      child: ListView(
                         children: [
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Overview',
-                                  style: textTheme.headlineSmall!.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20.sp,
-                                      color: MyColors.buttonColor),
-                                ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Obx(() => homeController
-                                        .isOverviewScoreModelLoad.value
-                                    ? Container(
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 16,
-                                                spreadRadius: 0,
-                                                offset: const Offset(0, 4),
-                                                color: Colors.black
-                                                    .withOpacity(0.12),
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(12)),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            OverviewScoreWidget(
-                                                percent:
-                                                    "${homeController.overviewScoreModel!.data.weeklyRewards}%",
-                                                scoreText: "Weekly Score"),
-                                            OverviewScoreWidget(
-                                                percent:
-                                                    "+${homeController.overviewScoreModel!.data.monthlyRewards}%",
-                                                scoreText: "Month"),
-                                            OverviewScoreWidget(
-                                                percent:
-                                                    "+${homeController.overviewScoreModel!.data.yearlyRewards}%",
-                                                scoreText: "Year"),
-                                            OverviewScoreWidget(
-                                                percent:
-                                                    "${homeController.overviewScoreModel!.data.totalRewards}",
-                                                scoreText: "Total Points"),
-                                            RadialAxisWidget(
-                                              progressBarValue: homeController
-                                                  .overviewScoreModel!
-                                                  .data
-                                                  .completedPercentage,
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    : shimmerWidget(65)),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Score',
+                                      'Overview',
                                       style: textTheme.headlineSmall!.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20.sp,
                                           color: MyColors.buttonColor),
                                     ),
-                                    Obx(
-                                      () => Container(
-                                        width: 85.w,
-                                        height: 28.h,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8.w),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: MyColors.buttonColor,
-                                                width: 1.h),
-                                            borderRadius:
-                                                BorderRadius.circular(4)),
-                                        child: DropdownButton<String>(
-                                          value: homeController
-                                              .selectedFilterType.value,
-                                          elevation: 4,
-                                          style: TextStyle(
-                                              fontSize: 12.sp,
-                                              color: MyColors.buttonColor),
-                                          isExpanded: true,
-                                          icon: const Icon((Icons
-                                              .keyboard_arrow_down_outlined)),
-                                          dropdownColor: Colors.white,
-                                          underline: const SizedBox(),
-                                          focusColor: Colors.white,
-                                          items: [
-                                            ...homeController.filterType
-                                                .map((value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value,
-                                                child: Text(
-                                                  value,
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp),
-                                                ),
-                                              );
-                                            }).toList(),
-                                          ],
-                                          onChanged: (data) {
-                                            homeController.selectedFilterType
-                                                .value = data!;
-                                            homeController.getOverview();
-                                            //  authController.selectedGender = data;
-                                          },
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Obx(() => homeController
+                                            .isOverviewScoreModelLoad.value
+                                        ? Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    blurRadius: 16,
+                                                    spreadRadius: 0,
+                                                    offset: const Offset(0, 4),
+                                                    color: Colors.black
+                                                        .withOpacity(0.12),
+                                                  )
+                                                ],
+                                                borderRadius:
+                                                    BorderRadius.circular(12)),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                OverviewScoreWidget(
+                                                    percent:
+                                                        "${homeController.overviewScoreModel!.data.weeklyRewards}%",
+                                                    scoreText: "Weekly Score"),
+                                                OverviewScoreWidget(
+                                                    percent:
+                                                        "+${homeController.overviewScoreModel!.data.monthlyRewards}%",
+                                                    scoreText: "Month"),
+                                                OverviewScoreWidget(
+                                                    percent:
+                                                        "+${homeController.overviewScoreModel!.data.yearlyRewards}%",
+                                                    scoreText: "Year"),
+                                                OverviewScoreWidget(
+                                                    percent:
+                                                        "${homeController.overviewScoreModel!.data.totalRewards}",
+                                                    scoreText: "Total Points"),
+                                                // RadialAxisWidget(
+                                                //   progressBarValue:
+                                                //       homeController
+                                                //           .overviewScoreModel!
+                                                //           .data
+                                                //           .completedPercentage,
+                                                // )
+                                              ],
+                                            ),
+                                          )
+                                        : shimmerWidget(65)),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Score',
+                                          style: textTheme.headlineSmall!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16.sp,
+                                                  color: MyColors.buttonColor),
                                         ),
-                                      ),
+                                        Obx(
+                                          () => Container(
+                                            width: 85.w,
+                                            height: 28.h,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.w),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: MyColors.buttonColor,
+                                                    width: 1.h),
+                                                borderRadius:
+                                                    BorderRadius.circular(4)),
+                                            child: DropdownButton<String>(
+                                              value: homeController
+                                                  .selectedFilterType.value,
+                                              elevation: 4,
+                                              style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: MyColors.buttonColor),
+                                              isExpanded: true,
+                                              icon: const Icon((Icons
+                                                  .keyboard_arrow_down_outlined)),
+                                              dropdownColor: Colors.white,
+                                              underline: const SizedBox(),
+                                              focusColor: Colors.white,
+                                              items: [
+                                                ...homeController.filterType
+                                                    .map((value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: Text(
+                                                      value,
+                                                      style: TextStyle(
+                                                          fontSize: 12.sp),
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                              ],
+                                              onChanged: (data) {
+                                                homeController
+                                                    .selectedFilterType
+                                                    .value = data!;
+                                                homeController.getOverview();
+                                                //  authController.selectedGender = data;
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    // SvgPicture.asset(MyImgs.chart),
+                                    Center(
+                                      child: Obx(() => homeController
+                                              .isOverviewLoad.value
+                                          ? SizedBox(
+                                              height: 225,
+                                              child: SfCartesianChart(
+                                                primaryXAxis:
+                                                    const CategoryAxis(
+                                                  interval: 1,
+                                                  majorGridLines:
+                                                      MajorGridLines(width: 0),
+                                                ),
+                                                primaryYAxis: const NumericAxis(
+                                                  minimum: 0,
+                                                  maximum: 100,
+                                                  interval: 20,
+                                                ),
+                                                series: <CartesianSeries>[
+                                                  LineSeries<
+                                                      Map<String, dynamic>,
+                                                      String>(
+                                                    dataSource: homeController
+                                                        .overViewDataList,
+                                                    xValueMapper:
+                                                        (Map<String, dynamic>
+                                                                    data,
+                                                                _) =>
+                                                            data["key"],
+                                                    yValueMapper:
+                                                        (Map<String, dynamic>
+                                                                    data,
+                                                                _) =>
+                                                            data["value"],
+                                                    dataLabelSettings:
+                                                        const DataLabelSettings(
+                                                      isVisible: false,
+                                                      textStyle: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.blue,
+                                                      ),
+                                                      labelAlignment:
+                                                          ChartDataLabelAlignment
+                                                              .top,
+                                                      useSeriesColor: false,
+                                                    ),
+                                                    markerSettings:
+                                                        const MarkerSettings(
+                                                      isVisible: true,
+                                                      shape:
+                                                          DataMarkerType.circle,
+                                                      borderWidth: 2,
+                                                      color:
+                                                          MyColors.buttonColor,
+                                                      borderColor:
+                                                          MyColors.buttonColor,
+                                                    ),
+                                                    enableTooltip: true,
+                                                    color: MyColors.primary2,
+                                                  )
+                                                ],
+                                                tooltipBehavior:
+                                                    TooltipBehavior(
+                                                        enable: true),
+                                              ),
+                                            )
+                                          : shimmerWidget(225)),
+                                    ),
+
+                                    SizedBox(
+                                      height: 20.h,
+                                    ),
+                                    Text(
+                                      'Recent task',
+                                      style: textTheme.headlineSmall!.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 20.sp,
+                                          color: MyColors.buttonColor),
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                // SvgPicture.asset(MyImgs.chart),
-                                Center(
-                                  child: Obx(() => homeController
-                                          .isOverviewLoad.value
-                                      ? SizedBox(
-                                          height: 225,
-                                          child: SfCartesianChart(
-                                            primaryXAxis: const CategoryAxis(
-                                              interval: 1,
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Obx(
+                                () => ListView.separated(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      if (homeController
+                                          .isRecentTaskLoad.value) {
+                                        if (homeController
+                                                    .recentTasksModel?.data ==
+                                                null ||
+                                            homeController.recentTasksModel!
+                                                .data.isEmpty) {
+                                          return Padding(
+                                            padding:
+                                                EdgeInsets.only(top: 100.h),
+                                            child: const Center(
+                                              child: Text(
+                                                "No Recent Tasks yet",
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                              ),
                                             ),
-                                            primaryYAxis: const NumericAxis(
-                                              minimum: 0,
-                                              maximum: 100,
-                                              interval: 20,
-                                            ),
-                                            series: <CartesianSeries>[
-                                              LineSeries<Map<String, dynamic>,
-                                                  String>(
-                                                dataSource: homeController
-                                                    .overViewDataList,
-                                                xValueMapper:
-                                                    (Map<String, dynamic> data,
-                                                            _) =>
-                                                        data["key"],
-                                                yValueMapper:
-                                                    (Map<String, dynamic> data,
-                                                            _) =>
-                                                        data["value"],
-                                                dataLabelSettings:
-                                                    const DataLabelSettings(
-                                                  isVisible: false,
-                                                  textStyle: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.blue,
-                                                  ),
-                                                  labelAlignment:
-                                                      ChartDataLabelAlignment
-                                                          .top,
-                                                  useSeriesColor: false,
-                                                ),
-                                                markerSettings:
-                                                    const MarkerSettings(
-                                                  isVisible: true,
-                                                  shape: DataMarkerType.circle,
-                                                  borderWidth: 2,
-                                                  color: MyColors.buttonColor,
-                                                  borderColor:
-                                                      MyColors.buttonColor,
-                                                ),
-                                                enableTooltip: true,
-                                                color: MyColors.primary2,
-                                              )
-                                            ],
-                                            tooltipBehavior:
-                                                TooltipBehavior(enable: true),
-                                          ),
-                                        )
-                                      : shimmerWidget(225)),
-                                ),
+                                          );
+                                        }
 
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Text(
-                                  'Recent task',
-                                  style: textTheme.headlineSmall!.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20.sp,
-                                      color: MyColors.buttonColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          Obx(
-                            () => ListView.separated(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  if (homeController.isRecentTaskLoad.value) {
-                                    if (homeController.recentTasksModel?.data ==
-                                            null ||
-                                        homeController
-                                            .recentTasksModel!.data.isEmpty) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(top: 100.h),
-                                        child: const Center(
-                                          child: Text(
-                                            "No Recent Tasks yet",
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
+                                        var overview = homeController
+                                            .recentTasksModel!.data[index];
+                                        return CustomProgressWidget(
+                                          name: overview.name,
+                                          endedAt: overview.endedAt,
+                                          earnedRewards: overview.earnRewards,
+                                          totalRewards: overview.totalRewards,
+                                          percentage:
+                                              overview.percentageCompleted,
+                                          id: overview.id,
+                                          numberOfDays: overview.days,
+                                          videoUrl: overview.description,
+                                          description: overview.description,
+                                          startedAt: overview.startedAt,
+                                        );
+                                      } else {
+                                        return const CustomProgressBarWidgetShimmer();
+                                      }
+                                    },
+                                    separatorBuilder: (context, index) =>
+                                        SizedBox(
+                                          height: 16.h,
                                         ),
-                                      );
-                                    }
-
-                                    var overview = homeController
-                                        .recentTasksModel!.data[index];
-                                    return CustomProgressWidget(
-                                      name: overview.name,
-                                      endedAt: overview.endedAt,
-                                      earnedRewards: overview.earnRewards,
-                                      totalRewards: overview.totalRewards,
-                                      percentage: overview.percentageCompleted,
-                                      id: overview.id,
-                                      numberOfDays: overview.days,
-                                      videoUrl: overview.description,
-                                      description: overview.description,
-                                      startedAt: overview.startedAt,
-                                    );
-                                  } else {
-                                    return const CustomProgressBarWidgetShimmer();
-                                  }
-                                },
-                                separatorBuilder: (context, index) => SizedBox(
-                                      height: 16.h,
-                                    ),
-                                itemCount: homeController.isRecentTaskLoad.value
-                                    ? homeController
-                                            .recentTasksModel!.data.isEmpty
-                                        ? 1
-                                        : homeController.recentTasksModel!.data
-                                                    .length >
-                                                3
-                                            ? 3
-                                            : homeController
-                                                .recentTasksModel!.data.length
-                                    : 4),
-                          )
+                                    itemCount:
+                                        homeController.isRecentTaskLoad.value
+                                            ? homeController.recentTasksModel!
+                                                    .data.isEmpty
+                                                ? 1
+                                                : homeController
+                                                            .recentTasksModel!
+                                                            .data
+                                                            .length >
+                                                        3
+                                                    ? 3
+                                                    : homeController
+                                                        .recentTasksModel!
+                                                        .data
+                                                        .length
+                                            : 4),
+                              )
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
+                    );
+                    //}
+                  } else {
+                    return Shimmer.fromColors(
+                        baseColor: MyColors.shimmerBaseColor,
+                        highlightColor: MyColors.shimmerHighlightColor,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              shimmerWidget(65),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              shimmerWidget(225),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Expanded(
+                                child: ListView.separated(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return const CustomProgressBarWidgetShimmer(
+                                        horizontalPadding: 0,
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) =>
+                                        SizedBox(
+                                          height: 16.h,
+                                        ),
+                                    itemCount: 4),
+                              )
+                            ],
+                          ),
+                        ));
+                  }
+                }),
 
                 ///Task Tab
                 RefreshIndicator(
