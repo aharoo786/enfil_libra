@@ -120,19 +120,23 @@ class ChallengeController extends GetxController implements GetxService {
               CustomToast.successToast(
                   msg: response.body["message"] ??
                       "Challenge updated successfully");
-              HomeController home = Get.find();
-              Future.wait([
-                getUserChallengesFunc(),
-                getChallengesScreen(),
-                home.getRecentTasks(),
-                home.getUsersRewards(),
-                home.getOverviewScore(),
-                home.getOverview(),
-                home.getUpcomingRewards(),
-                home.getUserStreak(),
-                getUserChallengeHistory(id)
-              ]);
-              home.update();
+              getUserChallengeHistory(id);
+              Future.delayed(const Duration(seconds: 3), () {
+                HomeController home = Get.find();
+                Future.wait([
+                  getUserChallengesFunc(),
+                  getChallengesScreen(),
+                  home.getRecentTasks(),
+                  home.getUsersRewards(),
+                  home.getOverviewScore(),
+                  home.getOverview(),
+                  home.getUpcomingRewards(),
+                  home.getUserStreak(),
+                ]);
+
+                home.update();
+              });
+
               Get.back();
             } else {
               CustomToast.failToast(
