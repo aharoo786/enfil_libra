@@ -93,7 +93,12 @@ class StartChallengeScreen extends StatelessWidget {
                                   ? Colors.black
                                   : Colors.transparent,
                               child: challenges.videoUrl == null
-                                  ? const Center(child: Icon(Icons.play_arrow,color: Colors.white,size: 40,))
+                                  ? const Center(
+                                      child: Icon(
+                                      Icons.play_arrow,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ))
                                   : PlayVideoFromYoutube(
                                       url: challenges.videoUrl!,
                                     ),
@@ -420,8 +425,10 @@ class StartChallengeScreen extends StatelessWidget {
                                                               msg:
                                                                   "You have already subscribed");
                                                         } else {
-                                                          signatureDialog(
-                                                              context);
+                                                          challengeController
+                                                              .getUserChallengeCheckIn(
+                                                                  challenges.id
+                                                                      .toString());
                                                         }
                                                       }
                                                     },
@@ -586,25 +593,44 @@ class StartChallengeScreen extends StatelessWidget {
   }
 
   Widget checkWidget(bool isAfter, bool isBefore, String status) {
+    bool isChecked = status == "1";
     if (isAfter) {
-      return Padding(
-        padding: EdgeInsets.only(right: 15.w),
-        child: SvgPicture.asset(MyImgs.lockIcon),
-      );
+      return SvgPicture.asset(MyImgs.lockIcon);
     } else if (status == "0" && isBefore) {
-      return Padding(
-        padding: EdgeInsets.only(right: 15.w),
-        child: const Icon(
-          Icons.clear,
-          color: Colors.red,
-        ),
+      return const Icon(
+        Icons.clear,
+        color: Colors.red,
       );
     } else {
-      return Checkbox(
-          shape: const CircleBorder(),
-          activeColor: const Color(0xff4ECB71),
-          value: status == "1" ? true : false,
-          onChanged: (value) {});
+      return GestureDetector(
+          onTap: () {
+            if (!isChecked) {
+              challengeController
+                  .getUserChallengeCheckIn(challenges.id.toString());
+            }
+          },
+          child: GestureDetector(
+            onTap: () {},
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isChecked ? const Color(0xff4ECB71) : Colors.white,
+                border: Border.all(
+                  color: isChecked ? const Color(0xff4ECB71) : Colors.black,
+                  width: 2.0,
+                ),
+              ),
+              width: 20.h,
+              height: 20.h,
+              child: isChecked
+                  ? const Icon(
+                      Icons.check,
+                      size: 12.0,
+                      color: Colors.white,
+                    )
+                  : null,
+            ),
+          ));
     }
   }
 

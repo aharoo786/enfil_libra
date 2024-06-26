@@ -1,10 +1,15 @@
 class MyImgs {
   static const String appLogo = "assets/images/appLogo.svg";
+  static const String gifFrame = "assets/images/gifFrame.svg";
   static const String logo = "assets/images/logo.png";
   static const String logoutGatePng = "assets/images/logoutGate.png";
   static const String onBoarding1 = "assets/images/onbaording1.svg";
   static const String onBoarding2 = "assets/images/onBoarding2.svg";
   static const String onBoarding3 = "assets/images/onBoarding3.svg";
+  static const String bronzeMedal = "assets/images/bronzeMedal.svg";
+  static const String silverMedal = "assets/images/silverMedal.svg";
+  static const String noBadge = "assets/images/noBadge.svg";
+  static const String goldMedal = "assets/images/goldMedal.svg";
   static const String welcomeCard = "assets/images/welcomeCard.png";
   static const String chart = "assets/images/chart.svg";
   static const String myAccount = "assets/images/myAccount.svg";

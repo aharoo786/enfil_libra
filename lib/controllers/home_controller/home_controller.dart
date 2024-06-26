@@ -34,6 +34,8 @@ class HomeController extends GetxController implements GetxService {
   var filterType = ["Week", "Month", "Year"].obs;
   var selectedFilterType = "Week".obs;
 
+  var rewardValue = 0.obs;
+
   ///variables
   var isUsersRewardsLoad = false.obs;
   var isOverviewLoad = false.obs;
@@ -245,6 +247,7 @@ class HomeController extends GetxController implements GetxService {
               if (model.status == Constants.success) {
                 userRewardsModel = model;
                 isUsersRewardsLoad.value = true;
+                rewardValue.value = int.parse(userRewardsModel!.data.reward);
               }
             } else {
               CustomToast.failToast(

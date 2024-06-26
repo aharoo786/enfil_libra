@@ -15,16 +15,11 @@ class RewardHomeScreen extends StatelessWidget {
   final AuthController authController = Get.find();
   final HomeController homeController = Get.find();
   final pointsList = [
-    "Bronze",
-    "Gold",
-    "Silver",
-    "100 points",
-    "200 points",
-    "300 points",
-    "400 points",
-    "500 points",
-    "600 points",
+    MyImgs.bronzeMedal,
+    MyImgs.silverMedal,
+    MyImgs.goldMedal,
   ];
+  final pointsText = ["Bronze", "Silver", "Gold"];
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -68,64 +63,92 @@ class RewardHomeScreen extends StatelessWidget {
           SizedBox(
             height: 40.h,
           ),
-          Expanded(
+          Obx(()=>homeController.rewardValue.value < 50?Padding(
+            padding: EdgeInsets.only(top: 150.h),
+            child: SvgPicture.asset(MyImgs.noBadge),
+          ): Expanded(
               child: RefreshIndicator(
-            onRefresh: () async {
-              await homeController.getUsersRewards(); // Await the Future
-            },
-            color: MyColors.buttonColor,
-            child: GridView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 13.h,
-                  childAspectRatio: 0.93,
-                  crossAxisSpacing: 13.w),
-              itemBuilder: (context, index) {
-                return Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: MyColors.borderColor),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                          spreadRadius: 0,
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                          color: Colors.black.withOpacity(0.12))
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 60.h,
-                          width: 60.h,
-                          padding: EdgeInsets.all(12.h),
+                onRefresh: () async {
+                  await homeController.getUsersRewards(); // Await the Future
+                },
+                color: MyColors.buttonColor,
+                child: Obx(
+                      () => GridView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 13.h,
+                        childAspectRatio: 0.93,
+                        crossAxisSpacing: 13.w),
+                    itemBuilder: (context, index) {
+                      if (homeController.isUsersRewardsLoad.value) {
+                        return Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(vertical: 14.h),
                           decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: MyColors.primary2),
-                              color: Colors.white),
-                          child: SvgPicture.asset(MyImgs.medal),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      Text(
-                        pointsList[index],
-                        style: textTheme.headlineLarge!.copyWith(
-                            fontSize: 20.sp, fontWeight: FontWeight.w400),
-                      ),
-                    ],
+                            color: Colors.white,
+                            border: Border.all(color: MyColors.borderColor),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 0,
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                  color: Colors.black.withOpacity(0.12))
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: SvgPicture.asset(pointsList[index]),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                pointsText[index],
+                                style: textTheme.headlineLarge!.copyWith(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Shimmer.fromColors(
+                            baseColor: MyColors.shimmerBaseColor,
+                            highlightColor: MyColors.shimmerHighlightColor,
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: MyColors.shimmerBaseColor,
+                                border:
+                                Border.all(color: MyColors.borderColor),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                      spreadRadius: 0,
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                      color: Colors.black.withOpacity(0.12))
+                                ],
+                              ),
+                            ));
+                      }
+                    },
+                    itemCount: !homeController.isUsersRewardsLoad.value
+                        ? 3
+                        : homeController.rewardValue.value >= 50 &&
+                        homeController.rewardValue.value < 100
+                        ? 1
+                        : homeController.rewardValue.value >= 100 &&
+                        homeController.rewardValue.value < 150
+                        ? 2
+                        : pointsList.length,
                   ),
-                );
-              },
-              itemCount: pointsList.length,
-            ),
-          ))
+                ),
+              )))
+
         ],
       ),
     );

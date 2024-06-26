@@ -1,4 +1,3 @@
-import 'package:enfil_libre/UI/challenge_module/start_challege/start_challege_screen.dart';
 import 'package:enfil_libre/UI/dashboard_module/dashboard_screen/dashboard_screen.dart';
 import 'package:enfil_libre/controllers/home_controller/home_controller.dart';
 import 'package:enfil_libre/data/models/get_user_challenges/get_user_challenges.dart';
@@ -121,11 +120,10 @@ class ChallengeController extends GetxController implements GetxService {
                   msg: response.body["message"] ??
                       "Challenge updated successfully");
               getUserChallengeHistory(id);
-              Future.delayed(const Duration(seconds: 3), () {
+              // Future.delayed(const Duration(seconds: 3), () {
                 HomeController home = Get.find();
                 Future.wait([
                   getUserChallengesFunc(),
-                  getChallengesScreen(),
                   home.getRecentTasks(),
                   home.getUsersRewards(),
                   home.getOverviewScore(),
@@ -135,9 +133,9 @@ class ChallengeController extends GetxController implements GetxService {
                 ]);
 
                 home.update();
-              });
+              // });
 
-              Get.back();
+             // Get.back();
             } else {
               CustomToast.failToast(
                   msg: "Some Error has occurred, Try Again Later");
@@ -223,25 +221,27 @@ class ChallengeController extends GetxController implements GetxService {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
               Get.back();
-              if (challenges != null) {
-                Get.offAll(() => DashboardScreen(
-                      index: 1,
-                      myChallengeTabIndex: 1,
-                    ));
-              }
+              // if (challenges != null) {
+              //   Get.offAll(() => DashboardScreen(
+              //         index: 1,
+              //         myChallengeTabIndex: 1,
+              //       ));
+              // }
               CustomToast.successToast(msg: response.body["message"]);
-              HomeController home = Get.find();
-              Future.wait([
-                getUserChallengesFunc(),
-                getChallengesScreen(),
-                home.getRecentTasks(),
-                home.getUsersRewards(),
-                home.getOverviewScore(),
-                home.getOverview(),
-                home.getUpcomingRewards(),
-                home.getUserStreak(),
-              ]);
-              home.update();
+              // Future.delayed(const Duration(seconds: 3), () {
+                HomeController home = Get.find();
+                Future.wait([
+                  getUserChallengesFunc(),
+                  home.getRecentTasks(),
+                  home.getUsersRewards(),
+                  home.getOverviewScore(),
+                  home.getOverview(),
+                  home.getUpcomingRewards(),
+                  home.getUserStreak(),
+                ]);
+
+                home.update();
+              // });
             }
           } else {
             CustomToast.failToast(msg: response.body["message"]);
