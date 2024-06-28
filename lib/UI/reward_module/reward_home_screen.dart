@@ -19,7 +19,7 @@ class RewardHomeScreen extends StatelessWidget {
     MyImgs.silverMedal,
     MyImgs.goldMedal,
   ];
-  final pointsText = ["Bronze", "Silver", "Gold"];
+  final pointsText = ["50 Coins", "100 Coins", "150 Coins"];
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;

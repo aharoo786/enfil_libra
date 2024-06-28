@@ -121,8 +121,8 @@ class ChallengeWidgetStart extends StatelessWidget {
             CustomButton(
               text: "START",
               onPressed: () {
-                Get.to(() => StartChallengeScreen(
-                    challenges: challenge!, fromStart: true));
+                Get.find<ChallengeController>().startChallenge.value = true;
+                Get.to(() => StartChallengeScreen(challenges: challenge!));
 
                 // Get.find<ChallengeController>()
                 //     .getUserChallengeHistory(challenge!.id.toString());

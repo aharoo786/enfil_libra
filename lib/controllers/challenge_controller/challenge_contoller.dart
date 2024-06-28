@@ -24,6 +24,7 @@ class ChallengeController extends GetxController implements GetxService {
   ///variables
   var isChallengesLoad = false.obs;
   var isUserChallenges = false.obs;
+  var startChallenge = true.obs;
   var isUserChallengeHistoryLoad = false.obs;
 
   ///Models
@@ -121,21 +122,34 @@ class ChallengeController extends GetxController implements GetxService {
                       "Challenge updated successfully");
               getUserChallengeHistory(id);
               // Future.delayed(const Duration(seconds: 3), () {
-                HomeController home = Get.find();
-                Future.wait([
-                  getUserChallengesFunc(),
-                  home.getRecentTasks(),
-                  home.getUsersRewards(),
-                  home.getOverviewScore(),
-                  home.getOverview(),
-                  home.getUpcomingRewards(),
-                  home.getUserStreak(),
-                ]);
+              HomeController home = Get.find();
+              Future.wait([
 
-                home.update();
+                Future.delayed(const Duration(seconds: 1), () {
+                  home.getRecentTasks();
+                }),
+                Future.delayed(const Duration(seconds: 1), () {
+                  home.getUsersRewards();
+                }),
+                Future.delayed(const Duration(seconds: 1), () {
+                  home.getOverviewScore();
+                }),
+                Future.delayed(const Duration(seconds: 1), () {
+                  home.getOverview();
+                }),
+                Future.delayed(const Duration(seconds: 1), () {
+                  home.getUpcomingRewards();
+                }),
+                Future.delayed(const Duration(seconds: 1), () {
+                  home.getUserStreak();
+                }),
+                getUserChallengesFunc()
+              ]);
+
+              home.update();
               // });
 
-             // Get.back();
+              // Get.back();
             } else {
               CustomToast.failToast(
                   msg: "Some Error has occurred, Try Again Later");
@@ -221,26 +235,27 @@ class ChallengeController extends GetxController implements GetxService {
               CustomToast.failToast(msg: response.body["message"]);
             } else if (response.body["status"] == Constants.success) {
               Get.back();
-              // if (challenges != null) {
-              //   Get.offAll(() => DashboardScreen(
-              //         index: 1,
-              //         myChallengeTabIndex: 1,
-              //       ));
-              // }
-              CustomToast.successToast(msg: response.body["message"]);
-              // Future.delayed(const Duration(seconds: 3), () {
-                HomeController home = Get.find();
-                Future.wait([
-                  getUserChallengesFunc(),
-                  home.getRecentTasks(),
-                  home.getUsersRewards(),
-                  home.getOverviewScore(),
-                  home.getOverview(),
-                  home.getUpcomingRewards(),
-                  home.getUserStreak(),
-                ]);
 
-                home.update();
+              startChallenge.value = false;
+              CustomToast.successToast(msg: response.body["message"]);
+              update();
+
+              // Future.delayed(const Duration(seconds: 3), () {
+              HomeController home = Get.find();
+              Future.wait([
+                getUserChallengeHistory(response.body["data"]["id"].toString()),
+                getUserChallengesFunc(),
+                home.getRecentTasks(),
+
+                // home.getUsersRewards(),
+                // home.getOverviewScore(),
+                // home.getOverview(),
+                // home.getUpcomingRewards(),
+                // home.getUserStreak(),
+              ]);
+
+              home.update();
+
               // });
             }
           } else {

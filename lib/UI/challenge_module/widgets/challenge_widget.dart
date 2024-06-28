@@ -34,6 +34,7 @@ class ChallengeWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (userChallenges!.status == Constants.process) {
+          Get.find<ChallengeController>().startChallenge.value=false;
           Get.to(() => StartChallengeScreen(
                 challenges: Challenges(
                   id: userChallenges!.id,
@@ -194,6 +195,8 @@ class ChallengeWidget extends StatelessWidget {
                           ? "Finished"
                           : "Failed",
                       onPressed: () {
+                        Get.find<ChallengeController>().startChallenge.value=false;
+
                         Get.to(() => StartChallengeScreen(
                               challenges: Challenges(
                                 id: userChallenges!.id,

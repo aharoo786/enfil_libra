@@ -1,21 +1,17 @@
-//
 // void main() {
 //
-//   var sentence ="my name is abudllah akram";
-//   captalizedFirts(sentence);
-// }
+//   var list=[1,2,3,4,5];
+//   var k=2;
+//   var index=0;
 //
+//   for (int i = list.length-k; i < list.length; i++) {
+//     print("i  $i");
+//     var temp=list[i];
+//     list.removeAt(i);
+//     list.insert(index,temp);
 //
-// captalizedFirts(String sentece){
+//     index++;
 //
-//   var split=sentece.split(" ");
-//   var text="";
-//   for (var element in split) {
-//     text = "$text${element[0].toUpperCase()}${element.substring(1,element.length)} ";
 //   }
-//
-//
-//   print("spliet  ${text}");
-//
-//
+//   print("i $list");
 // }

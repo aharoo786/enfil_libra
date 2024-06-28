@@ -147,6 +147,13 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
+
+  DateTime now = DateTime.now();
+  DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime lastDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  List<String> range=[DateFormat("dd-MM-yyyy").format(DateTime.now()),DateFormat("dd-MM-yyyy").format(DateTime.now())];
+  List<DateTime> initialRange=[DateTime.now(),DateTime.now()];
+
   crateHabit(
       {required String subCatName,
       required String color,
@@ -172,6 +179,8 @@ class HabitController extends GetxController implements GetxService {
               "slot": slot.toLowerCase(),
               "reminder": reminder,
               "counter": counterText,
+              "start_date":range[0],
+               "end_date":range[1],
               "time": showMinutes.value ? time : "null",
               "sub_category_id": subCatId
             },

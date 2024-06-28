@@ -63,6 +63,9 @@ class CustomTabBarState extends State<CustomTabBar>
                 height: 60.h,
                 child: TabBar(
                   controller: _tabController,
+                  isScrollable: true,
+                  labelPadding: EdgeInsets.symmetric(horizontal: 32.w),
+                  tabAlignment: TabAlignment.center,
                   padding: EdgeInsets.only(left: 33.w, right: 33.w),
                   labelColor: MyColors.buttonColor,
                   unselectedLabelColor: Colors.black.withOpacity(0.4),
@@ -144,7 +147,7 @@ class CustomTabBarState extends State<CustomTabBar>
               Positioned(
                 left: 33.w,
                 right: 33.w,
-                top: 50.h,
+                top: 47.h,
                 child: Divider(
                   // Horizontal divider
                   color: MyColors.buttonColor
@@ -754,7 +757,8 @@ class CustomTabBarState extends State<CustomTabBar>
                                 ),
                                 Container(
                                   height: 140.h,
-                                  margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 20.w),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       color: MyColors.shimmerBaseColor,
@@ -763,7 +767,8 @@ class CustomTabBarState extends State<CustomTabBar>
                                             spreadRadius: 0,
                                             blurRadius: 16,
                                             offset: const Offset(0, 4),
-                                            color: Colors.black.withOpacity(0.12))
+                                            color:
+                                                Colors.black.withOpacity(0.12))
                                       ]),
                                 ),
                                 SizedBox(
@@ -771,7 +776,8 @@ class CustomTabBarState extends State<CustomTabBar>
                                 ),
                                 Container(
                                   height: 160.h,
-                                  margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 20.w),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       color: MyColors.shimmerBaseColor,
@@ -780,7 +786,8 @@ class CustomTabBarState extends State<CustomTabBar>
                                             spreadRadius: 0,
                                             blurRadius: 16,
                                             offset: const Offset(0, 4),
-                                            color: Colors.black.withOpacity(0.12))
+                                            color:
+                                                Colors.black.withOpacity(0.12))
                                       ]),
                                 ),
                                 SizedBox(
@@ -788,7 +795,8 @@ class CustomTabBarState extends State<CustomTabBar>
                                 ),
                                 Container(
                                   height: 160.h,
-                                  margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 20.w),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       color: MyColors.shimmerBaseColor,
@@ -797,7 +805,8 @@ class CustomTabBarState extends State<CustomTabBar>
                                             spreadRadius: 0,
                                             blurRadius: 16,
                                             offset: const Offset(0, 4),
-                                            color: Colors.black.withOpacity(0.12))
+                                            color:
+                                                Colors.black.withOpacity(0.12))
                                       ]),
                                 ),
                               ],

@@ -40,8 +40,8 @@ dependencies:
   get: ^4.6.1
   fluttertoast: ^8.2.2
   flutter_svg: ^2.0.10+1
-  syncfusion_flutter_charts: ^25.1.35
-  syncfusion_flutter_gauges: ^25.1.35
+  syncfusion_flutter_charts: ^26.1.39
+  syncfusion_flutter_gauges: ^26.1.39
   connectivity_plus: ^4.0.2
   pod_player: ^0.2.1
   signature: ^5.4.1
@@ -55,6 +55,7 @@ dependencies:
   shimmer: ^3.0.0
   flutter_facebook_auth: ^6.2.0
   flutter_local_notifications: ^13.0.0
+  syncfusion_flutter_datepicker: ^26.1.39
   firebase_messaging: ^14.9.2
 
 

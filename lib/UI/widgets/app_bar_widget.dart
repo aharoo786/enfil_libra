@@ -54,9 +54,9 @@ class HelpingWidgets {
     );
   }
 
-  Widget bodyAppBar(String text, {Color? color}) {
+  Widget bodyAppBar(String text, {Color? color,bool padding=true}) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      padding: EdgeInsets.symmetric(vertical:20.h),
       child: Row(
         children: [
           GestureDetector(
@@ -67,6 +67,7 @@ class HelpingWidgets {
               Icons.arrow_back_ios_rounded,
             ),
           ),
+          SizedBox(width: 15.w,),
           Expanded(
             child: Center(
               child: Text(

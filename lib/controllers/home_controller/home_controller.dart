@@ -331,12 +331,24 @@ class HomeController extends GetxController implements GetxService {
   @override
   void onInit() {
     Future.wait([
-      getRecentTasks(),
-      getUpcomingRewards(),
-      getUsersRewards(),
-      getOverview(),
-      getUserStreak(),
-      getOverviewScore()
+      Future.delayed(const Duration(seconds: 1), () {
+        getOverviewScore();
+      }),
+      Future.delayed(const Duration(seconds: 1), () {
+        getUpcomingRewards();
+      }),
+      Future.delayed(const Duration(seconds: 1), () {
+        getRecentTasks();
+      }),
+      Future.delayed(const Duration(seconds: 1), () {
+        getUsersRewards();
+      }),
+      Future.delayed(const Duration(seconds: 1), () {
+        getOverview();
+      }),
+      Future.delayed(const Duration(seconds: 1), () {
+        getUserStreak();
+      }),
     ]);
     super.onInit();
   }

@@ -107,9 +107,8 @@ class MyChallengesScreen extends StatelessWidget {
                                             .getChallengesScreen(),
                                       ]);
                                       return Future(() => true);
-
                                     },
-                              color: MyColors.buttonColor,
+                                    color: MyColors.buttonColor,
                                     child: GridView.builder(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 20.h, horizontal: 20.w),
@@ -135,16 +134,15 @@ class MyChallengesScreen extends StatelessWidget {
                                     ),
                                   )
                                 : RefreshIndicator(
-                                onRefresh: () {
-                                  Future.wait([
-                                    challengeController
-                                        .getChallengesScreen(),
-                                  ]);
-                                  return Future(() => true);
-
-                                },
-                                color: MyColors.buttonColor,
-                                child: shimmerChallenge())),
+                                    onRefresh: () {
+                                      Future.wait([
+                                        challengeController
+                                            .getChallengesScreen(),
+                                      ]);
+                                      return Future(() => true);
+                                    },
+                                    color: MyColors.buttonColor,
+                                    child: shimmerChallenge())),
 
                             /// in Progress
                             Obx(() => challengeController.isUserChallenges.value
@@ -156,7 +154,7 @@ class MyChallengesScreen extends StatelessWidget {
                                       ]);
                                       return Future(() => true);
                                     },
-                              color: MyColors.buttonColor,
+                                    color: MyColors.buttonColor,
                                     child: GridView.builder(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 20.h, horizontal: 20.w),
@@ -193,7 +191,7 @@ class MyChallengesScreen extends StatelessWidget {
                                       ]);
                                       return Future(() => true);
                                     },
-                              color: MyColors.buttonColor,
+                                    color: MyColors.buttonColor,
                                     child: GridView.builder(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 20.h, horizontal: 20.w),
@@ -230,7 +228,7 @@ class MyChallengesScreen extends StatelessWidget {
                                       ]);
                                       return Future(() => true);
                                     },
-                              color: MyColors.buttonColor,
+                                    color: MyColors.buttonColor,
                                     child: GridView.builder(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 20.h, horizontal: 20.w),

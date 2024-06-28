@@ -23,13 +23,11 @@ class StartChallengeScreen extends StatelessWidget {
       {super.key,
       required this.challenges,
       this.earnedRewards,
-      this.fromStart = false,
       this.showReward = false});
 
   final Challenges challenges;
-  bool fromStart;
-  bool showReward;
-  String? earnedRewards;
+  final bool showReward;
+  final String? earnedRewards;
 
   final ChallengeController challengeController = Get.find();
   final SignatureController signatureControllerController = SignatureController(
@@ -44,281 +42,529 @@ class StartChallengeScreen extends StatelessWidget {
 
     return Scaffold(
         backgroundColor: MyColors.splashColor,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 20.h + kToolbarHeight,
-            ),
-            Expanded(
-                child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 4,
-                              blurRadius: 4,
-                              offset: const Offset(0, 4),
-                              color: Colors.black.withOpacity(0.08))
-                        ],
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(32),
-                            topRight: Radius.circular(32))),
-                    child: ListView(
-                      padding: EdgeInsets.only(
-                          bottom: 10.h, left: 20.w, right: 20.w),
-                      children: [
-                        Column(
-                          children: [
-                            HelpingWidgets().bodyAppBar(challenges.name),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Text(
-                              challenges.description,
-                              style: textTheme.headlineSmall!.copyWith(
-                                  fontWeight: FontWeight.w700, fontSize: 20.sp),
-                            ),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            Container(
-                              height: 175.h,
-                              width: MediaQuery.of(context).size.width,
-                              padding: challenges.videoUrl == null
-                                  ? EdgeInsets.symmetric(horizontal: 20.w)
-                                  : null,
-                              color: challenges.videoUrl == null
-                                  ? Colors.black
-                                  : Colors.transparent,
-                              child: challenges.videoUrl == null
-                                  ? const Center(
-                                      child: Icon(
-                                      Icons.play_arrow,
-                                      color: Colors.white,
-                                      size: 40,
-                                    ))
-                                  : PlayVideoFromYoutube(
-                                      url: challenges.videoUrl!,
-                                    ),
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 12.w, vertical: 24.h),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            spreadRadius: 0,
-                                            blurRadius: 16,
-                                            offset: const Offset(0, 4),
-                                            color:
-                                                Colors.black.withOpacity(0.12))
-                                      ]),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            MyImgs.calender,
-                                            height: 20.h,
-                                            colorFilter: ColorFilter.mode(
-                                                MyColors.buttonColor
-                                                    .withOpacity(0.4),
-                                                BlendMode.srcIn),
-                                          ),
-                                          SizedBox(
-                                            width: 8.w,
-                                          ),
-                                          Text(
-                                            'Duration',
-                                            style:
-                                                textTheme.titleLarge!.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 12.sp,
-                                              color: MyColors.buttonColor
-                                                  .withOpacity(0.4),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 12.w,
-                                          ),
-                                          Text(
-                                            '${challenges.numberOfDay} days',
-                                            style:
-                                                textTheme.titleLarge!.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 12.sp,
-                                              color: MyColors.black,
-                                            ),
-                                          ),
-                                        ],
+        body: GetBuilder<ChallengeController>(builder: (con) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 20.h + kToolbarHeight,
+              ),
+              Expanded(
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 4,
+                                blurRadius: 4,
+                                offset: const Offset(0, 4),
+                                color: Colors.black.withOpacity(0.08))
+                          ],
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(32),
+                              topRight: Radius.circular(32))),
+                      child: ListView(
+                        padding: EdgeInsets.only(
+                            bottom: 10.h, left: 20.w, right: 20.w),
+                        children: [
+                          Column(
+                            children: [
+                              HelpingWidgets().bodyAppBar(challenges.name,padding: false),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                challenges.description,
+                                style: textTheme.headlineSmall!.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 20.sp),
+                              ),
+                              SizedBox(
+                                height: 20.h,
+                              ),
+                              Container(
+                                height: 175.h,
+                                width: MediaQuery.of(context).size.width,
+                                padding: challenges.videoUrl == null
+                                    ? EdgeInsets.symmetric(horizontal: 20.w)
+                                    : null,
+                                color: challenges.videoUrl == null
+                                    ? Colors.black
+                                    : Colors.transparent,
+                                child: challenges.videoUrl == null
+                                    ? const Center(
+                                        child: Icon(
+                                        Icons.play_arrow,
+                                        color: Colors.white,
+                                        size: 40,
+                                      ))
+                                    : PlayVideoFromYoutube(
+                                        url: challenges.videoUrl!,
                                       ),
-                                      SizedBox(
-                                        height: 15.h,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SvgPicture.asset(
-                                                  MyImgs.calender,
-                                                  height: 20.h,
-                                                  colorFilter: ColorFilter.mode(
-                                                      MyColors.buttonColor
-                                                          .withOpacity(0.4),
-                                                      BlendMode.srcIn),
-                                                ),
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-                                                Text(
-                                                  'Start date',
-                                                  style: textTheme.titleLarge!
-                                                      .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 12.sp,
-                                                    color: MyColors.buttonColor
-                                                        .withOpacity(0.4),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 12.w,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    challenges.startedDate,
-                                                    style: textTheme.titleLarge!
-                                                        .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 12.sp,
-                                                      color: MyColors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          // SizedBox(
-                                          //   width: 12.w,
-                                          // ),
-
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SvgPicture.asset(
-                                                  MyImgs.calender,
-                                                  height: 20.h,
-                                                  colorFilter: ColorFilter.mode(
-                                                      MyColors.buttonColor
-                                                          .withOpacity(0.4),
-                                                      BlendMode.srcIn),
-                                                ),
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-                                                Text(
-                                                  'End date',
-                                                  style: textTheme.titleLarge!
-                                                      .copyWith(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 12.sp,
-                                                    color: MyColors.buttonColor
-                                                        .withOpacity(0.4),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 12.w,
-                                                ),
-                                                Expanded(
-                                                  child: Text(
-                                                    challenges.endedDate,
-                                                    style: textTheme.titleLarge!
-                                                        .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 12.sp,
-                                                      color: MyColors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 15.h,
-                                      ),
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            MyImgs.miniBadge,
-                                            height: 20.h,
-                                            colorFilter: const ColorFilter.mode(
-                                                MyColors.primary2,
-                                                BlendMode.srcIn),
-                                          ),
-                                          SizedBox(
-                                            width: 8.w,
-                                          ),
-                                          Text(
-                                            "Points you will earn",
-                                            style:
-                                                textTheme.titleLarge!.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 12.sp,
-                                              color: MyColors.buttonColor
-                                                  .withOpacity(0.4),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 12.w,
-                                          ),
-                                          Text(
-                                            challenges.rewardPoint,
-                                            style:
-                                                textTheme.titleLarge!.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 12.sp,
-                                              color: MyColors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                              ),
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    height: 20.h,
                                   ),
-                                ),
-                                fromStart
-                                    ? const SizedBox.shrink()
-                                    : showReward
-                                        ? Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 20.h,
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w, vertical: 24.h),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              spreadRadius: 0,
+                                              blurRadius: 16,
+                                              offset: const Offset(0, 4),
+                                              color: Colors.black
+                                                  .withOpacity(0.12))
+                                        ]),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              MyImgs.calender,
+                                              height: 20.h,
+                                              colorFilter: ColorFilter.mode(
+                                                  MyColors.buttonColor
+                                                      .withOpacity(0.4),
+                                                  BlendMode.srcIn),
+                                            ),
+                                            SizedBox(
+                                              width: 8.w,
+                                            ),
+                                            Text(
+                                              'Duration',
+                                              style: textTheme.titleLarge!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 12.sp,
+                                                color: MyColors.buttonColor
+                                                    .withOpacity(0.4),
                                               ),
-                                              Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 16.w,
-                                                      vertical: 21.h),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      color: Colors.white,
-                                                      boxShadow: [
-                                                        BoxShadow(
+                                            ),
+                                            SizedBox(
+                                              width: 12.w,
+                                            ),
+                                            Text(
+                                              '${challenges.numberOfDay} days',
+                                              style: textTheme.titleLarge!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 12.sp,
+                                                color: MyColors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 15.h,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    MyImgs.calender,
+                                                    height: 20.h,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            MyColors
+                                                                .buttonColor
+                                                                .withOpacity(
+                                                                    0.4),
+                                                            BlendMode.srcIn),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8.w,
+                                                  ),
+                                                  Text(
+                                                    'Start date',
+                                                    style: textTheme.titleLarge!
+                                                        .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 12.sp,
+                                                      color: MyColors
+                                                          .buttonColor
+                                                          .withOpacity(0.4),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 12.w,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      challenges.startedDate,
+                                                      style: textTheme
+                                                          .titleLarge!
+                                                          .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 12.sp,
+                                                        color: MyColors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            // SizedBox(
+                                            //   width: 12.w,
+                                            // ),
+
+                                            Expanded(
+                                              child: Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    MyImgs.calender,
+                                                    height: 20.h,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            MyColors
+                                                                .buttonColor
+                                                                .withOpacity(
+                                                                    0.4),
+                                                            BlendMode.srcIn),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8.w,
+                                                  ),
+                                                  Text(
+                                                    'End date',
+                                                    style: textTheme.titleLarge!
+                                                        .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 12.sp,
+                                                      color: MyColors
+                                                          .buttonColor
+                                                          .withOpacity(0.4),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 12.w,
+                                                  ),
+                                                  Expanded(
+                                                    child: Text(
+                                                      challenges.endedDate,
+                                                      style: textTheme
+                                                          .titleLarge!
+                                                          .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 12.sp,
+                                                        color: MyColors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 15.h,
+                                        ),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              MyImgs.miniBadge,
+                                              height: 20.h,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      MyColors.primary2,
+                                                      BlendMode.srcIn),
+                                            ),
+                                            SizedBox(
+                                              width: 8.w,
+                                            ),
+                                            Text(
+                                              earnedRewards == null
+                                                  ? "Points you will earn"
+                                                  : "You have earned",
+                                              style: textTheme.titleLarge!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 12.sp,
+                                                color: MyColors.buttonColor
+                                                    .withOpacity(0.4),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 12.w,
+                                            ),
+                                            Text(
+                                              earnedRewards == null
+                                                  ? challenges.rewardPoint
+                                                  : earnedRewards!,
+                                              style: textTheme.titleLarge!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 12.sp,
+                                                color: MyColors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  showReward
+                                      ? Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 20.h,
+                                            ),
+                                            Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 16.w,
+                                                    vertical: 21.h),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          spreadRadius: 0,
+                                                          blurRadius: 16,
+                                                          offset: const Offset(
+                                                              0, 4),
+                                                          color: Colors.black
+                                                              .withOpacity(
+                                                                  0.12))
+                                                    ]),
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 130.w),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            MyImgs.medal,
+                                                            height: 100.h,
+                                                          ),
+                                                          Spacer(),
+                                                          CustomButton(
+                                                            text: earnedRewards ==
+                                                                        "0" ||
+                                                                    earnedRewards ==
+                                                                        null
+                                                                ? "Failed"
+                                                                : "Finished",
+                                                            onPressed: () {},
+                                                            color: MyColors
+                                                                .finishedColor,
+                                                            borderColor: MyColors
+                                                                .finishedColor,
+                                                            textColor:
+                                                                const Color(
+                                                                    0xff4ECB71),
+                                                            width: 90.w,
+                                                            height: 32.h,
+                                                            fontSize: 12.sp,
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 5.h),
+                                                    Text(
+                                                      "You have earned",
+                                                      style: textTheme
+                                                          .headlineSmall!
+                                                          .copyWith(
+                                                              fontSize: 12.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.3)),
+                                                    ),
+                                                    Text(
+                                                      "${earnedRewards ?? 0} Points",
+                                                      style: textTheme
+                                                          .headlineSmall!
+                                                          .copyWith(
+                                                        fontSize: 32.sp,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    )
+                                                  ],
+                                                )),
+                                          ],
+                                        )
+                                      : challengeController.startChallenge.value
+                                          ? const SizedBox.shrink()
+                                          : Obx(() => challengeController
+                                                  .isUserChallengeHistoryLoad
+                                                  .value
+                                              ? ListView.separated(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  // shrinkWrap: true,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    var challengeHistory =
+                                                        challengeController
+                                                            .userChallengeHistory!
+                                                            .data
+                                                            .challengeHistories[index];
+                                                    bool isAfter = compareDates(
+                                                        challengeHistory
+                                                            .endedAt,
+                                                        true);
+                                                    bool isBefore =
+                                                        compareDates(
+                                                            challengeHistory
+                                                                .endedAt,
+                                                            false);
+
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        if (!isAfter &&
+                                                            !isBefore) {
+                                                          if (challengeHistory
+                                                                  .status ==
+                                                              "1") {
+                                                            CustomToast.failToast(
+                                                                msg:
+                                                                    "You have already subscribed");
+                                                          } else {
+                                                            challengeController
+                                                                .getUserChallengeCheckIn(
+                                                                    challengeController
+                                                                        .userChallengeHistory!
+                                                                        .data
+                                                                        .id
+                                                                        .toString());
+                                                          }
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                        height: 52.h,
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    12.w),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                            color: Colors.white,
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                  spreadRadius:
+                                                                      0,
+                                                                  blurRadius:
+                                                                      16,
+                                                                  offset:
+                                                                      const Offset(
+                                                                          0, 4),
+                                                                  color: Colors
+                                                                      .black
+                                                                      .withOpacity(
+                                                                          0.12))
+                                                            ]),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                SvgPicture
+                                                                    .asset(
+                                                                  MyImgs
+                                                                      .calender,
+                                                                  height: 20.h,
+                                                                  colorFilter: const ColorFilter
+                                                                      .mode(
+                                                                      MyColors
+                                                                          .buttonColor,
+                                                                      BlendMode
+                                                                          .srcIn),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 8.w,
+                                                                ),
+                                                                Text(
+                                                                  DateFormat(
+                                                                          "dd/MM/yyyy")
+                                                                      .format(challengeHistory
+                                                                          .endedAt),
+                                                                  style: textTheme.titleLarge!.copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontSize:
+                                                                          16.sp,
+                                                                      color: MyColors
+                                                                          .black),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            checkWidget(
+                                                                isAfter,
+                                                                isBefore,
+                                                                challengeHistory
+                                                                    .status)
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  separatorBuilder:
+                                                      (context, index) =>
+                                                          SizedBox(
+                                                            height: 16.h,
+                                                          ),
+                                                  itemCount: challengeController
+                                                      .userChallengeHistory!
+                                                      .data
+                                                      .challengeHistories
+                                                      .length)
+                                              : Shimmer.fromColors(
+                                                  baseColor: Colors.grey[300]!,
+                                                  highlightColor:
+                                                      Colors.grey[100]!,
+                                                  child: ListView.separated(
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        const NeverScrollableScrollPhysics(),
+                                                    itemBuilder:
+                                                        (context, index) =>
+                                                            Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                        horizontal: 12.w,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        color: Colors.white,
+                                                        boxShadow: [
+                                                          BoxShadow(
                                                             spreadRadius: 0,
                                                             blurRadius: 16,
                                                             offset:
@@ -326,255 +572,46 @@ class StartChallengeScreen extends StatelessWidget {
                                                                     0, 4),
                                                             color: Colors.black
                                                                 .withOpacity(
-                                                                    0.12))
-                                                      ]),
-                                                  child: Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 130.w),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                              MyImgs.medal,
-                                                              height: 100.h,
-                                                            ),
-                                                            Spacer(),
-                                                            CustomButton(
-                                                              text: "Finished",
-                                                              onPressed: () {},
-                                                              color: MyColors
-                                                                  .finishedColor,
-                                                              borderColor: MyColors
-                                                                  .finishedColor,
-                                                              textColor:
-                                                                  const Color(
-                                                                      0xff4ECB71),
-                                                              width: 90.w,
-                                                              height: 32.h,
-                                                              fontSize: 12.sp,
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 5.h),
-                                                      Text(
-                                                        "You have earned",
-                                                        style: textTheme
-                                                            .headlineSmall!
-                                                            .copyWith(
-                                                                fontSize: 12.sp,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
-                                                                        0.3)),
-                                                      ),
-                                                      Text(
-                                                        "${earnedRewards ?? 0} Points",
-                                                        style: textTheme
-                                                            .headlineSmall!
-                                                            .copyWith(
-                                                          fontSize: 32.sp,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ],
-                                          )
-                                        : Obx(() => challengeController
-                                                .isUserChallengeHistoryLoad
-                                                .value
-                                            ? ListView.separated(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                // shrinkWrap: true,
-                                                itemBuilder: (context, index) {
-                                                  var challengeHistory =
-                                                      challengeController
-                                                          .userChallengeHistory!
-                                                          .data
-                                                          .challengeHistories[index];
-                                                  bool isAfter = compareDates(
-                                                      challengeHistory.endedAt,
-                                                      true);
-                                                  bool isBefore = compareDates(
-                                                      challengeHistory.endedAt,
-                                                      false);
-
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      if (!isAfter &&
-                                                          !isBefore) {
-                                                        if (challengeHistory
-                                                                .status ==
-                                                            "1") {
-                                                          CustomToast.failToast(
-                                                              msg:
-                                                                  "You have already subscribed");
-                                                        } else {
-                                                          challengeController
-                                                              .getUserChallengeCheckIn(
-                                                                  challenges.id
-                                                                      .toString());
-                                                        }
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      height: 52.h,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 12.w),
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                          color: Colors.white,
-                                                          boxShadow: [
-                                                            BoxShadow(
-                                                                spreadRadius: 0,
-                                                                blurRadius: 16,
-                                                                offset:
-                                                                    const Offset(
-                                                                        0, 4),
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
-                                                                        0.12))
-                                                          ]),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                MyImgs.calender,
-                                                                height: 20.h,
-                                                                colorFilter: const ColorFilter
-                                                                    .mode(
-                                                                    MyColors
-                                                                        .buttonColor,
-                                                                    BlendMode
-                                                                        .srcIn),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 8.w,
-                                                              ),
-                                                              Text(
-                                                                DateFormat(
-                                                                        "dd/MM/yyyy")
-                                                                    .format(challengeHistory
-                                                                        .endedAt),
-                                                                style: textTheme.titleLarge!.copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                    fontSize:
-                                                                        16.sp,
-                                                                    color: MyColors
-                                                                        .black),
-                                                              ),
-                                                            ],
+                                                                    0.12),
                                                           ),
-                                                          checkWidget(
-                                                              isAfter,
-                                                              isBefore,
-                                                              challengeHistory
-                                                                  .status)
                                                         ],
                                                       ),
+                                                      child: Container(
+                                                        height: 30.h,
+                                                        width: double.infinity,
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
-                                                  );
-                                                },
-                                                separatorBuilder:
-                                                    (context, index) =>
-                                                        SizedBox(
-                                                          height: 16.h,
-                                                        ),
-                                                itemCount: challengeController
-                                                    .userChallengeHistory!
-                                                    .data
-                                                    .challengeHistories
-                                                    .length)
-                                            : Shimmer.fromColors(
-                                                baseColor: Colors.grey[300]!,
-                                                highlightColor:
-                                                    Colors.grey[100]!,
-                                                child: ListView.separated(
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  itemBuilder:
-                                                      (context, index) =>
-                                                          Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                      horizontal: 12.w,
+                                                    separatorBuilder:
+                                                        (context, index) =>
+                                                            SizedBox(
+                                                      height: 16.h,
                                                     ),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      color: Colors.white,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          spreadRadius: 0,
-                                                          blurRadius: 16,
-                                                          offset: const Offset(
-                                                              0, 4),
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.12),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    child: Container(
-                                                      height: 30.h,
-                                                      width: double.infinity,
-                                                      color: Colors.white,
-                                                    ),
+                                                    itemCount: 4,
                                                   ),
-                                                  separatorBuilder:
-                                                      (context, index) =>
-                                                          SizedBox(
-                                                    height: 16.h,
-                                                  ),
-                                                  itemCount: 4,
-                                                ),
-                                              ))
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    )))
-          ],
-        ),
-        bottomNavigationBar: fromStart
-            ? Container(
-                color: Colors.white,
-                padding: EdgeInsets.only(
-                    bottom: 40.h, left: 55.w, right: 55.w, top: 10.h),
-                child: CustomButton(
-                    text: "Start",
-                    onPressed: () {
-                      signatureDialog(context);
-                    }))
-            : null);
+                                                ))
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      )))
+            ],
+          );
+        }),
+        bottomNavigationBar: showReward
+            ? null
+            : Obx(() => challengeController.startChallenge.value
+                ? Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.only(
+                        bottom: 40.h, left: 55.w, right: 55.w, top: 10.h),
+                    child: CustomButton(
+                        text: "Start",
+                        onPressed: () {
+                          signatureDialog(context);
+                        }))
+                : SizedBox.shrink()));
   }
 
   bool compareDates(DateTime challengeEndDate, bool isAfterTrue) {
@@ -605,8 +642,8 @@ class StartChallengeScreen extends StatelessWidget {
       return GestureDetector(
           onTap: () {
             if (!isChecked) {
-              challengeController
-                  .getUserChallengeCheckIn(challenges.id.toString());
+              challengeController.getUserChallengeCheckIn(
+                  challengeController.userChallengeHistory!.data.id.toString());
             }
           },
           child: GestureDetector(
@@ -676,12 +713,12 @@ class StartChallengeScreen extends StatelessWidget {
                           CustomToast.failToast(
                               msg: "Please provide signature");
                         } else {
-                          if (fromStart) {
+                          if (challengeController.startChallenge.value) {
                             challengeController.addChallenge(
                                 challenges.id.toString(), challenges);
                           } else {
-                            challengeController.getUserChallengeCheckIn(
-                                challenges.id.toString());
+                            // challengeController.getUserChallengeCheckIn(
+                            //     challenges.id.toString());
                           }
                         }
                       })

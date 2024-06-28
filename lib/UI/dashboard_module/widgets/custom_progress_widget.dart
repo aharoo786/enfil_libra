@@ -39,6 +39,8 @@ class CustomProgressWidget extends StatelessWidget {
     var textTheme = theme.textTheme;
     return GestureDetector(
       onTap: () {
+        Get.find<ChallengeController>().startChallenge.value = false;
+
         Get.to(() => StartChallengeScreen(
               challenges: Challenges(
                 id: id,
@@ -48,7 +50,7 @@ class CustomProgressWidget extends StatelessWidget {
                 videoUrl: videoUrl,
                 description: description,
                 startedDate: startedAt,
-                endedDate: endedAt!,
+                endedDate: endedAt,
               ),
             ));
 

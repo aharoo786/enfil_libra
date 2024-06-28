@@ -6,12 +6,14 @@ import 'package:enfil_libre/controllers/auth_controller/auth_controller.dart';
 import 'package:enfil_libre/controllers/habit_controller/habit_controller.dart';
 import 'package:enfil_libre/data/models/habit_module/get_catergories_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:signature/signature.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../values/my_colors.dart';
 import '../widgets/app_bar_widget.dart';
 
@@ -35,7 +37,15 @@ class SelectHabitSlotScreen extends StatelessWidget {
 
   final List<String> frequencyText = ["Daily", "Weekly", "Monthly"];
   final List<String> slotText = ["Morning", "Evening", "Night", "Every Time"];
-  final List<String> dayText = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  final List<String> dayText = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
 
   final HabitController habitController = Get.find();
 
@@ -155,7 +165,9 @@ class SelectHabitSlotScreen extends StatelessWidget {
                             textTheme,
                             frequencyText[index],
                             index,
-                            habitController.selectedFrequency),
+                            habitController.selectedFrequency,
+                            context,
+                            isFrequency: true),
                         separatorBuilder: (context, index) => SizedBox(
                               width: 16.w,
                             ),
@@ -304,7 +316,7 @@ class SelectHabitSlotScreen extends StatelessWidget {
                     children: List.generate(
                       slotText.length,
                       (index) => frequencyWidget(textTheme, slotText[index],
-                          index, habitController.selectedSlot),
+                          index, habitController.selectedSlot, context),
                     ),
                   ),
 
@@ -424,10 +436,15 @@ class SelectHabitSlotScreen extends StatelessWidget {
     );
   }
 
-  frequencyWidget(
-      TextTheme textTheme, String text, int index, RxInt selectedIndex) {
+  frequencyWidget(TextTheme textTheme, String text, int index,
+      RxInt selectedIndex, BuildContext context,
+      {bool isFrequency = false}) {
     return GestureDetector(
       onTap: () {
+        if (isFrequency && index == 2) {
+          _selectDateRange(context);
+        }
+
         selectedIndex.value = index;
       },
       child: Obx(
@@ -459,6 +476,144 @@ class SelectHabitSlotScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _selectDateRange(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: Colors.white,
+          child: Container(
+            padding: EdgeInsets.all(10.h),
+            height: 350.0.h,
+            width: 374.0.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: SfDateRangePicker(
+                      initialSelectedDates: habitController.initialRange,
+                      onSelectionChanged:
+                          (DateRangePickerSelectionChangedArgs args) {
+                        if (args.value is PickerDateRange) {
+                          DateTime? startDate = args.value.startDate;
+                          DateTime? endDate = args.value.endDate;
+                          habitController.range = startDate == null ||
+                                  endDate == null
+                              ? habitController.range
+                              : [
+                                  DateFormat("dd-MM-yyyy").format(startDate),
+                                  DateFormat("dd-MM-yyyy").format(endDate)
+                                ];
+                        }
+                      },
+
+                      minDate: habitController.firstDayOfMonth,
+                      rangeSelectionColor: MyColors.buttonColor,
+                      maxDate: habitController.lastDayOfMonth,
+                      backgroundColor: Colors.white,
+                      startRangeSelectionColor: MyColors.buttonColor,
+                      selectionColor: MyColors.buttonColor,
+                      initialSelectedDate: DateTime.now(),
+                      todayHighlightColor: MyColors.buttonColor,
+
+                      endRangeSelectionColor: MyColors.buttonColor,
+                      selectionMode: DateRangePickerSelectionMode.range,
+                      headerStyle: const DateRangePickerHeaderStyle(
+                        backgroundColor: Colors.white,
+                      ),
+                      monthCellStyle: const DateRangePickerMonthCellStyle(todayCellDecoration: BoxDecoration(color: MyColors.buttonColor,shape: BoxShape.circle)),
+                      view: DateRangePickerView.month,
+                      monthViewSettings: const DateRangePickerMonthViewSettings(
+                        firstDayOfWeek: 1,
+                      ),
+
+                      selectionTextStyle: const TextStyle(
+                        color:
+                            Colors.white, // Text color for the selected dates
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 30.h,
+                          width: 80.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: MyColors.buttonColor)),
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14.sp,
+                                color: MyColors.buttonColor),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 20.w,),
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 30.h,
+                          width: 50.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: MyColors.buttonColor)),
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Text(
+                            "OK",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14.sp,
+                                color: MyColors.buttonColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    // final DateTimeRange? picked = await showDateRangePicker(
+    //   context: context,
+    //   firstDate: DateTime.now(), // Example: From today's date minus 1 year
+    //   lastDate: DateTime.now().add(Duration(days: 30)), // Example: Up to today's date
+    // );
+    //
+    // if (picked != null) {
+    //   // Handle the selected date range
+    //   print('Selected date range: ${picked.start} to ${picked.end}');
+    //   // You can use picked.start and picked.end to process the selected range
+    // }
   }
 
   dayWidget(TextTheme textTheme, String text, int index, RxInt selectedIndex) {

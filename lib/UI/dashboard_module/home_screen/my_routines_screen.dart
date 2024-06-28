@@ -58,19 +58,29 @@ class MyRoutinesScreen extends StatelessWidget {
                                   fontSize: 20.sp,
                                   color: MyColors.buttonColor),
                             ),
-                            CustomButton(
-                              text: "+ Create a habit",
-                              width: 150.w,
-                              height: 30.h,
-                              fontSize: 14.sp,
-                              onPressed: () {
+
+                            GestureDetector(
+                              onTap: (){
                                 Get.find<HabitController>()
                                     .getCategoriesScreen();
                                 Get.to(() => CreateNewHabit());
                               },
-                              color: Colors.white,
-                              textColor: MyColors.buttonColor,
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 30.h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color:  MyColors.buttonColor)
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                child: Text("+ Create a habit",  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14.sp,
+                                    color: MyColors.buttonColor),),
+                              ),
                             ),
+
+                        
                           ],
                         ),
                       ),
