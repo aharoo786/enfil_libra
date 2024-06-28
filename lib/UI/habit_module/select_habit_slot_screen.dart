@@ -237,7 +237,7 @@ class SelectHabitSlotScreen extends StatelessWidget {
                     height: 16.h,
                   ),
                   Obx(
-                    () => habitController.selectedFrequency.value == 3
+                    () => habitController.selectedFrequency.value == 1
                         ? SizedBox(
                             height: 40.h,
                             child: ListView.separated(
@@ -479,6 +479,9 @@ class SelectHabitSlotScreen extends StatelessWidget {
   }
 
   Future<void> _selectDateRange(BuildContext context) async {
+    print(":initial ${habitController.initialRange}");
+    DateRangePickerController dateRangePickerController =
+        DateRangePickerController();
     showDialog(
       context: context,
       builder: (context) {
@@ -499,22 +502,24 @@ class SelectHabitSlotScreen extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: SfDateRangePicker(
-                      initialSelectedDates: habitController.initialRange,
+                      initialSelectedRange: PickerDateRange(
+                          habitController.initialRange[0],
+                          habitController.initialRange[1]),
                       onSelectionChanged:
                           (DateRangePickerSelectionChangedArgs args) {
                         if (args.value is PickerDateRange) {
                           DateTime? startDate = args.value.startDate;
                           DateTime? endDate = args.value.endDate;
-                          habitController.range = startDate == null ||
-                                  endDate == null
-                              ? habitController.range
-                              : [
-                                  DateFormat("dd-MM-yyyy").format(startDate),
-                                  DateFormat("dd-MM-yyyy").format(endDate)
-                                ];
+
+                          if (startDate != null && endDate != null) {
+                            habitController.range = [
+                              DateFormat("dd-MM-yyyy").format(startDate),
+                              DateFormat("dd-MM-yyyy").format(endDate)
+                            ];
+                            habitController.initialRange = [startDate, endDate];
+                          }
                         }
                       },
-
                       minDate: habitController.firstDayOfMonth,
                       rangeSelectionColor: MyColors.buttonColor,
                       maxDate: habitController.lastDayOfMonth,
@@ -523,18 +528,19 @@ class SelectHabitSlotScreen extends StatelessWidget {
                       selectionColor: MyColors.buttonColor,
                       initialSelectedDate: DateTime.now(),
                       todayHighlightColor: MyColors.buttonColor,
-
                       endRangeSelectionColor: MyColors.buttonColor,
                       selectionMode: DateRangePickerSelectionMode.range,
                       headerStyle: const DateRangePickerHeaderStyle(
                         backgroundColor: Colors.white,
                       ),
-                      monthCellStyle: const DateRangePickerMonthCellStyle(todayCellDecoration: BoxDecoration(color: MyColors.buttonColor,shape: BoxShape.circle)),
+                      monthCellStyle: const DateRangePickerMonthCellStyle(
+                          todayCellDecoration: BoxDecoration(
+                              color: MyColors.buttonColor,
+                              shape: BoxShape.circle)),
                       view: DateRangePickerView.month,
                       monthViewSettings: const DateRangePickerMonthViewSettings(
                         firstDayOfWeek: 1,
                       ),
-
                       selectionTextStyle: const TextStyle(
                         color:
                             Colors.white, // Text color for the selected dates
@@ -572,7 +578,9 @@ class SelectHabitSlotScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 20.w,),
+                      SizedBox(
+                        width: 20.w,
+                      ),
                       GestureDetector(
                         onTap: () {
                           Get.back();

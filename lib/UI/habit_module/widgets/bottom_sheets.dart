@@ -235,7 +235,7 @@ class HabitBottomSheets {
                                               .selectedFrequencyDay.value]
                                           : frequencyText[habitController
                                               .selectedFrequency.value],
-                                      slot: slotText[
+                                      slot:habitController.selectedSlot.value==3?"every_time": slotText[
                                           habitController.selectedSlot.value],
                                       reminder: habitController.showReminder.value
                                           ? habitController.reminderTime

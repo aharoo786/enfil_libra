@@ -70,7 +70,8 @@ class StartChallengeScreen extends StatelessWidget {
                         children: [
                           Column(
                             children: [
-                              HelpingWidgets().bodyAppBar(challenges.name,padding: false),
+                              HelpingWidgets()
+                                  .bodyAppBar(challenges.name, padding: false),
                               SizedBox(
                                 height: 10.h,
                               ),
@@ -356,7 +357,25 @@ class StartChallengeScreen extends StatelessWidget {
                                                                 .start,
                                                         children: [
                                                           SvgPicture.asset(
-                                                            MyImgs.medal,
+                                                            int.parse(earnedRewards!) >=
+                                                                        50 &&
+                                                                    int.parse(
+                                                                            earnedRewards!) <
+                                                                        100
+                                                                ? MyImgs
+                                                                    .bronzeMedal
+                                                                : int.parse(earnedRewards!) >=
+                                                                            100 &&
+                                                                        int.parse(earnedRewards!) <
+                                                                            150
+                                                                    ? MyImgs
+                                                                        .silverMedal
+                                                                    : int.parse(earnedRewards!) >
+                                                                            150
+                                                                        ? MyImgs
+                                                                            .goldMedal
+                                                                        : MyImgs
+                                                                            .medal,
                                                             height: 100.h,
                                                           ),
                                                           Spacer(),

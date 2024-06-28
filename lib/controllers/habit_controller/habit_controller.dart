@@ -79,6 +79,11 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
+  List<UserHabit> morningHabits = [];
+  List<UserHabit> eveningHabits = [];
+  List<UserHabit> nightHabits = [];
+  List<UserHabit> evertTimeHabits = [];
+
   Future getUserHabits() async {
     isHabitsLoad.value = false;
 
@@ -98,6 +103,22 @@ class HabitController extends GetxController implements GetxService {
               GetUserHabits model = GetUserHabits.fromJson(response.body);
               if (model.status == Constants.success) {
                 getUserHabitUser = model;
+                nightHabits.clear();
+                morningHabits.clear();
+                evertTimeHabits.clear();
+                eveningHabits.clear();
+                for (var habit in getUserHabitUser!.data) {
+                  if (habit.slot == "night") {
+                    nightHabits.add(habit);
+                  } else if (habit.slot == "evening") {
+                    eveningHabits.add(habit);
+                  } else if (habit.slot == "morning") {
+                    morningHabits.add(habit);
+                  } else {
+                    evertTimeHabits.add(habit);
+                  }
+                }
+
                 isHabitsLoad.value = true;
               }
             } else {
@@ -147,12 +168,16 @@ class HabitController extends GetxController implements GetxService {
     });
   }
 
-
   DateTime now = DateTime.now();
-  DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime lastDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
-  List<String> range=[DateFormat("dd-MM-yyyy").format(DateTime.now()),DateFormat("dd-MM-yyyy").format(DateTime.now())];
-  List<DateTime> initialRange=[DateTime.now(),DateTime.now()];
+  DateTime firstDayOfMonth =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime lastDayOfMonth =
+      DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
+  List<String> range = [
+    DateFormat("dd-MM-yyyy").format(DateTime.now()),
+    DateFormat("dd-MM-yyyy").format(DateTime.now())
+  ];
+  List<DateTime> initialRange = [DateTime.now(), DateTime.now()];
 
   crateHabit(
       {required String subCatName,
@@ -179,8 +204,8 @@ class HabitController extends GetxController implements GetxService {
               "slot": slot.toLowerCase(),
               "reminder": reminder,
               "counter": counterText,
-              "start_date":range[0],
-               "end_date":range[1],
+              "start_date": range[0],
+              "end_date": range[1],
               "time": showMinutes.value ? time : "null",
               "sub_category_id": subCatId
             },
